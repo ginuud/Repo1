@@ -17,6 +17,24 @@ namespace api.Data
         .HasForeignKey(p => p.TeamId);
             modelBuilder.Entity<Player>().Property(x => x.Id).ValueGeneratedOnAdd();
 
+            modelBuilder.Entity<Team>().HasData(
+                new Team {
+                    Id = 1,
+                    Name = "Team 1"
+                },
+                new Team {
+                    Id = 2,
+                    Name = "Team 2"
+                }
+            );
+
+                        modelBuilder.Entity<Game>().HasData(
+                new Game {
+                    Id = 1,
+                    Name = "Game 1"
+                }
+            );
+            
             modelBuilder.Entity<Player>().HasData(
                 new Player {
                     Id = 1,
@@ -59,16 +77,6 @@ namespace api.Data
                     Points = 0,
                     GameId = 1,
                     TeamId = 2
-                }
-            );
-            modelBuilder.Entity<Team>().HasData(
-                new Team {
-                    Id = 1,
-                    Name = "Team 1"
-                },
-                new Team {
-                    Id = 2,
-                    Name = "Team 2"
                 }
             );
         }

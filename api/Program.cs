@@ -11,7 +11,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
 builder.Services
-    .AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("TeamUpDB"))
+    .AddDbContext<DataContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("DataContext")))
     .AddScoped<PlayersRepo>();
 
 var app = builder.Build();
