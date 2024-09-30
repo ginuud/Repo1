@@ -31,3 +31,6 @@ c:\Coding\Uni\ISA3\ISA3_Gitlab\api\obj\Debug\net8.0\refint\api.dll
 c:\Coding\Uni\ISA3\ISA3_Gitlab\api\obj\Debug\net8.0\api.pdb
 c:\Coding\Uni\ISA3\ISA3_Gitlab\api\obj\Debug\net8.0\api.genruntimeconfig.cache
 c:\Coding\Uni\ISA3\ISA3_Gitlab\api\obj\Debug\net8.0\ref\api.dll
+c:\Coding\Uni\ISA3\ISA3_Gitlab\api\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.dll
+c:\Coding\Uni\ISA3\ISA3_Gitlab\api\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+c:\Coding\Uni\ISA3\ISA3_Gitlab\api\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.InMemory.dll
