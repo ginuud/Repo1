@@ -12,7 +12,8 @@ builder.Services.AddControllers();
 
 builder.Services
     .AddDbContext<DataContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("DataContext")))
-    .AddScoped<PlayersRepo>();
+    .AddScoped<PlayersRepo>()
+    .AddScoped<TeamsRepo>();
 
 var app = builder.Build();
 

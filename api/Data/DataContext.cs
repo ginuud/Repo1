@@ -12,9 +12,9 @@ namespace api.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder){
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Player>()
-        .HasOne(p => p.Team)       // Each player has one team
-        .WithMany(t => t.Players)  // Each team has many players
-        .HasForeignKey(p => p.TeamId);
+                .HasOne(p => p.Team)       // Each player has one team
+                .WithMany(t => t.Players)  // Each team has many players
+                .HasForeignKey(p => p.TeamId);
             modelBuilder.Entity<Player>().Property(x => x.Id).ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Team>().HasData(
@@ -28,13 +28,13 @@ namespace api.Data
                 }
             );
 
-                        modelBuilder.Entity<Game>().HasData(
+            modelBuilder.Entity<Game>().HasData(
                 new Game {
                     Id = 1,
                     Name = "Game 1"
                 }
             );
-            
+
             modelBuilder.Entity<Player>().HasData(
                 new Player {
                     Id = 1,

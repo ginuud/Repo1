@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using api.Data.Repos;
 using api.Models.Classes;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +15,8 @@ namespace api.Controllers
             var result = await repo.GetAllPlayers();
             return Ok(result);
         }
-    [HttpPost]
+        
+        [HttpPost]
         public async Task<IActionResult> SavePlayer([FromBody] Player player){
             var playerExists = await repo.PlayerExistsInDb(player.Id);
             if (playerExists){

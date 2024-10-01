@@ -6,8 +6,7 @@ namespace api.Data.Repos
     public class PlayersRepo(DataContext context)
     {
         private readonly DataContext context = context;
-
-        //Create
+        
         public async Task<Player> SavePlayerToDb( Player player){
             context.Add(player);
             await context.SaveChangesAsync();
