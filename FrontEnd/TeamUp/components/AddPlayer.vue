@@ -23,6 +23,7 @@
   </template>
   
   <script setup lang="ts">
+    import type { FormError, FormErrorEvent, FormSubmitEvent } from "#ui/types";
     import type { Player } from "~/types/player";
   
     const { addPlayer, generateId, generateRanks } = usePlayerStore();
