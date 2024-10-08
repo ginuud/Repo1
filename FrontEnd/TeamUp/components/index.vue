@@ -10,8 +10,12 @@
   
   const links = [
     {
-      label: "PLayers",
+      label: "Players",
       to: "/players",
+    },
+    {
+      label: "Add players",
+      to: "/add-player",
     },
   ];
   </script>
