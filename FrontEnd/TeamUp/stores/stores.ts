@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import type { Player } from "~/types/player";
 
-export const useTeamStore = defineStore('tiim', () => {
+export const usePlayerStore = defineStore('tiim', () => {
     const players = ref<Player[]>([
         {id: 1, name: 'Ivo Linna', team: 'A', points: 0 },
         {id: 2, name: 'Arvo Pärt', team: 'A', points: 15 },
