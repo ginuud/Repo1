@@ -3,4 +3,5 @@ export type Player = {
    name: string
    team: 'A' | 'B'
    points: number
+   rank: number
 }

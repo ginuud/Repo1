@@ -1,12 +1,7 @@
-<script setup lang="ts">
-import TheMenu from './components/index.vue';
-</script>
-
 <template>
-  <TheMenu/>
-  <div>
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
+  <TheMenu />
+  <div class="p-2">
+    <NuxtPage />
   </div>
 </template>
+

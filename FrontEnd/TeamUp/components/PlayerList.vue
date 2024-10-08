@@ -14,17 +14,21 @@
     defineProps<{ title: String }>();
     const columns = [
     {
+      key: "rank",
+      label: "Rank",
+    },
+    {
+      key: "points",
+      label: "Points",
+      sortable: true
+    },
+    {
       key: "name",
       label: "Name",
     },
     {
       key: "team",
       label: "Team",
-    },
-    {
-      key: "points",
-      label: "Points",
-      sortable: true
     },
     {
       key: "actions",

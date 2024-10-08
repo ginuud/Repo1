@@ -25,7 +25,7 @@
   <script setup lang="ts">
     import type { Player } from "~/types/player";
   
-    const { addPlayer, generateId } = usePlayerStore();
+    const { addPlayer, generateId, generateRanks } = usePlayerStore();
 
     const state = reactive<Player>({
         id: generateId(),
@@ -47,6 +47,7 @@
     
     async function onSubmit(event: FormSubmitEvent<any>) {
         addPlayer({...state})
+        generateRanks()
         await navigateTo("/players");
     }
     
