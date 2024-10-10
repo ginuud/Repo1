@@ -31,7 +31,8 @@ const state = reactive<Game>({
         id: generateId(),
         name: undefined,
         team1name: undefined,
-        team2name: undefined
+        team2name: undefined,
+        status: 'in progress',
     });
 
 const validate = (state: any): FormError[] => {

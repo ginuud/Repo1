@@ -3,4 +3,5 @@ export type Game = {
    name: string
    team1name: 'A' | 'B'
    team2name: 'A' | 'B'
+   status: 'in progress' | 'inactive'
 }

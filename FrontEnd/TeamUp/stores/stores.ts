@@ -61,8 +61,8 @@ export const usePlayerStore = defineStore('player', () => {
     }
 
     const games = ref<Game[]>([
-      {id: generateId(), name: 'Jalgpall', team1name: 'A', team2name: 'B'},
-      {id: generateId(), name: 'Korvpall', team1name: 'A', team2name: 'B'},
+      {id: generateId(), name: 'Jalgpall', team1name: 'A', team2name: 'B', status: 'in progress'},
+      {id: generateId(), name: 'Korvpall', team1name: 'A', team2name: 'B', status: 'inactive'},
     ]);
 
     return { games, generateId, addGame };
