@@ -8,7 +8,7 @@
         <UTable :columns="columns" :rows="games">
             <template #actions-data="{ row }" >
                 <UButton 
-                    type="button" color="red" icon="i-heroicons-stop-20-solid" @click="endGame(row.id)">
+                    type="button" color="red" variant="ghost" icon="i-heroicons-stop-circle-20-solid" @click="endGame(row.id)">
                 </UButton>
             </template>
         </UTable>
