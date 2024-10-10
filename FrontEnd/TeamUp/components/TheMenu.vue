@@ -17,5 +17,9 @@
       label: "Add players",
       to: "/add-player",
     },
+    {
+      label: "Start Game",
+      to: "/start-game",
+    },
   ];
   </script>
