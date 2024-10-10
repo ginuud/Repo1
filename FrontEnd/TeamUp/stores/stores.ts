@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import type { Player } from "~/types/player";
+import type { Game } from "~/types/game";
 
-export const usePlayerStore = defineStore('tiim', () => {
+export const usePlayerStore = defineStore('player', () => {
     let currentId: number = 0;
 
     function generateId(): number {
@@ -10,8 +11,8 @@ export const usePlayerStore = defineStore('tiim', () => {
       return currentId;
     }
 
-    const addPlayer = (student: Player) => {
-        players.value.push(student)
+    const addPlayer = (player: Player) => {
+        players.value.push(player)
     }
 
     const deletePlayer = async (playerId: number) => {
@@ -45,4 +46,24 @@ export const usePlayerStore = defineStore('tiim', () => {
       };
 
       return { players, generateId, addPlayer, deletePlayer, generateRanks };
+  })
+
+  export const useGameStore = defineStore('game', () => {
+    let currentId: number = 0;
+
+    function generateId(): number {
+      currentId++;
+      return currentId;
+    }
+
+    const addGame = (game: Game) => {
+        games.value.push(game)
+    }
+
+    const games = ref<Game[]>([
+      {id: generateId(), name: 'Jalgpall', team1name: 'A', team2name: 'B'},
+      {id: generateId(), name: 'Korvpall', team1name: 'A', team2name: 'B'},
+    ]);
+
+    return { games, generateId, addGame };
   })
