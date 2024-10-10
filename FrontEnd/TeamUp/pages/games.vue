@@ -1,3 +1,3 @@
 <template>
-    <AddPlayer title="Your games"/>
+    <GameList title="Your games"/>
 </template>

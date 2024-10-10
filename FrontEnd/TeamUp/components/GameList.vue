@@ -8,7 +8,7 @@
         <UTable :columns="columns" :rows="games">
             <template #actions-data="{ row }" >
                 <UButton 
-                    type="button" color="green" icon="i-heroicons-stop-circle-duotone" @click="endGame(row.id)">
+                    type="button" color="red" icon="i-heroicons-stop-20-solid" @click="endGame(row.id)">
                 </UButton>
             </template>
         </UTable>
@@ -49,6 +49,12 @@ const columns = [
 const gameStore = useGameStore();
 const games = computed(() =>gameStore.games.map(game => ({
     ...game})));
-  
+
+import { useRouter } from 'vue-router';
+const router = useRouter();
+
+const endGame = async (id: number) => {
+ await router.push("/players");
+};
 
 </script>

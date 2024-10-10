@@ -21,5 +21,9 @@
       label: "Start Game",
       to: "/start-game",
     },
+    {
+      label: "Games",
+      to: "/games",
+    },
   ];
   </script>
