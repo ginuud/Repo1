@@ -21,7 +21,10 @@
   <script setup lang="ts">
     import type { FormError, FormErrorEvent, FormSubmitEvent } from "#ui/types";
     import type { Team } from "~/types/team";
+    import { useTeamStore } from "~/stores/stores";
     import { usePlayerStore } from "~/stores/stores";
+
+    const teamStore = useTeamStore()
     const playerStore = usePlayerStore();
 
     const playerOptions = computed(() =>
@@ -33,7 +36,7 @@
     const { addTeam, generateId, } = useTeamStore();
 
     const state = reactive<Team>({
-        id: generateId(),
+        id: teamStore.generateId(),
         teamname: undefined,
         members: [],
     });
@@ -42,15 +45,16 @@
         const errors = [];
         if (!state.teamname) 
         errors.push({ path: "teamname", message: "Required" });
-        if (!state.members)
-        if (!state.members || state.members.length === 1)
+        if (state.members.length < 2)
         errors.push({ path: "members", message: "Choose at least 2 players" });
         return errors;
     };
     
     async function onSubmit(event: FormSubmitEvent<any>) {
-        addTeam({...state})
-        await navigateTo("/players");
+      let playerNames;
+        playerNames = state.members.map((member: any) => member.label);
+        addTeam({ ...state, members: playerNames });
+        await navigateTo("/teams");
     }
     
     async function onError(event: FormErrorEvent) {
