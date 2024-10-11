@@ -43,7 +43,8 @@
         if (!state.teamname) 
         errors.push({ path: "teamname", message: "Required" });
         if (!state.members)
-        errors.push({ path: "members", message: "Required" });
+        if (!state.members || state.members.length === 1)
+        errors.push({ path: "members", message: "Choose at least 2 players" });
         return errors;
     };
     

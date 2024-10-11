@@ -9,10 +9,6 @@
       <UFormGroup label="Name" name="name">
         <UInput v-model="state.name" type="name"/>
       </UFormGroup>
-  
-      <UFormGroup label="Team" name="team">
-        <USelect v-model="state.team" :options="[{ value: 'A', label: 'A' }, { value: 'B', label: 'B' }]"/>
-      </UFormGroup>
 
       <UFormGroup label="Points" name="points">
         <UInput v-model="state.points" type="points"/>
@@ -31,7 +27,6 @@
     const state = reactive<Player>({
         id: generateId(),
         name: undefined,
-        team: undefined,
         points: undefined
     });
 
@@ -40,8 +35,6 @@
         if (!state.name) 
         errors.push({ path: "name", message: "Required" });
         if (!state.team)
-        errors.push({ path: "team", message: "Required" });
-        if (!state.points)
         errors.push({ path: "points", message: "Required" });
         return errors;
     };
