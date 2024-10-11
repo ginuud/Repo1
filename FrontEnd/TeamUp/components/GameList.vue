@@ -6,9 +6,19 @@
       </div>
       <div v-else>
         <UTable :columns="columns" :rows="games">
+          <template #status-data="{ row }">
+          <UBadge 
+            v-if="row.status === 'in progress'" color="green" variant="subtle">
+            In progress
+          </UBadge>
+          <UBadge 
+            v-else-if="row.status === 'inactive'" color="red" variant="subtle">
+            Inactive
+          </UBadge>
+        </template>
             <template #actions-data="{ row }" >
                 <UButton 
-                    type="button" color="red" icon="i-heroicons-stop-20-solid" @click="endGame(row.id)">
+                    type="button" color="red" variant="ghost" icon="i-heroicons-stop-circle-20-solid" @click="endGame(row.id)">
                 </UButton>
             </template>
         </UTable>
