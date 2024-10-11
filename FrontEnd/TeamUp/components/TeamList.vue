@@ -9,11 +9,11 @@
     />
   </template>
   <script setup lang="ts">
-  import { useTeamStore } from "~/stores/stores" // Adjust the path based on your store's location
+  import { useTeamStore } from "~/stores/stores" 
   
   const teamStore = useTeamStore();
   
-  // Dynamically create the items for the accordion using the team names
+  // Tuleb ilusamaks teha
   const accordionItems = teamStore.teams.map((team, index) => ({
     label: `Team: ${team.teamname}`,
     content: `Members: ${team.members.join(', ')}`
