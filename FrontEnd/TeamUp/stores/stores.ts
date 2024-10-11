@@ -24,16 +24,16 @@ export const usePlayerStore = defineStore('player', () => {
       }
 
     const players = ref<Player[]>([
-        {id: generateId(), name: 'Ivo Linna', team: 'A', points: 0, rank: 10 },
-        {id: generateId(), name: 'Arvo Pärt', team: 'A', points: 15, rank: 4 },
-        {id: generateId(), name: 'Kristjan Jõekalda', team: 'A', points: 0, rank: 9 },
-        {id: generateId(), name: 'Ott Sepp', team: 'A', points: 0, rank: 8 },
-        {id: generateId(), name: 'Jüri Ratas', team: 'A', points: 6, rank: 5 },
-        {id: generateId(), name: 'Koit Toome', team: 'B', points: 0, rank: 7 },
-        {id: generateId(), name: 'Anu Saagim', team: 'B', points: 23, rank: 1 },
-        {id: generateId(), name: 'Evelin Ilves', team: 'B', points: 0, rank: 6 },
-        {id: generateId(), name: 'Marko Reikop', team: 'B', points: 20, rank: 2 },
-        {id: generateId(), name: 'Mihkel Raud', team: 'B', points: 19, rank: 3 },
+        {id: generateId(), name: 'Ivo Linna', points: 0, rank: 10 },
+        {id: generateId(), name: 'Arvo Pärt', points: 15, rank: 4 },
+        {id: generateId(), name: 'Kristjan Jõekalda', points: 0, rank: 9 },
+        {id: generateId(), name: 'Ott Sepp', points: 0, rank: 8 },
+        {id: generateId(), name: 'Jüri Ratas', points: 6, rank: 5 },
+        {id: generateId(), name: 'Koit Toome', points: 0, rank: 7 },
+        {id: generateId(), name: 'Anu Saagim', points: 23, rank: 1 },
+        {id: generateId(), name: 'Evelin Ilves', points: 0, rank: 6 },
+        {id: generateId(), name: 'Marko Reikop', points: 20, rank: 2 },
+        {id: generateId(), name: 'Mihkel Raud', points: 19, rank: 3 },
       ]);
 
       const generateRanks = () => {
@@ -61,8 +61,17 @@ export const usePlayerStore = defineStore('player', () => {
       {id: generateId(), name: 'Jalgpall', team1name: 'A', team2name: 'B', status: 'in progress'},
       {id: generateId(), name: 'Korvpall', team1name: 'A', team2name: 'B', status: 'inactive'},
     ]);
+    const addGame = (game: Game) => {
+      games.value.push(game)
+  }
 
-    return { games, generateId, addGame };
+  const updateGameStatus = (id: number, status: "in progress" | "inactive") => {
+    const game = games.value.find(game => game.id === id);
+    if (game) {
+      game.status = status;
+    }
+  }
+  return { games, generateId, addGame, updateGameStatus };
   })
 
   export const useTeamStore = defineStore('team', () => {
