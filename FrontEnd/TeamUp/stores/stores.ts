@@ -56,14 +56,20 @@ export const usePlayerStore = defineStore('player', () => {
       return currentId;
     }
 
-    const addGame = (game: Game) => {
-        games.value.push(game)
-    }
-
     const games = ref<Game[]>([
       {id: generateId(), name: 'Jalgpall', team1name: 'A', team2name: 'B', status: 'in progress'},
       {id: generateId(), name: 'Korvpall', team1name: 'A', team2name: 'B', status: 'inactive'},
     ]);
 
-    return { games, generateId, addGame };
+    const addGame = (game: Game) => {
+        games.value.push(game)
+    }
+
+    const updateGameStatus = (id: number, status: "in progress" | "inactive") => {
+      const game = games.value.find(game => game.id === id);
+      if (game) {
+        game.status = status;
+      }
+    }
+    return { games, generateId, addGame, updateGameStatus };
   })
