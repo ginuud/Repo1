@@ -20,8 +20,8 @@ export const usePlayerStore = defineStore('player', () => {
         const index = players.value.findIndex((player) => player.id === playerId);
         if (index !== -1) {
           players.value.splice(index, 1);
-        }
       }
+    }
 
     const players = ref<Player[]>([
         {id: generateId(), name: 'Ivo Linna', points: 0, rank: 10 },
@@ -45,8 +45,25 @@ export const usePlayerStore = defineStore('player', () => {
 
         players.value = sortedPlayers;
       };
+      
+      const teamStore = useTeamStore();
 
-      return { players, generateId, addPlayer, deletePlayer, generateRanks };
+      const addPointsToWinningTeam = (winningTeam: string) => {
+      const team = teamStore.teams.find(t => t.teamname === winningTeam);
+      if (team) {
+        players.value.forEach((player) => {
+        if (team.members.includes(player.name)) {
+        player.points += 1;
+        }
+      });
+    
+    generateRanks(); // Recalculate the ranks after points are added
+    } else {
+      console.error(`Team ${winningTeam} not found`);
+    }
+    };
+
+    return { players, generateId, addPlayer, deletePlayer, generateRanks, addPointsToWinningTeam };
   })
 
   export const useGameStore = defineStore('game', () => {
@@ -63,15 +80,19 @@ export const usePlayerStore = defineStore('player', () => {
     ]);
     const addGame = (game: Game) => {
       games.value.push(game)
-  }
+    }
 
-  const updateGameStatus = (id: number, status: "in progress" | "inactive") => {
+    const makeStatusInactive = (id: number, status: "in progress") => {
     const game = games.value.find(game => game.id === id);
     if (game) {
-      game.status = status;
+      game.status = "inactive";
+    } 
+    else {
+      console.error(`Game with id ${id} not found`);
     }
-  }
-  return { games, generateId, addGame, updateGameStatus };
+    }
+
+    return { games, generateId, addGame, makeStatusInactive };
   })
 
   export const useTeamStore = defineStore('team', () => {
