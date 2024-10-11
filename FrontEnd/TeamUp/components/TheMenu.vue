@@ -22,6 +22,10 @@
       to: "/add-team",
     },
     {
+      label: "Teams",
+      to: "/teams",
+    },
+    {
       label: "Start Game",
       to: "/start-game",
     },
