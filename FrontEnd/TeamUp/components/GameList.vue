@@ -64,13 +64,8 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 const endGame = async (id: number) => {
-<<<<<<< FrontEnd/TeamUp/components/GameList.vue
-  gameStore.updateGameStatus(id, 'inactive');
+  //gameStore.updateGameStatus(id, 'in progress');
   await router.push(`/select-winner?gameId=${id}`);
-=======
- gameStore.updateGameStatus(id, 'inactive');
- await router.push("/players");
->>>>>>> FrontEnd/TeamUp/components/GameList.vue
 };
 
 </script>

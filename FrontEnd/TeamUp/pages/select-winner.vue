@@ -40,7 +40,7 @@
   const submitWinner = () => {
     if (selectedTeam.value) {
       playerStore.addPointsToWinningTeam(selectedTeam.value);
-      //gameStore.makeStatusInactive(gameId.value); 
+      //gameStore.makeStatusInactive(gameId.value, "in progress"); 
       router.push('/players'); 
     }
   };
