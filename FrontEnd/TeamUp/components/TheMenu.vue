@@ -18,6 +18,10 @@
       to: "/add-player",
     },
     {
+      label: "Add teams",
+      to: "/add-team",
+    },
+    {
       label: "Start Game",
       to: "/start-game",
     },
