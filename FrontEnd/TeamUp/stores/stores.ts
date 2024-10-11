@@ -45,7 +45,17 @@ export const usePlayerStore = defineStore('player', () => {
         players.value = sortedPlayers;
       };
 
-      return { players, generateId, addPlayer, deletePlayer, generateRanks };
+      const addPointsToWinningTeam = (winningTeam: 'A' | 'B') => {
+        players.value.forEach((player) => {
+          if (player.team === winningTeam) {
+            player.points += 1; 
+          }
+        });
+
+        generateRanks(); 
+      };
+
+      return { players, generateId, addPlayer, deletePlayer, generateRanks, addPointsToWinningTeam };
   })
 
   export const useGameStore = defineStore('game', () => {
@@ -65,5 +75,12 @@ export const usePlayerStore = defineStore('player', () => {
       {id: generateId(), name: 'Korvpall', team1name: 'A', team2name: 'B', status: 'inactive'},
     ]);
 
-    return { games, generateId, addGame };
+    // const makeStatusInactive =(id: number) => {
+    //     const game = games.value.find(g => g.id === id);
+    //     if (game && game.status === 'in progress') {
+    //     game.status = 'inactive';
+    //     }
+    // }
+
+    return { games, generateId, addGame, /* makeStatusInactive */ };
   })

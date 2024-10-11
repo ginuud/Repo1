@@ -53,8 +53,12 @@ const games = computed(() =>gameStore.games.map(game => ({
 import { useRouter } from 'vue-router';
 const router = useRouter();
 
+// const endGame = async (id: number) => {
+//     // useGameStore.stopGame(id)
+//  await router.push({"/select-winner", query: { gameId: id } });
+// };
 const endGame = async (id: number) => {
- await router.push("/players");
+  await router.push(`/select-winner?gameId=${id}`);
 };
 
 </script>
