@@ -53,11 +53,11 @@ export const usePlayerStore = defineStore('player', () => {
       if (team) {
         players.value.forEach((player) => {
         if (team.members.includes(player.name)) {
-        player.points += 1;
+        player.points = Number(player.points) + 1;
         }
       });
     
-    generateRanks(); // Recalculate the ranks after points are added
+    generateRanks();
     } else {
       console.error(`Team ${winningTeam} not found`);
     }
