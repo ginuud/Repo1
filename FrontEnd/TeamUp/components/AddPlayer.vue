@@ -34,7 +34,7 @@
         const errors = [];
         if (!state.name) 
         errors.push({ path: "name", message: "Required" });
-        if (!state.team)
+        if (!state.points)
         errors.push({ path: "points", message: "Required" });
         return errors;
     };
