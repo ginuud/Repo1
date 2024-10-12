@@ -61,7 +61,7 @@ async function onError(event: FormErrorEvent) {
 
 const teamOptions = computed(() => 
   teamsStore.teams.map(team => ({
-    value: team.id,
+    value: team.teamname,
     label: team.teamname 
   }))
 );
