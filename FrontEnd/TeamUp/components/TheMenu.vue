@@ -17,5 +17,21 @@
       label: "Add players",
       to: "/add-player",
     },
+    {
+      label: "Add teams",
+      to: "/add-team",
+    },
+    {
+      label: "Teams",
+      to: "/teams",
+    },
+    {
+      label: "Start Game",
+      to: "/start-game",
+    },
+    {
+      label: "Games",
+      to: "/games",
+    },
   ];
   </script>

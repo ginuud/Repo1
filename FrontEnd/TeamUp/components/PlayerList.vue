@@ -27,10 +27,6 @@
       label: "Name",
     },
     {
-      key: "team",
-      label: "Team",
-    },
-    {
       key: "actions",
       label: "Tegevused"
     }
