@@ -1,24 +1,52 @@
 using Microsoft.EntityFrameworkCore;
 using REST.Models.Classes;
-using REST.Models.Enums;
 
 namespace REST.Data
 {
     public class DataContext(DbContextOptions options) : DbContext(options)
     {
         public DbSet<Player> Players { get; set; }
+        public DbSet<Team> Teams { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder){
             base.OnModelCreating(modelBuilder);
+
+            // Configure Player <-> Team relationship
+            modelBuilder.Entity<Player>()
+                .HasOne(p => p.Team) // Each Player has one Team
+                .WithMany(t => t.Members) // Each Team has many Players
+                .HasForeignKey(p => p.TeamId) // TeamId is the foreign key
+                .OnDelete(DeleteBehavior.Cascade); 
+
             modelBuilder.Entity<Player>().Property(x => x.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Player>().Property(p => p.Id).HasIdentityOptions(startValue: 4);
 
+            modelBuilder.Entity<Team>().Property(x => x.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Team>().Property(p => p.Id).HasIdentityOptions(startValue: 4);
+
+            modelBuilder.Entity<Team>().HasData(
+                new Team
+                {
+                    Id = 1,
+                    Name = "Bulls",
+                },
+                new Team
+                {
+                    Id = 2,
+                    Name = "Lakers",
+                },
+                new Team
+                {
+                    Id = 3,
+                    Name = "Celtics",
+                }
+            );
             modelBuilder.Entity<Player>().HasData(
                 new Player
                 {
                     Id = 1,
                     Name = "Michael Jordan",
-                    Team = Team.Bulls,
+                    TeamId = 1,
                     Points = 32292,
                     Rank = 1
                 },
@@ -26,7 +54,7 @@ namespace REST.Data
                 {
                     Id = 2,
                     Name = "LeBron James",
-                    Team = Team.Lakers,
+                    TeamId = 2,
                     Points = 35367,
                     Rank = 2
                 },
@@ -34,7 +62,7 @@ namespace REST.Data
                 {
                     Id = 3,
                     Name = "Kobe Bryant",
-                    Team = Team.Lakers,
+                    TeamId = 2,
                     Points = 33643,
                     Rank = 3
                 },
@@ -42,7 +70,7 @@ namespace REST.Data
                 {
                     Id = 4,
                     Name = "Magic Johnson",
-                    Team = Team.Lakers,
+                    TeamId = 2,
                     Points = 17707,
                     Rank = 4
                 },
@@ -50,9 +78,9 @@ namespace REST.Data
                 {
                     Id = 5,
                     Name = "Larry Bird",
-                    Team = Team.Celtics,
+                    TeamId = 3,
                     Points = 21791,
-                    Rank = 5
+                    Rank = 53
                 }
             );
         }
