@@ -11,11 +11,12 @@ namespace REST.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder){
             base.OnModelCreating(modelBuilder);
 
-            // Configure Player <-> Team relationship
+            //modelBuilder.Entity<Player>(x => x.HasKey(p => new { p.TeamId }));
+
             modelBuilder.Entity<Player>()
-                .HasOne(p => p.Team) // Each Player has one Team
-                .WithMany(t => t.Members) // Each Team has many Players
-                .HasForeignKey(p => p.TeamId) // TeamId is the foreign key
+                .HasOne(p => p.Team)
+                .WithMany(t => t.Members)
+                .HasForeignKey(p => p.TeamId)
                 .OnDelete(DeleteBehavior.Cascade); 
 
             modelBuilder.Entity<Player>().Property(x => x.Id).ValueGeneratedOnAdd();

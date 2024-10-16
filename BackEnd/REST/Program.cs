@@ -12,7 +12,8 @@ builder.Services.AddControllers();
 
 builder.Services
     .AddDbContext<DataContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("Default")))
-    .AddScoped<PlayersRepo>();
+    .AddScoped<PlayersRepo>()
+    .AddScoped<TeamsRepo>();
 
 var app = builder.Build();
 
