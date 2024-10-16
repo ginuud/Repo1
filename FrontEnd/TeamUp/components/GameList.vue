@@ -64,7 +64,6 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 const endGame = async (id: number) => {
-  //gameStore.updateGameStatus(id, 'in progress');
   await router.push(`/select-winner?gameId=${id}`);
 };
 
