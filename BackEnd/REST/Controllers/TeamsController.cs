@@ -13,9 +13,14 @@ namespace REST.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class TeamsController(TeamsRepo repo) : ControllerBase
+    public class TeamsController : ControllerBase
     {
-        private readonly TeamsRepo repo = repo;
+        private readonly ITeamRepository repo;
+
+        public TeamsController(ITeamRepository teamRepo)
+        {
+            repo = teamRepo;
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
@@ -24,7 +29,7 @@ namespace REST.Controllers
             var stockDto = result.Select(s => s.ToTeamDto()).ToList();
             return Ok(result);
         }
-        
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTeam(int id){
             var team = await repo.GetByIdAsync(id);
@@ -35,13 +40,12 @@ namespace REST.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SaveTeam([FromBody] Team team){
-            var teamExists = await repo.TeamExists(team.Id);
-            if (teamExists ){
-                return Conflict();
-            }
-            var result = repo.CreateAsync(team);
-            return CreatedAtAction(nameof(SaveTeam), new {team.Id}, result);
+        public async Task<IActionResult> Create([FromBody] Team team){
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            var result = await repo.CreateAsync(team);
+            return CreatedAtAction(nameof(Create), new {team.Id}, result);
         }
 
         [HttpPut("{id:int}")]

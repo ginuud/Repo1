@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using REST.Data.Repos;
 using REST.Dtos.Player;
+using REST.Interfaces;
 using REST.Mappers;
 using REST.Models.Classes;
 
@@ -14,11 +15,11 @@ namespace REST.Controllers
     [Route("api/[controller]")]
     public class PlayersController : ControllerBase
     {
-        private readonly PlayersRepo repo;
+        private readonly IPlayerRepository repo;
 
 
 
-        public PlayersController(PlayersRepo playersRepo)
+        public PlayersController(IPlayerRepository playersRepo)
         {
             repo = playersRepo;
         }
@@ -40,13 +41,12 @@ namespace REST.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SavePlayer([FromBody] Player player){
-            var playerExists = await repo.PlayerExists(player.Id);
-            if (playerExists ){
-                return Conflict();
-            }
-            var result = repo.CreateAsync(player);
-            return CreatedAtAction(nameof(SavePlayer), new {player.Id}, result);
+        public async Task<IActionResult> Create([FromBody] Player player){
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            var result = await repo.CreateAsync(player);
+            return CreatedAtAction(nameof(Create), new {player.Id}, result);
         }
 
         [HttpPut("{id:int}")]
