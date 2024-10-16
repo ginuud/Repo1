@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using REST.Data;
 using REST.Data.Repos;
+using REST.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,8 +13,9 @@ builder.Services.AddControllers();
 
 builder.Services
     .AddDbContext<DataContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("Default")))
-    .AddScoped<PlayersRepo>()
-    .AddScoped<TeamsRepo>();
+    .AddScoped<IPlayerRepository, PlayersRepo>()
+    .AddScoped<ITeamRepository, TeamsRepo>();
+
 
 var app = builder.Build();
 

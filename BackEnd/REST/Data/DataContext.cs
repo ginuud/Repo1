@@ -16,8 +16,7 @@ namespace REST.Data
             modelBuilder.Entity<Player>()
                 .HasOne(p => p.Team)
                 .WithMany(t => t.Members)
-                .HasForeignKey(p => p.TeamId)
-                .OnDelete(DeleteBehavior.Cascade); 
+                .HasForeignKey(p => p.TeamId); 
 
             modelBuilder.Entity<Player>().Property(x => x.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Player>().Property(p => p.Id).HasIdentityOptions(startValue: 4);

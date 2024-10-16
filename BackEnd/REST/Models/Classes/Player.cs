@@ -9,6 +9,6 @@ namespace REST.Models.Classes
         public int Points { get; set; }
         public int Rank { get; set; }
         public int TeamId { get; set; }
-        //public Team? Team { get; set; }
+        public Team? Team { get; set; }
     }
 }
