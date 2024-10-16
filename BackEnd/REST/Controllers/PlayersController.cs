@@ -41,12 +41,13 @@ namespace REST.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Player player){
+        public async Task<IActionResult> Create([FromBody] CreatePlayerDto playerDto){
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             
-            var result = await repo.CreateAsync(player);
-            return CreatedAtAction(nameof(Create), new {player.Id}, result);
+            var playerModel = playerDto.ToPlayerFromCreate();
+            var result = await repo.CreateAsync(playerModel);
+            return CreatedAtAction(nameof(Create), new {playerModel.Id}, result);
         }
 
         [HttpPut("{id:int}")]

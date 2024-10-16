@@ -10,7 +10,7 @@ namespace REST.Data.Repos
         private readonly DataContext context = context;
 
         public async Task<Player> CreateAsync(Player player){
-            context.Add(player);
+            context.Players.Add(player);
             await context.SaveChangesAsync();
             return player;
         }

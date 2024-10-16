@@ -9,7 +9,6 @@ namespace REST.Dtos.Team
 {
     public class CreateTeamDto
     {
-        public int Id { get; set; }
         [Required]
         [MaxLength(10, ErrorMessage = "Name cannot be over 10 over characters")]
         public string? Name { get; set; }

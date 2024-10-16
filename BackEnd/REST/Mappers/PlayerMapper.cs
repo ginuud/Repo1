@@ -13,14 +13,13 @@ namespace REST.Mappers
     {
         public static PlayerDto ToPlayerDto(this Player playerModel){
             return new PlayerDto{
-                Id = playerModel.Id,
                 Name = playerModel.Name,
                 Points = playerModel.Points,
                 Rank = playerModel.Rank,
                 TeamId = playerModel.TeamId,
             };
         }
-        public static Player ToPlayerFromCreate(this CreatePlayerDto playerDto, int playerId){
+        public static Player ToPlayerFromCreate(this CreatePlayerDto playerDto){
             return new Player{
                 Name = playerDto.Name,
                 Points = playerDto.Points,
