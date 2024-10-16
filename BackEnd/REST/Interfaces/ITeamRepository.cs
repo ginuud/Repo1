@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using REST.Dtos.Team;
 using REST.Models.Classes;
 
 namespace REST.Interfaces
