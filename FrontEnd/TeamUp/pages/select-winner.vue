@@ -22,8 +22,8 @@
   <script setup lang="ts">
   import { ref, computed } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
-  import { useGameStore } from '~/stores/stores'; 
-  import { usePlayerStore } from '~/stores/stores'; 
+  import { useGameStore } from '~/stores/gameStore'; 
+  import { usePlayerStore } from '~/stores/playerStore'; 
   
   const route = useRoute();
   const router = useRouter();
