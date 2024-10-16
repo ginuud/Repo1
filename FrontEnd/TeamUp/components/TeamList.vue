@@ -9,7 +9,7 @@
     />
   </template>
   <script setup lang="ts">
-  import { useTeamStore } from "~/stores/stores" 
+  import { useTeamStore } from "~/stores/teamStore" 
   
   const teamStore = useTeamStore();
   

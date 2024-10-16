@@ -21,10 +21,9 @@
   <script setup lang="ts">
     import type { FormError, FormErrorEvent, FormSubmitEvent } from "#ui/types";
     import type { Team } from "~/types/team";
-    import { useTeamStore } from "~/stores/stores";
-    import { usePlayerStore } from "~/stores/stores";
+    import { useTeamStore } from "~/stores/teamStore";
+    import { usePlayerStore } from "~/stores/playerStore";
 
-    const teamStore = useTeamStore()
     const playerStore = usePlayerStore();
 
     const playerOptions = computed(() =>
@@ -36,7 +35,7 @@
     const { addTeam, generateId, } = useTeamStore();
 
     const state = reactive<Team>({
-        id: teamStore.generateId(),
+        id: generateId(),
         teamname: undefined,
         members: [],
     });
