@@ -1,8 +1,11 @@
-using REST.Models.Classes;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace REST.Models.Classes
+namespace REST.Dtos.Team
 {
-    public class Player
+    public class PlayerDto
     {
         public int Id { get; set; }
         public string? Name { get; set; }

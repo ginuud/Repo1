@@ -13,7 +13,7 @@ namespace REST.Data.Repos
             return team;
         }
 
-        public async Task<List<Team>> GetAllTeams()
+        public async Task<List<Team>> GetAllTeamsAsync()
         {
             IQueryable<Team> query = context.Teams.AsQueryable();
 

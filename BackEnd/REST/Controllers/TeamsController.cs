@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using REST.Data.Repos;
+using REST.Mappers;
 using REST.Models.Classes;
 
 namespace REST.Controllers
@@ -17,7 +18,8 @@ namespace REST.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var result = await repo.GetAllTeams();
+            var result = await repo.GetAllTeamsAsync();
+            var stockDto = result.Select(s => s.ToTeamDto()).ToList();
             return Ok(result);
         }
         [HttpGet("{id}")]
