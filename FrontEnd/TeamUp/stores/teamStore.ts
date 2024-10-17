@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import type { Team } from "~/types/team";
-import type { Player } from "~/types/player";
 
 export const useTeamStore = defineStore('team', () => {
     let currentId: number = 0;

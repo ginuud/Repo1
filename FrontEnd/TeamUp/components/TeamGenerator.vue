@@ -36,7 +36,6 @@
   import { usePlayerStore } from '~/stores/playerStore'; // Player store
   import { useTeamStore } from '~/stores/teamStore'; // Team store
   import type { Player } from '~/types/player'; // Player type
-  import type { Team } from '~/types/team'; // Team type
   
   const playerStore = usePlayerStore();
   const teamStore = useTeamStore();
@@ -50,38 +49,39 @@
   
   // Function to handle team generation and store it in the team store
   function onGenerateTeams() {
-    const teams = generateBalancedTeams(playerStore.players, formState.numberOfTeams);
-    generatedTeams.value = teams;
-  
-    // Add generated teams to the team store
-    teams.forEach((team, index) => {
-      teamStore.addTeam({
-        id: teamStore.generateId(),
-        teamname: `Team ${index + 1}`,
-        members: team.players.map(player => player.name)
-      });
+  const teams = generateBalancedTeams(playerStore.players, formState.numberOfTeams);
+  generatedTeams.value = teams;
+
+  // Add generated teams to the team store
+  teams.forEach((team, index) => {
+    teamStore.addTeam({
+      id: teamStore.generateId(),
+      teamname: `Team ${index + 1}`,
+      members: team.players.map(player => player.name)
     });
-  }
+  });
+}
   
   // Function to divide players into balanced teams based on their points
   function generateBalancedTeams(players: Player[], numberOfTeams: number): { players: Player[], totalPoints: number }[] {
-    const sortedPlayers = players.slice().sort((a, b) => b.points - a.points);
-  
-    const teams = Array.from({ length: numberOfTeams }, () => ({
-      players: [] as Player[],
-      totalPoints: 0
-    }));
-  
-    sortedPlayers.forEach((player) => {
-      const teamWithLeastPoints = teams.reduce((prev, curr) =>
-        prev.totalPoints < curr.totalPoints ? prev : curr
-      );
-      teamWithLeastPoints.players.push(player);
-      teamWithLeastPoints.totalPoints += player.points;
-    });
-  
-    return teams;
-  }
+  // Sort players by points in descending order
+  const sortedPlayers = players.slice().sort((a, b) => b.points - a.points);
+
+  // Initialize teams with an equal number of players
+  const teams = Array.from({ length: numberOfTeams }, () => ({
+    players: [] as Player[],
+    totalPoints: 0
+  }));
+
+  // Distribute players evenly among teams, trying to balance total points
+  sortedPlayers.forEach((player, index) => {
+    const teamIndex = index % numberOfTeams;
+    teams[teamIndex].players.push(player);
+    teams[teamIndex].totalPoints += player.points;
+  });
+
+  return teams;
+}
   </script>
   
   
