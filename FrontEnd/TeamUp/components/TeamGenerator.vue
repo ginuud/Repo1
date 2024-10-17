@@ -13,6 +13,20 @@
       </div>
       <UButton type="submit">Generate Teams</UButton>
     </UForm>
+    <!-- KUSTUTA SIIT -->
+    <div v-if="generatedTeams.length > 0">
+      <h2>Generated Teams</h2>
+      <div v-for="(team, index) in generatedTeams" :key="index">
+        <h3>{{ formState.teamNames[index] }}</h3> <!-- Display the team name from the form -->
+        <ul>
+          <li v-for="player in team.players" :key="player.id">
+            {{ player.name }} - {{ player.points }} points
+          </li>
+        </ul>
+        <p><strong>Total Points:</strong> {{ team.totalPoints }}</p>
+      </div>
+    </div>
+    <!-- KUSTUTA SIIANI -->
   </div>
 </template>
 
@@ -43,7 +57,7 @@ async function onGenerateTeams() {
       members: team.players.map(player => player.name)
     });
   });
-  await navigateTo("/teams");
+  // LISA TAGASI KUI ÜLEVALT ON DIVID KUSTUTATUD await navigateTo("/teams");
 }
 
 function generateBalancedTeams(players: Player[], numberOfTeams: number): { players: Player[], totalPoints: number }[] {
