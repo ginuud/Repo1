@@ -105,6 +105,7 @@ const submitWinner = () => {
 	playerStore.addPointsToWinningTeam(selectedTeam.value);
 	gameStore.makeStatusInactive(selectedGameId.value, "in progress");
 	isModalOpen.value = false;
+  navigateTo("/players");
   }
 };
 
