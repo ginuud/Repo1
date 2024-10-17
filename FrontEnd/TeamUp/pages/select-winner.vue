@@ -17,6 +17,7 @@
         <UButton color="red" @click="cancelSelection">Cancel</UButton>
       </template>
     </UCard>
+ 
   </template>
   
   <script setup lang="ts">
