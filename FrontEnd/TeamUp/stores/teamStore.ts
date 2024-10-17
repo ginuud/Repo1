@@ -26,27 +26,27 @@ export const useTeamStore = defineStore('team', () => {
       {id: generateId(), teamname: 'B', members:['Koit Toome', 'Evelin Ilves']},
     ]);
 
-    const generateTeams = (teamCount: number) => {
-      const playerStore = usePlayerStore(); // Get players from the player store
-      const players = playerStore.players; // Access players
-  
+    const generateTeams = (teamCount: number, teamNames: string[]) => {
+      const playerStore = usePlayerStore(); // Access players from the player store
+      const players = playerStore.players; 
+
       // Sort players by points in descending order
-      const sortedPlayers = [...players].sort((a, b) => b.points - a.points);
-  
-      // Initialize generated teams
-      const generatedTeams: Team[] = Array.from({ length: teamCount }, (_, i) => ({
+      const sortedPlayers = players.slice().sort((a, b) => b.points - a.points);
+
+      // Initialize teams with equal distribution
+      const balancedTeams: Team[] = Array.from({ length: teamCount }, (_, i) => ({
         id: generateId(),
-        teamname: `Team ${i + 1}`,
+        teamname: teamNames[i] || `Team ${i + 1}`, // Use form-provided team names or default names
         members: [],
       }));
-  
-      // Distribute players between teams
+
+      // Distribute players evenly among teams
       sortedPlayers.forEach((player, index) => {
-        generatedTeams[index % teamCount].members.push(player.name);
+        balancedTeams[index % teamCount].members.push(player.name); // Distribute players by index
       });
-  
-      // Clear current teams and add newly generated teams
-      teams.value = generatedTeams;
+
+      // Clear the current teams and add the newly generated balanced teams
+      teams.value = balancedTeams;
     };
 
     return { teams, generateId, addTeam, deleteTeam, generateTeams };

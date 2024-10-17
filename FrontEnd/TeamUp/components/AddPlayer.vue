@@ -11,7 +11,7 @@
       </UFormGroup>
 
       <UFormGroup label="Points" name="points">
-        <UInput v-model="state.points" type="points"/>
+        <UInput v-model="state.points" type="number" placeholder="Enter points" />
       </UFormGroup>
   
       <UButton type="submit"> Lisa </UButton>
@@ -27,7 +27,7 @@
     const state = reactive<Player>({
         id: generateId(),
         name: undefined,
-        points: undefined
+        points: undefined,
     });
 
     const validate = (state: any): FormError[] => {
