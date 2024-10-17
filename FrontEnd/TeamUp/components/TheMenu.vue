@@ -33,5 +33,9 @@
       label: "Games",
       to: "/games",
     },
+    {
+      label: "Team generation",
+      to: "/team-generator",
+    },
   ];
   </script>
