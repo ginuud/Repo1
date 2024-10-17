@@ -32,7 +32,7 @@
         label: player.name,
     })));
   
-    const { addTeam, generateId, } = useTeamStore();
+    const { addTeam, generateId, generateTeams, } = useTeamStore();
 
     const state = reactive<Team>({
         id: generateId(),

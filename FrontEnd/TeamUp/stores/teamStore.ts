@@ -26,5 +26,28 @@ export const useTeamStore = defineStore('team', () => {
       {id: generateId(), teamname: 'B', members:['Koit Toome', 'Evelin Ilves']},
     ]);
 
-    return { teams, generateId, addTeam, deleteTeam };
+    const generateTeams = (teamCount: number) => {
+      const playerStore = usePlayerStore(); // Get players from the player store
+      const players = playerStore.players; // Access players
+  
+      // Sort players by points in descending order
+      const sortedPlayers = [...players].sort((a, b) => b.points - a.points);
+  
+      // Initialize generated teams
+      const generatedTeams: Team[] = Array.from({ length: teamCount }, (_, i) => ({
+        id: generateId(),
+        teamname: `Team ${i + 1}`,
+        members: [],
+      }));
+  
+      // Distribute players between teams
+      sortedPlayers.forEach((player, index) => {
+        generatedTeams[index % teamCount].members.push(player.name);
+      });
+  
+      // Clear current teams and add newly generated teams
+      teams.value = generatedTeams;
+    };
+
+    return { teams, generateId, addTeam, deleteTeam, generateTeams };
   })

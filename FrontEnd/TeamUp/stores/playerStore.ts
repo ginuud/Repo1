@@ -6,8 +6,7 @@ export const usePlayerStore = defineStore('player', () => {
     let currentId: number = 0;
 
     function generateId(): number {
-      currentId++;
-      return currentId;
+      return ++currentId;
     }
 
     const addPlayer = (player: Player) => {
