@@ -17,11 +17,11 @@ namespace REST.Data.Repos
         }
         public async Task<List<Team>> GetAllAsync()
         {
-            IQueryable<Team> query = context.Teams.AsQueryable();
+            var teams = context.Teams.Include(m => m.Members).AsQueryable();
 
-            return await query.ToListAsync();
+            return await teams.ToListAsync();
         }
-        public async Task<Team?> GetByIdAsync(int id) => await context.Teams.FindAsync(id);
+        public async Task<Team?> GetByIdAsync(int id) => await context.Teams.Include(m => m.Members).FirstOrDefaultAsync(i => i.Id == id);
         public async Task<bool> TeamExists(int id) => await context.Teams.AnyAsync(p => p.Id == id);
 
         public async Task<Team?> UpdateAsync(int id, UpdateTeamRequestDto teamDto) {           

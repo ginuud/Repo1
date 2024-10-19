@@ -27,8 +27,10 @@ namespace REST.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var result = await repo.GetAllAsync();
-            return Ok(result);
+            var players = await repo.GetAllAsync();
+
+            var playerDto = players.Select(t => t.ToPlayerDto());
+            return Ok(playerDto);
         }
         
         [HttpGet("{id}")]
@@ -45,7 +47,7 @@ namespace REST.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             
-            var playerModel = playerDto.ToPlayerFromCreate();
+            var playerModel = playerDto.ToPlayerFromCreate(playerDto.TeamId);
             var result = await repo.CreateAsync(playerModel);
             return CreatedAtAction(nameof(Create), new {playerModel.Id}, result);
         }

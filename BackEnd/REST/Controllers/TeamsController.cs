@@ -26,8 +26,8 @@ namespace REST.Controllers
         public async Task<IActionResult> GetAll()
         {
             var result = await repo.GetAllAsync();
-            var stockDto = result.Select(s => s.ToTeamDto()).ToList();
-            return Ok(result);
+            var teamDto = result.Select(s => s.ToTeamDto()).ToList();
+            return Ok(teamDto);
         }
 
         [HttpGet("{id}")]
