@@ -28,13 +28,14 @@ namespace REST.Controllers
         public async Task<IActionResult> GetAll()
         {
             var players = await repo.GetAllAsync();
-
             var playerDto = players.Select(t => t.ToPlayerDto());
+
             return Ok(playerDto);
         }
         
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetPlayer(int id){
+        public async Task<IActionResult> GetPlayer(int id)
+        {
             var player = await repo.GetByIdAsync(id);
             if (player == null){
                 return NotFound();
@@ -43,7 +44,8 @@ namespace REST.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreatePlayerDto playerDto){
+        public async Task<IActionResult> Create([FromBody] CreatePlayerDto playerDto)
+        {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             
@@ -53,7 +55,8 @@ namespace REST.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update([FromRoute]int id, [FromBody] UpdatePlayerRequestDto updateDto){
+        public async Task<IActionResult> Update([FromRoute]int id, [FromBody] UpdatePlayerRequestDto updateDto)
+        {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 

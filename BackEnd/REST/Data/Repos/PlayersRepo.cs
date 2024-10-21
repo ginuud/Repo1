@@ -10,8 +10,9 @@ namespace REST.Data.Repos
         private readonly DataContext context = context;
 
         public async Task<Player> CreateAsync(Player player){
-            context.Players.Add(player);
+            await context.Players.AddAsync(player);
             await context.SaveChangesAsync();
+            
             return player;
         }
 
@@ -28,8 +29,8 @@ namespace REST.Data.Repos
         
         public async Task<bool> PlayerExists(int id) => await context.Players.AnyAsync(p => p.Id == id);
 
-        public async Task<Player?> UpdateAsync(int id, UpdatePlayerRequestDto playerDto) {
-            
+        public async Task<Player?> UpdateAsync(int id, UpdatePlayerRequestDto playerDto) 
+        {
             var existingPlayer = await context.Players.FirstOrDefaultAsync(x => x.Id == id);
 
             if (existingPlayer == null) {
@@ -43,14 +44,17 @@ namespace REST.Data.Repos
             return existingPlayer;
         }
 
-        public async Task<Player?> DeleteAsync(int id) {
-            Player? playerInDb = await GetByIdAsync(id);
-            if (playerInDb == null) {
+        public async Task<Player?> DeleteAsync(int id) 
+        {
+            var playerModel = await context.Players.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (playerModel == null) {
                 return null;
             }
-            context.Remove(playerInDb);
+
+            context.Players.Remove(playerModel);
             await context.SaveChangesAsync();
-            return playerInDb;	
+            return playerModel;	
         }
     }
 }

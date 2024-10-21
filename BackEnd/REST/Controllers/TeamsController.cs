@@ -27,11 +27,13 @@ namespace REST.Controllers
         {
             var result = await repo.GetAllAsync();
             var teamDto = result.Select(s => s.ToTeamDto()).ToList();
+
             return Ok(teamDto);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetTeam(int id){
+        public async Task<IActionResult> GetTeam(int id)
+        {
             var team = await repo.GetByIdAsync(id);
             if (team == null){
                 return NotFound();
@@ -40,16 +42,19 @@ namespace REST.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Team team){
+        public async Task<IActionResult> Create([FromBody] CreateTeamDto teamDto)
+        {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             
-            var result = await repo.CreateAsync(team);
-            return CreatedAtAction(nameof(Create), new {team.Id}, result);
+            var teamModel = teamDto.ToTeamFromCreate();
+            var result = await repo.CreateAsync(teamModel);
+            return CreatedAtAction(nameof(Create), new {teamModel.Id}, result);
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update([FromRoute]int id, [FromBody] UpdateTeamRequestDto updateDto){
+        public async Task<IActionResult> Update([FromRoute]int id, [FromBody] UpdateTeamRequestDto updateDto)
+        {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             

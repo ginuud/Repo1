@@ -10,7 +10,7 @@ namespace REST.Data.Repos
         private readonly DataContext context = context;
 
         public async Task<Team> CreateAsync(Team team){
-            await context.AddAsync(team);
+            await context.Teams.AddAsync(team);
             await context.SaveChangesAsync();
             
             return team;
@@ -21,7 +21,9 @@ namespace REST.Data.Repos
 
             return await teams.ToListAsync();
         }
-        public async Task<Team?> GetByIdAsync(int id) => await context.Teams.Include(m => m.Members).FirstOrDefaultAsync(i => i.Id == id);
+        public async Task<Team?> GetByIdAsync(int id) => await context.Teams
+        .Include(m => m.Members)
+        .FirstOrDefaultAsync(i => i.Id == id);
         public async Task<bool> TeamExists(int id) => await context.Teams.AnyAsync(p => p.Id == id);
 
         public async Task<Team?> UpdateAsync(int id, UpdateTeamRequestDto teamDto) {           
@@ -33,21 +35,23 @@ namespace REST.Data.Repos
             }
             
             existingTeam.Name = teamDto.Name;
+
             await context.SaveChangesAsync();
 
             return existingTeam;
         }
 
-        public async Task<Team?> DeleteAsync(int id) {
-            Team? teamInDb = await GetByIdAsync(id);
-            if (teamInDb == null) {
+        public async Task<Team?> DeleteAsync(int id) 
+        {
+            var teamModel = await context.Teams.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (teamModel == null) {
                 return null;
             }
 
-            context.Remove(teamInDb);
+            context.Teams.Remove(teamModel);
             await context.SaveChangesAsync();
-
-            return teamInDb;
+            return teamModel;
         }
     }
 }
