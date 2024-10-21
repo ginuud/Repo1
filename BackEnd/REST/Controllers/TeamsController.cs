@@ -12,7 +12,7 @@ using REST.Models.Classes;
 namespace REST.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/teams")]
     public class TeamsController : ControllerBase
     {
         private readonly ITeamRepository repo;
@@ -31,40 +31,54 @@ namespace REST.Controllers
             return Ok(teamDto);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("{id}")]
         public async Task<IActionResult> GetTeam(int id)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
             var team = await repo.GetByIdAsync(id);
-            if (team == null){
-                return NotFound();
-            }
+
+            if (team == null) return NotFound();
+
             return Ok(team);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateTeamDto teamDto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             
             var teamModel = teamDto.ToTeamFromCreate();
-            var result = await repo.CreateAsync(teamModel);
-            return CreatedAtAction(nameof(Create), new {teamModel.Id}, result);
+            await repo.CreateAsync(teamModel);
+
+            return CreatedAtAction(nameof(Create), new {teamModel.Id}, teamModel);
         }
 
-        [HttpPut("{id:int}")]
+        [HttpPut]
+        [Route("{id}")]
         public async Task<IActionResult> Update([FromRoute]int id, [FromBody] UpdateTeamRequestDto updateDto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             
             var teamModel = await repo.UpdateAsync(id, updateDto);
 
-            if (teamModel == null){
-                return NotFound();
-            }
+            if (teamModel == null) return NotFound();
 
             return Ok(teamModel.ToTeamDto());
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<ActionResult> Delete([FromRoute]int id)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var teamModel = await repo.DeleteAsync(id);
+
+            if (teamModel == null) return NotFound("Team doesn't exist");
+
+            return Ok(teamModel);
         }
     }
 }
