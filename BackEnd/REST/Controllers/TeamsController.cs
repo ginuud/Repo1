@@ -49,7 +49,15 @@ namespace REST.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             
-            var teamModel = teamDto.ToTeamFromCreate();
+            var playerIDs = teamDto.Members.Select(m => m.Id).ToList();
+            var existingPlayers = await repo.GetPlayersByIdsAsync(playerIDs);
+
+            if (existingPlayers == null || existingPlayers.Count != playerIDs.Count)
+            {
+                return BadRequest("Some players are invalid or do not exist.");
+            }
+
+            var teamModel = teamDto.ToTeamFromCreate(existingPlayers);
             await repo.CreateAsync(teamModel);
 
             return CreatedAtAction(nameof(Create), new {teamModel.Id}, teamModel);

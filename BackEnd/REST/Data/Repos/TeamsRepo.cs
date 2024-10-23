@@ -24,6 +24,12 @@ namespace REST.Data.Repos
         public async Task<Team?> GetByIdAsync(int id) => await context.Teams
         .Include(m => m.Members)
         .FirstOrDefaultAsync(i => i.Id == id);
+
+        public async Task<List<Player>> GetPlayersByIdsAsync(List<int> playerIds)
+        {
+            return await context.Players.Where(m => playerIds.Contains(m.Id)).ToListAsync();
+        }
+
         public async Task<bool> TeamExists(int id) => await context.Teams.AnyAsync(p => p.Id == id);
 
         public async Task<Team?> UpdateAsync(int id, UpdateTeamRequestDto teamDto) {           

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Npgsql.Replication;
 using REST.Dtos.Team;
 using REST.Models.Classes;
 
@@ -13,9 +14,10 @@ namespace REST.Mappers
                 Members = teamModel.Members.Select(c => c.ToPlayerDto()).ToList(),
             };
         }
-        public static Team ToTeamFromCreate(this CreateTeamDto teamDto){
+        public static Team ToTeamFromCreate(this CreateTeamDto teamDto, List<Player> members){
             return new Team{
                 Name = teamDto.Name,
+                Members = members
             };
         }
         public static Team ToTeamFromUpdate(this UpdateTeamRequestDto teamDto){
