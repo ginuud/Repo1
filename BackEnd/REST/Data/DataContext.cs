@@ -18,6 +18,11 @@ namespace REST.Data
                 .HasOne(p => p.Team)
                 .WithMany(t => t.Members)
                 .HasForeignKey(p => p.TeamId);
+            
+            modelBuilder.Entity<Game>()
+                 .HasMany(g => g.Teams)
+                 .WithOne(t => t.Game)
+                 .HasForeignKey(t => t.GameId);
 
             modelBuilder.Entity<Player>().Property(x => x.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Player>().Property(p => p.Id).HasIdentityOptions(startValue: 10);
@@ -27,6 +32,24 @@ namespace REST.Data
 
             modelBuilder.Entity<Game>().Property(x => x.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Game>().Property(p => p.Id).HasIdentityOptions(startValue: 3);
+
+            modelBuilder.Entity<Game>().HasData(
+                new Game
+                {
+                    Id = 1,
+                    Name = "Bulls vs Lakers"
+                },
+                new Game
+                {
+                    Id = 2,
+                    Name = "Celtics vs Spurs"
+                }
+                // new Game
+                // {
+                //     Id = 3,
+                //     Name = "Wariors"
+                // }                 
+            );
 
             modelBuilder.Entity<Team>().HasData(
                 new Team
@@ -52,13 +75,13 @@ namespace REST.Data
                     Id = 4,
                     Name = "Spurs",
                     GameId = 2
-                },
-                new Team
-                {
-                    Id = 5,
-                    Name = "Warriors",
-                    GameId = 3
                 }
+                // new Team
+                // {
+                //     Id = 5,
+                //     Name = "Warriors",
+                //     GameId = 3
+                // }
 
             );
             modelBuilder.Entity<Player>().HasData(
@@ -117,39 +140,26 @@ namespace REST.Data
                     TeamId = 4,
                     Points = 1522,
                     Rank = 79
-                },
-                new Player
-                {
-                    Id = 8,
-                    Name = "Stephen Curry",
-                    TeamId = 5,
-                    Points = 23668,
-                    Rank = 6
-                },
-                new Player
-                {
-                    Id = 9,
-                    Name = "Kevin Durant",
-                    TeamId = 5,
-                    Points = 28924,
-                    Rank = 5
                 }
+                // new Player
+                // {
+                //     Id = 8,
+                //     Name = "Stephen Curry",
+                //     TeamId = 5,
+                //     Points = 23668,
+                //     Rank = 6
+                // },
+                // new Player
+                // {
+                //     Id = 9,
+                //     Name = "Kevin Durant",
+                //     TeamId = 5,
+                //     Points = 28924,
+                //     Rank = 5
+                // }
 
             );
-            modelBuilder.Entity<Game>().HasData(
-                new Game
-                {
-                    Id = 1,
-                    Name = "Bulls vs Lakers",
-                    Teams = []
-                },
-                new Game
-                {
-                    Id = 2,
-                    Name = "Celtics vs Spurs",
-                    Teams = []
-                }                
-            );
+            
         }
     }
 }

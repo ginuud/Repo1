@@ -25,7 +25,8 @@ namespace REST.Mappers
         }
         public static Game ToGameFromUpdate(this UpdateGameRequestDto gameDto){
             return new Game{
-                Name = gameDto.Name                
+                Name = gameDto.Name, 
+                Teams = new List<Team>()               
             };
         }
     }

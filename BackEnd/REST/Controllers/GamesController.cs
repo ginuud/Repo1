@@ -57,7 +57,7 @@ namespace REST.Controllers
             return CreatedAtAction(nameof(GetGame), new {id = gameModel.Id}, gameModel.ToGameDto());
         }
 
-        [HttpPut("{id:int}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromRoute]int id, [FromBody] UpdateGameRequestDto updateDto){
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -71,5 +71,18 @@ namespace REST.Controllers
 
             return Ok(gameModel.ToGameDto());
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute]int id)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var gameModel = await repo.DeleteAsync(id);
+
+            if (gameModel == null) return NotFound("Game doesn't exist");
+
+            return Ok(gameModel);
+        }
+
     }
 }

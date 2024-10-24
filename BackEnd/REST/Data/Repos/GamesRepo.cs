@@ -38,15 +38,24 @@ namespace REST.Data.Repos
 
         public async Task<Game?> UpdateAsync(int id, UpdateGameRequestDto gameDto) {
             
-            var existingGame = await context.Games.FirstOrDefaultAsync(x => x.Id == id);
+            var existingGame = await context.Games
+            .Include(g => g.Teams)
+            .FirstOrDefaultAsync(x => x.Id == id);
 
             if (existingGame == null) {
                 return null;
             }
             existingGame.Name = gameDto.Name;
 
+            if (gameDto.TeamIds != null && gameDto.TeamIds.Any()){
+                existingGame.Teams.Clear();
+                var teams = await context.Teams.Where(t => gameDto.TeamIds.Contains(t.Id)).ToListAsync();
+                foreach (var team in teams)
+                {
+                    existingGame.Teams.Add(team);
+                }
+            }
             await context.SaveChangesAsync();
-
             return existingGame;
         }
 
@@ -60,7 +69,7 @@ namespace REST.Data.Repos
             context.Games.Remove(gameModel);
             await context.SaveChangesAsync();
             return gameModel;	
-        }
+        }        
         
     }
 }
