@@ -60,7 +60,7 @@ namespace REST.Controllers
             var teamModel = teamDto.ToTeamFromCreate(existingPlayers);
             await repo.CreateAsync(teamModel);
 
-            return CreatedAtAction(nameof(Create), new {teamModel.Id}, teamModel);
+            return CreatedAtAction(nameof(Create), new {id = teamModel.Id}, teamModel.ToTeamDto());
         }
 
         [HttpPut]

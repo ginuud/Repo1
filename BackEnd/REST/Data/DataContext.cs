@@ -11,8 +11,6 @@ namespace REST.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder){
             base.OnModelCreating(modelBuilder);
 
-            //modelBuilder.Entity<Player>(x => x.HasKey(p => new { p.TeamId }));
-
             modelBuilder.Entity<Player>()
                 .HasOne(p => p.Team)
                 .WithMany(t => t.Members)
