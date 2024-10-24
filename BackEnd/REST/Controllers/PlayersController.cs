@@ -17,8 +17,6 @@ namespace REST.Controllers
     {
         private readonly IPlayerRepository repo;
 
-
-
         public PlayersController(IPlayerRepository playersRepo)
         {
             repo = playersRepo;
