@@ -12,7 +12,7 @@ using REST.Models.Classes;
 namespace REST.Controllers
 {
     [ApiController]
-    [Route("api/teams")]
+    [Route("api/[controller]")]
     public class TeamsController : ControllerBase
     {
         private readonly ITeamRepository repo;
@@ -60,7 +60,7 @@ namespace REST.Controllers
             var teamModel = teamDto.ToTeamFromCreate(existingPlayers);
             await repo.CreateAsync(teamModel);
 
-            return CreatedAtAction(nameof(Create), new {id = teamModel.Id}, teamModel.ToTeamDto());
+            return CreatedAtAction(nameof(GetTeam), new {id = teamModel.Id}, teamModel.ToTeamDto());
         }
 
         [HttpPut]

@@ -12,7 +12,7 @@ using REST.Models.Classes;
 namespace REST.Controllers
 {
     [ApiController]
-    [Route("api/players")]
+    [Route("api/[controller]")]
     public class PlayersController : ControllerBase
     {
         private readonly IPlayerRepository repo;

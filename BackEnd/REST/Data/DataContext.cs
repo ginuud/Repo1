@@ -20,7 +20,7 @@ namespace REST.Data
             modelBuilder.Entity<Player>().Property(p => p.Id).HasIdentityOptions(startValue: 4);
 
             modelBuilder.Entity<Team>().Property(x => x.Id).ValueGeneratedOnAdd();
-            modelBuilder.Entity<Team>().Property(p => p.Id).HasIdentityOptions(startValue: 4);
+            modelBuilder.Entity<Team>().Property(p => p.Id).HasIdentityOptions(startValue: 6);
 
             modelBuilder.Entity<Team>().HasData(
                 new Team
