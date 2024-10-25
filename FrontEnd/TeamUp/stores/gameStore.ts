@@ -28,5 +28,14 @@ export const useGameStore = defineStore('game', () => {
     }
     }
 
-    return { games, generateId, addGame, makeStatusInactive };
+    const setWinner = (id: number, winner: string) => {
+      const game = games.value.find(game => game.id === id);
+      if (game) {
+        game.winner = winner;
+      } else {
+        console.error(`Game with id ${id} not found`);
+      }
+    };
+
+    return { games, generateId, addGame, makeStatusInactive, setWinner };
   })

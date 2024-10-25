@@ -6,4 +6,5 @@ export type Game = {
    team1name: Team
    team2name: Team
    status: 'in progress' | 'inactive'
+   winner?: string | null;
 }

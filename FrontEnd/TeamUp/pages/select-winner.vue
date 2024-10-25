@@ -39,12 +39,13 @@
   const selectedTeam = ref<'A' | 'B' | null>(null);
   
   const submitWinner = () => {
-    if (selectedTeam.value) {
-      playerStore.addPointsToWinningTeam(selectedTeam.value);
-      gameStore.makeStatusInactive(gameId.value, "in progress"); 
-      router.push('/players'); 
-    }
-  };
+  if (selectedTeam.value && gameId.value) {
+    gameStore.setWinner(gameId.value, selectedTeam.value);
+    gameStore.makeStatusInactive(gameId.value, "in progress");
+    playerStore.addPointsToWinningTeam(selectedTeam.value);
+    router.push('/players');
+  }
+};
   
   const cancelSelection = () => {
     router.push('/games')
