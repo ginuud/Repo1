@@ -6,6 +6,12 @@
       @submit="onGenerateTeams"
       class="space-y-4"
     >
+    <UFormGroup label="Number of Teams" name="numberOfTeams">
+          <USelect
+            v-model="formState.numberOfTeams"
+            :options="[{ value: 2, label: '2' }, { value: 3, label: '3' }, { value: 4, label: '4' }]"
+          />
+        </UFormGroup>
       <div v-for="(team, index) in formState.teamNames" :key="index">
         <UFormGroup :label="`Team ${index + 1} Name`" :name="`teamName${index + 1}`">
           <UInput v-model="formState.teamNames[index]" placeholder="Enter team name" />
