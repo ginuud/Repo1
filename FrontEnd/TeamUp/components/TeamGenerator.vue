@@ -6,6 +6,14 @@
       @submit="onGenerateTeams"
       class="space-y-4"
     >
+    <UFormGroup label="Select Players" name="selectedPlayers">
+        <div v-for="player in playerStore.players" :key="player.id">
+          <label>
+            <input type="checkbox" v-model="formState.selectedPlayers" :value="player" />
+            {{ player.name }} 
+          </label>
+        </div>
+      </UFormGroup>
       <UFormGroup label="Number of Teams" name="numberOfTeams">
         <USelect
           v-model="formState.numberOfTeams"
@@ -47,7 +55,8 @@ const teamStore = useTeamStore();
 
 const formState = reactive({
   numberOfTeams: 2,
-  teamNames: Array(2).fill('')
+  teamNames: Array(2).fill(''),
+  selectedPlayers: [] as Player[],
 });
 
 const generatedTeams = ref<{ players: Player[]; totalPoints: number }[]>([]);
@@ -62,7 +71,7 @@ watch(() => formState.numberOfTeams, () => {
 });
 
 async function onGenerateTeams() {
-  const teams = generateBalancedTeams(playerStore.players, formState.numberOfTeams);
+  const teams = generateBalancedTeams(formState.selectedPlayers, formState.numberOfTeams);
   generatedTeams.value = teams;
 
   teams.forEach((team, index) => {
