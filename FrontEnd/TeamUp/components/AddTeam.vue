@@ -36,7 +36,7 @@
 
     const state = reactive<Team>({
         id: generateId(),
-        teamname: undefined,
+        teamname: '',
         members: [],
     });
 

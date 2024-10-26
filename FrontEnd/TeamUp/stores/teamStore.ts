@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import type { Team } from "~/types/team";
+import type { Player } from '~/types/player';
 
 export const useTeamStore = defineStore('team', () => {
     let currentId: number = 0;
@@ -22,31 +23,30 @@ export const useTeamStore = defineStore('team', () => {
     }
 
     const teams = ref<Team[]>([
-      {id: generateId(), teamname: 'A', members:['Ivo Linna', 'Arvo Pärt','Kristjan Jõekalda']},
-      {id: generateId(), teamname: 'B', members:['Koit Toome', 'Evelin Ilves']},
+      {id: generateId(), teamname: 'A', members:[]},
+      {id: generateId(), teamname: 'B', members:[]},
     ]);
 
-    const generateTeams = (teamCount: number, teamNames: string[]) => {
-      const playerStore = usePlayerStore(); // Access players from the player store
-      const players = playerStore.players; 
+    const generateTeams = (selectedPlayers: Player[], teamCount: number, teamNames: string[]): Team[] => {
 
-      // Sort players by points in descending order
-      const sortedPlayers = players.slice().sort((a, b) => b.points - a.points);
+      if (selectedPlayers.length < teamCount) {
+          console.error('Not enough players to generate the requested number of teams.');
+          return []; 
+      }
 
-      // Initialize teams with equal distribution
+      const sortedPlayers = selectedPlayers.slice().sort((a, b) => b.points - a.points);
+
       const balancedTeams: Team[] = Array.from({ length: teamCount }, (_, i) => ({
-        id: generateId(),
-        teamname: teamNames[i] || `Team ${i + 1}`, // Use form-provided team names or default names
-        members: [],
+          id: generateId(),
+          teamname: teamNames[i], 
+          members: [],
       }));
 
-      // Distribute players evenly among teams
       sortedPlayers.forEach((player, index) => {
-        balancedTeams[index % teamCount].members.push(player.name); // Distribute players by index
+          balancedTeams[index % teamCount].members.push(player); 
       });
 
-      // Clear the current teams and add the newly generated balanced teams
-      teams.value = balancedTeams;
+      return balancedTeams; 
     };
 
     return { teams, generateId, addTeam, deleteTeam, generateTeams };
