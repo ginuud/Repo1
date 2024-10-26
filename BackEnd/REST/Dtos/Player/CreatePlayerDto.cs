@@ -15,6 +15,5 @@ namespace REST.Dtos.Player
         [Range(1, 100)]
         public int Points { get; set; }
         public int Rank { get; set; }
-        public int TeamId { get; set; }
     }
 }

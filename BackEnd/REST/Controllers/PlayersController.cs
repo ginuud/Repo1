@@ -49,7 +49,7 @@ namespace REST.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             
-            var playerModel = playerDto.ToPlayerFromCreate(playerDto.TeamId);
+            var playerModel = playerDto.ToPlayerFromCreate(playerDto.TeamId); //ei tohiks võtta teamId-d
             await repo.CreateAsync(playerModel);
 
             return CreatedAtAction(nameof(Create), new {playerModel.Id}, playerModel.ToPlayerDto());
