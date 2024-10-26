@@ -66,18 +66,11 @@
     };
 
     async function onSubmit(event: FormSubmitEvent<any>) {
-      console.log('Selected Players IDs:', state.selectedPlayers); //
         const selectedPlayers = state.selectedPlayers
           .map(selected => selected.value) 
           .map(id => playerStore.players.find(player => player.id === id))
           .filter((player): player is Player => player !== undefined);
-            console.log('Selected Players:', selectedPlayers);
-    
-    // Check number of teams and prepare team names
-    console.log('Number of Teams:', state.numberOfTeams); //
-    console.log('Team Names:', teamNames); //
         const teams = generateTeams(selectedPlayers, state.numberOfTeams, teamNames);
-    console.log('Generated Teams:', teams); //
         teams.forEach((team, index) => {
             addTeam({
                 id: generateId(),
