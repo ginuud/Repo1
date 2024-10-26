@@ -36,9 +36,14 @@
     const playerStore = usePlayerStore();
     const { addTeam, generateId, generateTeams, } = useTeamStore();
 
+    interface SelectedPlayer {
+      value: number;
+      label: string;
+    }
+
     const state = reactive({
         teamname: '',
-        selectedPlayers: [],
+        selectedPlayers: [] as SelectedPlayer[],
         numberOfTeams: 2,
     });
 
@@ -59,12 +64,13 @@
         errors.push({ path: "numberOfTeams", message: "At least 2 teams required" });
         return errors;
     };
-    
+
     async function onSubmit(event: FormSubmitEvent<any>) {
       console.log('Selected Players IDs:', state.selectedPlayers); //
         const selectedPlayers = state.selectedPlayers
-            .map(id => playerStore.players.find(player => player.id === id))
-            .filter((player): player is Player => player !== undefined);;
+          .map(selected => selected.value) 
+          .map(id => playerStore.players.find(player => player.id === id))
+          .filter((player): player is Player => player !== undefined);
             console.log('Selected Players:', selectedPlayers);
     
     // Check number of teams and prepare team names
