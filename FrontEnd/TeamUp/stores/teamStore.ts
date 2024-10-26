@@ -28,25 +28,25 @@ export const useTeamStore = defineStore('team', () => {
     ]);
 
     const generateTeams = (selectedPlayers: Player[], teamCount: number, teamNames: string[]): Team[] => {
-
-      if (selectedPlayers.length < teamCount) {
-          console.error('Not enough players to generate the requested number of teams.');
-          return []; 
-      }
-
       const sortedPlayers = selectedPlayers.slice().sort((a, b) => b.points - a.points);
 
-      const balancedTeams: Team[] = Array.from({ length: teamCount }, (_, i) => ({
-          id: generateId(),
-          teamname: teamNames[i], 
-          members: [],
+      const balancedTeams: { team: Team; points: number }[] = Array.from({ length: teamCount }, (_, i) => ({
+        team: { id: generateId(), teamname: teamNames[i], members: [] },
+        points: 0, // Temporary tracking of team points for balancing
       }));
-
-      sortedPlayers.forEach((player, index) => {
-          balancedTeams[index % teamCount].members.push(player); 
+  
+      sortedPlayers.forEach((player) => {
+        const teamWithLeastPlayersAndPoints = balancedTeams.reduce((prev, curr) => 
+          prev.team.members.length < curr.team.members.length ||
+          (prev.team.members.length === curr.team.members.length && prev.points < curr.points)
+            ? prev
+            : curr
+        );
+        teamWithLeastPlayersAndPoints.team.members.push(player);
+        teamWithLeastPlayersAndPoints.points += player.points;
       });
 
-      return balancedTeams; 
+      return balancedTeams.map(({ team }) => team);
     };
 
     return { teams, generateId, addTeam, deleteTeam, generateTeams };
