@@ -49,7 +49,7 @@ export const usePlayerStore = defineStore('player', () => {
       const team = teamStore.teams.find(t => t.teamname === winningTeam);
       if (team) {
         players.value.forEach((player) => {
-        if (team.members.includes(player.name)) {
+        if (team.members.includes(player)) {
         player.points = Number(player.points) + 1;
         }
       });

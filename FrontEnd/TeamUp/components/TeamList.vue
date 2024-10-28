@@ -16,7 +16,7 @@
   // Tuleb ilusamaks teha
   const accordionItems = teamStore.teams.map((team, index) => ({
     label: `Team: ${team.teamname}`,
-    content: `Members: ${team.members.join(', ')}`
+    content: `Members: ${team.members.map(member => member.name).join(', ')}`,
   }));
   </script>
   

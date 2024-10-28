@@ -28,15 +28,15 @@
 
     const playerOptions = computed(() =>
     playerStore.players.map((player) => ({
-        value: player.id,
+        value: player,
         label: player.name,
     })));
   
-    const { addTeam, generateId, generateTeams, } = useTeamStore();
+    const { addTeam, generateId, } = useTeamStore();
 
     const state = reactive<Team>({
         id: generateId(),
-        teamname: undefined,
+        teamname: '',
         members: [],
     });
 
@@ -50,9 +50,12 @@
     };
     
     async function onSubmit(event: FormSubmitEvent<any>) {
-      let playerNames;
-        playerNames = state.members.map((member: any) => member.label);
-        addTeam({ ...state, members: playerNames });
+      const selectedPlayers = state.members.map((member: any) => member.value);
+      addTeam({
+                id: generateId(),
+                teamname: state.teamname,
+                members: selectedPlayers,
+            });
         await navigateTo("/teams");
     }
     
