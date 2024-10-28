@@ -155,16 +155,16 @@ const isOpen = ref(false);
 
 // Open modal and set game data
 
-watch(selectedGameId, (newId) => {
-  if (newId !== null) {
-    isOpen.value = true;
-  }
-});
+//watch(selectedGameId, (newId) => {
+  //if (newId !== null) {
+   // isOpen.value = true;
+  //}
+//});
 
 // Open modal and set game data
 const openModal = (gameId: number) => {
   const game = gameStore.games.find(g => g.id === gameId);
-  if (game) {
+  if (game && game.status === 'in progress') {
 	selectedGameId.value = gameId;
 	team1.value = game.team1name || '';
 	team2.value = game.team2name || '';
@@ -173,8 +173,12 @@ const openModal = (gameId: number) => {
 };
 
 const openDetails = (gameId: number) => {
-  selectedGameId.value = gameId;
-  isOpen.value = true;
+  const game = gameStore.games.find(g => g.id === gameId);
+  if(game && game.status === 'inactive'){
+    selectedGameId.value = gameId;
+    isOpen.value = true;
+  }
+  
 };
 
 // Handle submitting the winner
