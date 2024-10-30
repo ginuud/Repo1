@@ -9,13 +9,12 @@ namespace REST.Dtos.Player
     public class UpdatePlayerRequestDto
     {
         [Required]
-        [MaxLength(10, ErrorMessage = "Name cannot be over 10 over characters")]
+        [MaxLength(30, ErrorMessage = "Name cannot be over 30 over characters")]
         public string? Name { get; set; }
         [Required]
         [Range(1, 100)]
         public int Points { get; set; }
         public int Rank { get; set; }
         public int TeamId { get; set; }
-        //public Team? Team { get; set; }
     }
 }

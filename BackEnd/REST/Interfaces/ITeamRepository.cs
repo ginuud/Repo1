@@ -9,7 +9,7 @@ namespace REST.Interfaces
         Task<Team?> GetByIdAsync(int id);
         Task<List<Player>> GetPlayersByIdsAsync(List<int> playerIds);
         Task<Team> CreateAsync(Team teamModel);
-        Task<Team?> UpdateAsync(int id, UpdateTeamRequestDto stockDto);
+        Task<Team?> UpdateAsync(int id, UpdateTeamRequestDto teamDto);
         Task<Team?> DeleteAsync(int id);
         Task<bool> TeamExists(int id);
     }

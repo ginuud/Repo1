@@ -21,11 +21,10 @@ namespace REST.Mappers
                 Points = playerDto.Points,
             };
         }
-        public static Player ToPlayerFromUpdate(this UpdatePlayerRequestDto playerDto, int teamId){
+        public static Player ToPlayerFromUpdate(this UpdatePlayerRequestDto playerDto){
             return new Player{
                 Name = playerDto.Name,
                 Points = playerDto.Points,
-                TeamId = teamId,
             };
         }
     }

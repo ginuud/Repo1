@@ -68,7 +68,7 @@ namespace REST.Controllers
         public async Task<IActionResult> Update([FromRoute]int id, [FromBody] UpdateTeamRequestDto updateDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            
+
             var teamModel = await repo.UpdateAsync(id, updateDto);
 
             if (teamModel == null) return NotFound();

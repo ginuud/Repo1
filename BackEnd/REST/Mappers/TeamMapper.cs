@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql.Replication;
 using REST.Dtos.Team;
 using REST.Models.Classes;
+using REST.Mappers;
 
 namespace REST.Mappers
 {
@@ -20,10 +21,18 @@ namespace REST.Mappers
                 Members = members
             };
         }
-        public static Team ToTeamFromUpdate(this UpdateTeamRequestDto teamDto){
-            return new Team{
-                Name = teamDto.Name,
-            };
-        }
+        // public static Team ToTeamFromUpdate(this UpdateTeamRequestDto teamDto){
+        //     return new Team{
+        //         Name = teamDto.Name,
+        //         Members = teamDto.Members
+        //             .Select(member => member.Id)
+        //             .ToList()
+        //     };
+        // }
+        // public static Player PlayerToTeamFromUpdate(int teamId){
+        //     return new Player{
+        //         Id = teamId
+        //     };
+        // }
     }
 }

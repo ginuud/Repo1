@@ -42,6 +42,9 @@ namespace REST.Data.Repos
             
             existingTeam.Name = teamDto.Name;
 
+            var membersIds = teamDto.Members.Select(m => m.Id).ToList();
+            existingTeam.Members = await context.Players.Where(m => membersIds.Contains(m.Id)).ToListAsync();
+
             await context.SaveChangesAsync();
 
             return existingTeam;
