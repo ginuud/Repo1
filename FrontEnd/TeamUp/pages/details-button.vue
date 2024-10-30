@@ -12,27 +12,34 @@
   </template>
   
   <script setup lang="ts">
-  import { ref, onMounted } from 'vue';
+  import { computed, ref, onMounted} from 'vue';
   import { useRoute } from 'vue-router';
   import { useGameStore } from '~/stores/gameStore';
   
   const route = useRoute();
   const gameStore = useGameStore();
-  const gameDetails = ref<null | { team1name: string; team2name: string; winner: string | null }>(null);
+
+  const gameId = Number(route.params.id);
+
+  const gameDetails = computed(() => {
+  return gameStore.games.find(game => game.id === gameId) || null;
+});
+  //const gameDetails = ref(null);//ref<null | { team1name: string; team2name: string; winner: string | null }>(null);
   
-  onMounted(() => {
-    // Retrieve the game ID from route parameters
-    const gameId = Number(route.params.id);
-    // Find the game details in the game store
-    const game = gameStore.games.find(g => g.id === gameId);
-    if (game) {
-      gameDetails.value = {
-        team1name: game.team1name,
-        team2name: game.team2name,
-        winner: game.winner || null,  // Retrieve the winner from gameStore
-      };
-    }
-  });
-  </script>
+  //const fetchGameDetails = () => {
+  //const gameId = Number(route.params.id);
+  //const game = gameStore.games.find(g => g.id === gameId);
+  //if (game) {
+    //gameDetails.value= {
+      //team1name: game.team1name,
+     // team2name: game.team2name,
+      //winner: game.winner || null,
+   // };
+ // }
+//};
+
+onMounted(gameDetails);
+
+</script>
   
   

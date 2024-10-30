@@ -41,7 +41,7 @@
   const submitWinner = () => {
   if (selectedTeam.value && gameId.value) {
     gameStore.setWinner(gameId.value, selectedTeam.value);
-    gameStore.makeStatusInactive(gameId.value, "in progress");
+    gameStore.makeStatusInactive(gameId.value);
     playerStore.addPointsToWinningTeam(selectedTeam.value);
     router.push('/players');
   }

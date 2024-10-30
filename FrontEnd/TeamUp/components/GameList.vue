@@ -156,7 +156,7 @@ const isOpen = ref(false);
 // Open modal and set game data
 
 //watch(selectedGameId, (newId) => {
-  //if (newId !== null) {
+ // if (newId !== null) {
    // isOpen.value = true;
   //}
 //});

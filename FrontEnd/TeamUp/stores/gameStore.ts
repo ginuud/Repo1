@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import SelectWinner from '~/pages/select-winner.vue';
 import type { Game } from "~/types/game";
 
 export const useGameStore = defineStore('game', () => {
@@ -11,17 +12,20 @@ export const useGameStore = defineStore('game', () => {
     }
 
     const games = ref<Game[]>([
-      {id: generateId(), name: 'Jalgpall', team1name: 'A', team2name: 'B', status: 'in progress'},
-      {id: generateId(), name: 'Korvpall', team1name: 'A', team2name: 'B', status: 'inactive'},
+      {id: generateId(), name: 'Jalgpall', team1name: 'A', team2name: 'B', status: 'in progress', winner: null },
+      {id: generateId(), name: 'Korvpall', team1name: 'A', team2name: 'B', status: 'inactive', winner: 'A'},
     ]);
     const addGame = (game: Game) => {
       games.value.push(game)
     }
 
-    const makeStatusInactive = (id: number, status: "in progress") => {
+    const makeStatusInactive = (id: number, //status: "in progress"
+
+    ) => {
     const game = games.value.find(game => game.id === id);
     if (game) {
-      game.status = "inactive";
+      Object.assign(game, { status: 'inactive' });
+      //game.status = "inactive";
     } 
     else {
       console.error(`Game with id ${id} not found`);
@@ -31,6 +35,7 @@ export const useGameStore = defineStore('game', () => {
     const setWinner = (id: number, winner: string) => {
       const game = games.value.find(game => game.id === id);
       if (game) {
+        Object.assign(game, { winner });
         game.winner = winner;
       } else {
         console.error(`Game with id ${id} not found`);
