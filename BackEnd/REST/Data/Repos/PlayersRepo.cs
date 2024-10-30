@@ -38,6 +38,7 @@ namespace REST.Data.Repos
             }
             existingPlayer.Name = playerDto.Name;
             existingPlayer.Points = playerDto.Points;
+            existingPlayer.TeamId = playerDto.TeamId;
 
             await context.SaveChangesAsync();
 
