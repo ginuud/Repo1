@@ -11,6 +11,6 @@ namespace REST.Dtos.Team
         public string? Name { get; set; }
         public int Points { get; set; }
         public int Rank { get; set; }
-        public int TeamId { get; set; }
+        public int? TeamId { get; set; }
     }
 }

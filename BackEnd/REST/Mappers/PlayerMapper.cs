@@ -15,11 +15,10 @@ namespace REST.Mappers
                 TeamId = playerModel.TeamId,
             };
         }
-        public static Player ToPlayerFromCreate(this CreatePlayerDto playerDto, int teamId){
+        public static Player ToPlayerFromCreate(this CreatePlayerDto playerDto){
             return new Player{
                 Name = playerDto.Name,
                 Points = playerDto.Points,
-                TeamId = teamId,
             };
         }
         public static Player ToPlayerFromUpdate(this UpdatePlayerRequestDto playerDto, int teamId){
