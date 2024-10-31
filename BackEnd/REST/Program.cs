@@ -24,6 +24,15 @@ builder.Services
     .AddScoped<ITeamRepository, TeamsRepo>()
     .AddScoped<IGameRepository, GamesRepo>();
 
+builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+    {
+        builder
+        .SetIsOriginAllowed(_ => true)
+        .AllowCredentials()
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+    }));
+
 
 var app = builder.Build();
 
@@ -37,6 +46,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseCors("MyPolicy");
 }
 
 app.UseHttpsRedirection();
