@@ -22,6 +22,7 @@
     	<template #actions-data="{ row }">
       	<!-- Open modal instead of redirecting -->
       	<UButton
+			v-if="row.status === 'in progress'"
         	type="button" color="red" variant="ghost" icon="i-heroicons-stop-circle-20-solid"
         	@click="openModal(row.id)">
       	</UButton>
