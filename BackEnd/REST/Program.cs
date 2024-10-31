@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using REST.Data;
 using REST.Data.Repos;
+using REST.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,9 +11,19 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
+builder.Services.AddControllers() //maybe switch out for NewtonSoft.Json
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+    });
+
+
 builder.Services
     .AddDbContext<DataContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("Default")))
-    .AddScoped<PlayersRepo>();
+    .AddScoped<IPlayerRepository, PlayersRepo>()
+    .AddScoped<ITeamRepository, TeamsRepo>()
+    .AddScoped<IGameRepository, GamesRepo>();
+
 
 var app = builder.Build();
 
