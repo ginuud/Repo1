@@ -21,7 +21,8 @@ builder.Services.AddControllers() //maybe switch out for NewtonSoft.Json
 builder.Services
     .AddDbContext<DataContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("Default")))
     .AddScoped<IPlayerRepository, PlayersRepo>()
-    .AddScoped<ITeamRepository, TeamsRepo>();
+    .AddScoped<ITeamRepository, TeamsRepo>()
+    .AddScoped<IGameRepository, GamesRepo>();
 
 
 var app = builder.Build();
