@@ -11,10 +11,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
-builder.Services.AddControllers() //maybe switch out for NewtonSoft.Json
-    .AddJsonOptions(options =>
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
     {
-        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
     });
 
 
@@ -23,6 +22,15 @@ builder.Services
     .AddScoped<IPlayerRepository, PlayersRepo>()
     .AddScoped<ITeamRepository, TeamsRepo>()
     .AddScoped<IGameRepository, GamesRepo>();
+
+builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+    {
+        builder
+        .SetIsOriginAllowed(_ => true)
+        .AllowCredentials()
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+    }));
 
 
 var app = builder.Build();
@@ -37,6 +45,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseCors("MyPolicy");
 }
 
 app.UseHttpsRedirection();
