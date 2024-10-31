@@ -60,11 +60,16 @@ namespace REST.Data.Repos
         }
 
         public async Task<Game?> DeleteAsync(int id) {
-            var gameModel = await context.Games.FirstOrDefaultAsync(x => x.Id == id);
+            var gameModel = await context.Games.Include(g => g.Teams).FirstOrDefaultAsync(x => x.Id == id);
 
             if (gameModel == null) {
                 return null;
             }
+
+            foreach (var team in gameModel.Teams) {
+                team.GameId = null;
+            }
+            await context.SaveChangesAsync();
 
             context.Games.Remove(gameModel);
             await context.SaveChangesAsync();
