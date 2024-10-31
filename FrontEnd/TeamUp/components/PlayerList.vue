@@ -2,7 +2,7 @@
     <div>
       <h1 class="text-xl text-center">{{ title }}</h1>
       <template v-if="players.length > 0">
-        <UTable :columns="columns" :rows="players."></UTable>
+        <UTable v-model:sort="sort" :columns="columns" :rows="players"></UTable>
       </template>
       <template v-else>
         <p class="text-center">Mängijate andmed puuduvad</p>
@@ -32,14 +32,7 @@
     }
   ];
 
-    const playerStore = usePlayerStore();
-
-    const {players} = storeToRefs(playerStore)
-
-    onMounted(() => {
-      playerStore.loadPlayers();
-      console.log("Players loaded:", players.value);
-    })
+  const {players} = usePlayerStore();
 
     const sort = ref({
     column: 'points',
