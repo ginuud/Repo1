@@ -26,28 +26,26 @@ export const usePlayerStore = defineStore('player', () => {
       players.value = await $fetch<Player[]>('http://localhost:5181/api/Players')
     }
 
-
-
-      const generateRanks = () => {
-        const sortedPlayers = players.value.slice().sort((a, b) => b.points - a.points);
-    
-        sortedPlayers.forEach((player, index) => {
-          player.rank = index + 1;
-        });
-
-        players.value = sortedPlayers;
-      };
-      
-      const teamStore = useTeamStore();
-
-      const addPointsToWinningTeam = (winningTeam: string) => {
-      const team = teamStore.teams.find(t => t.teamname === winningTeam);
-      if (team) {
-        players.value.forEach((player) => {
-        if (team.members.includes(player)) {
-        player.points = Number(player.points) + 1;
-        }
+    const generateRanks = () => {
+      const sortedPlayers = players.value.slice().sort((a, b) => b.points - a.points);
+  
+      sortedPlayers.forEach((player, index) => {
+        player.rank = index + 1;
       });
+
+      players.value = sortedPlayers;
+    };
+    
+    const teamStore = useTeamStore();
+
+    const addPointsToWinningTeam = (winningTeam: string) => {
+    const team = teamStore.teams.find(t => t.teamname === winningTeam);
+    if (team) {
+      players.value.forEach((player) => {
+      if (team.members.includes(player)) {
+      player.points = Number(player.points) + 1;
+      }
+    });
     
     generateRanks();
     } else {

@@ -10,10 +10,12 @@ export const useGameStore = defineStore('game', () => {
       return currentId;
     }
 
-    const games = ref<Game[]>([
-      {id: generateId(), name: 'Jalgpall', team1name: 'A', team2name: 'B', status: 'in progress'},
-      {id: generateId(), name: 'Korvpall', team1name: 'A', team2name: 'B', status: 'inactive'},
-    ]);
+    const games = ref<Game[]>([])
+
+    const loadGames = async () => {
+      games.value = await $fetch<Game[]>('http://localhost:5181/api/Games')
+    }
+    
     const addGame = (game: Game) => {
       games.value.push(game)
     }
@@ -28,5 +30,5 @@ export const useGameStore = defineStore('game', () => {
     }
     }
 
-    return { games, generateId, addGame, makeStatusInactive };
+    return { games, generateId, addGame, makeStatusInactive, loadGames };
   })

@@ -1,16 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using REST.Interfaces;
 using REST.Mappers;
 using REST.Dtos.Game;
-using REST.Models.Classes;
 
 namespace REST.Controllers
 {
-    [Route("api/game")]
+    [Route("api/[controller]")]
     [ApiController]
     public class GamesController : ControllerBase
     {
