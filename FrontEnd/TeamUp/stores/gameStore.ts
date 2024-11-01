@@ -21,7 +21,7 @@ export const useGameStore = defineStore('game', () => {
     }
 
     const makeStatusInactive = (id: number, status: "in progress") => {
-    const game = games.value.find(game => game.id === id);
+    const game = games.value.find(game => game.Id === id);
     if (game) {
       game.status = "inactive";
     } 

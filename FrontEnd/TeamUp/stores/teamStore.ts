@@ -22,13 +22,14 @@ export const useTeamStore = defineStore('team', () => {
       }
     }
 
-    const teams = ref<Team[]>([
-      {id: generateId(), teamname: 'A', members:[]},
-      {id: generateId(), teamname: 'B', members:[]},
-    ]);
+    const teams = ref<Team[]>([])
+
+    const loadTeams = async () => {
+      teams.value = await $fetch<Team[]>('http://localhost:5181/api/Teams')
+    }
 
     const generateTeams = (selectedPlayers: Player[], teamCount: number, teamNames: string[]): Team[] => {
-      const sortedPlayers = selectedPlayers.slice().sort((a, b) => b.points - a.points);
+      const sortedPlayers = selectedPlayers.slice().sort((a, b) => b.Points - a.Points);
 
       const balancedTeams: { team: Team; points: number }[] = Array.from({ length: teamCount }, (_, i) => ({
         team: { id: generateId(), teamname: teamNames[i], members: [] },
@@ -37,17 +38,17 @@ export const useTeamStore = defineStore('team', () => {
   
       sortedPlayers.forEach((player) => {
         const teamWithLeastPlayersAndPoints = balancedTeams.reduce((prev, curr) => 
-          prev.team.members.length < curr.team.members.length ||
-          (prev.team.members.length === curr.team.members.length && prev.points < curr.points)
+          prev.team.Members.length < curr.team.Members.length ||
+          (prev.team.Members.length === curr.team.Members.length && prev.points < curr.points)
             ? prev
             : curr
         );
-        teamWithLeastPlayersAndPoints.team.members.push(player);
-        teamWithLeastPlayersAndPoints.points += player.points;
+        teamWithLeastPlayersAndPoints.team.Members.push(player);
+        teamWithLeastPlayersAndPoints.points += player.Points;
       });
 
       return balancedTeams.map(({ team }) => team);
     };
 
-    return { teams, generateId, addTeam, deleteTeam, generateTeams };
+    return { teams, generateId, addTeam, deleteTeam, generateTeams, loadTeams };
   })

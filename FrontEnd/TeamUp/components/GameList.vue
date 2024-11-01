@@ -72,6 +72,7 @@ const gameStore = useGameStore();
 const playerStore = usePlayerStore();
 
 const {players} = storeToRefs(playerStore)
+const {games} = storeToRefs(gameStore)
 
 onMounted(() => {
     playerStore.loadPlayers();
@@ -88,7 +89,7 @@ const columns = [
   { key: "actions", label: "End game" },
 ];
 
-const games = computed(() => gameStore.games.map(game => ({ ...game })));
+//const games = computed(() => gameStore.games.map(game => ({ ...game })));
 
 // Modal state
 const isModalOpen = ref(false);
