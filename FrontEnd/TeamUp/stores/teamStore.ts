@@ -11,8 +11,12 @@ export const useTeamStore = defineStore('team', () => {
       return currentId;
     }
 
-    const addTeam = (team: Team) => {
-        teams.value.push(team)
+    const addTeam = async (Team: Team) => {
+      const res = await $fetch('http://localhost:5181/api/Teams', {
+        method: 'POST',
+        body: Team,
+      });
+      teams.value.push(res)
     }
 
     const deleteTeam = async (teamId: number) => {
