@@ -7,13 +7,10 @@
       @error="onError"
     >
     <UFormGroup label="Game name" name="Name">
-        <UInput v-model="state.name" type="Name"/>
+        <UInput v-model="state.Name" type="Name"/>
       </UFormGroup>
-      <UFormGroup label="Team 1 name" name="Teams[0]">
-        <USelect v-model="state.Teams[0]" :options="teamOptions"/>
-      </UFormGroup>
-      <UFormGroup label="Team 2 name" name="Teams[1]">
-        <USelect v-model="state.Teams[1]" :options="teamOptions"/>
+      <UFormGroup label="Teams" name="Teams">
+        <USelectMenu v-model="state.Teams" :options="teamOptions" multiple placeholder="Select teams" />
       </UFormGroup>
   
       <UButton type="submit"> Start game </UButton>
@@ -56,8 +53,26 @@ async function onSubmit(event: Event) {
 
   console.log("State before starting game:", state)
 
+  const transformedData = {
+    Id: state.Id,
+    Name: state.Name,
+    Teams: state.Teams.map(team => ({
+        id: team.value.id,
+        name: team.value.name,
+        members: team.value.members.map(member => ({
+            id: member.id,
+            name: member.name,
+            points: member.points,
+            rank: member.rank,
+            teamId: member.teamId
+        }))
+    })),
+    Status: state.Status
+};
+
+  console.log("Data before starting game:", transformedData)
   try {
-    await gameStore.addGame({...state})
+    await gameStore.addGame(transformedData)
     console.log("Game successfully started")
     await navigateTo("/games");
   }
@@ -74,7 +89,7 @@ async function onError(event: FormErrorEvent) {
 
 const teamOptions = computed(() => 
 teamStore.teams.map(team => ({
-    value: team.name,
+    value: team,
     label: team.name 
   }))
 );

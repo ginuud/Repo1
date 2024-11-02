@@ -39,12 +39,6 @@
         return errors;
     };
     
-    // async function onSubmit(event: FormSubmitEvent<any>) {
-    //     await playerStore.addPlayer({...state})
-    //     generateRanks()
-    //     await navigateTo("/players");
-    // }
-    
     async function onSubmit(event: Event) {
       event.preventDefault();
 
@@ -53,7 +47,7 @@
       try {
           await playerStore.addPlayer({...state});
           console.log("Player successfully added");
-          await navigateTo("/games");
+          await navigateTo("/players");
       } 
       catch (error) {
           console.error("Error in addPlayer:", error);
