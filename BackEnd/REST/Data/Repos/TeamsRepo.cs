@@ -52,10 +52,14 @@ namespace REST.Data.Repos
 
         public async Task<Team?> DeleteAsync(int id) 
         {
-            var teamModel = await context.Teams.FirstOrDefaultAsync(x => x.Id == id);
+            var teamModel = await context.Teams.Include(m => m.Members).FirstOrDefaultAsync(x => x.Id == id);
 
             if (teamModel == null) {
                 return null;
+            }
+
+            foreach (var player in teamModel.Members) {
+                player.TeamId = null;
             }
 
             context.Teams.Remove(teamModel);

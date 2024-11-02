@@ -22,7 +22,6 @@
     	<template #actions-data="{ row }">
       	<!-- Open modal instead of redirecting -->
       	<UButton
-			v-if="row.status === 'in progress'"
         	type="button" color="red" variant="ghost" icon="i-heroicons-stop-circle-20-solid"
         	@click="openModal(row.id)">
       	</UButton>
@@ -72,15 +71,25 @@ defineProps<{ title: String }>();
 const gameStore = useGameStore();
 const playerStore = usePlayerStore();
 
+const {players} = storeToRefs(playerStore)
+const {games} = storeToRefs(gameStore)
+
+onMounted(() => {
+    playerStore.loadPlayers();
+    console.log("Players loaded:", players.value);
+	gameStore.loadGames();
+	console.log("Games loaded:", games.value)
+  })
+
 const columns = [
   { key: "name", label: "Game" },
-  { key: "team1name", label: "Team 1" },
-  { key: "team2name", label: "Team 2" },
+  { key: "teams.0.name", label: "Team 1" },
+  { key: "teams.1.name", label: "Team 2" },
   { key: "status", label: "Status" },
   { key: "actions", label: "End game" },
 ];
 
-const games = computed(() => gameStore.games.map(game => ({ ...game })));
+//const games = computed(() => gameStore.games.map(game => ({ ...game })));
 
 // Modal state
 const isModalOpen = ref(false);
@@ -91,11 +100,11 @@ const team2 = ref('');
 
 // Open modal and set game data
 const openModal = (gameId: number) => {
-  const game = gameStore.games.find(g => g.id === gameId);
+  const game = gameStore.games.find(g => g.Id === gameId);
   if (game) {
 	selectedGameId.value = gameId;
-	team1.value = game.team1name || '';
-	team2.value = game.team2name || '';
+	team1.value = game.teams[0] || '';
+	team2.value = game.teams[1] || '';
 	isModalOpen.value = true;
   }
 };

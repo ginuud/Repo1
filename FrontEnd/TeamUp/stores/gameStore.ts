@@ -10,23 +10,36 @@ export const useGameStore = defineStore('game', () => {
       return currentId;
     }
 
-    const games = ref<Game[]>([
-      {id: generateId(), name: 'Jalgpall', team1name: 'A', team2name: 'B', status: 'in progress'},
-      {id: generateId(), name: 'Korvpall', team1name: 'A', team2name: 'B', status: 'inactive'},
-    ]);
-    const addGame = (game: Game) => {
-      games.value.push(game)
+    const games = ref<Game[]>([])
+
+    const loadGames = async () => {
+      games.value = await $fetch<Game[]>('http://localhost:5181/api/Games')
+    }
+    
+    const addGame = async (game: Game) => {
+      const res = await $fetch('http://localhost:5181/api/Games', {
+        method: 'POST',
+        body: game,
+      });
+      games.value.push(res)
+    }
+
+    const deleteGame = async (gameId: number) => {
+      const res = await $fetch('http://localhost:5181/api/Games/' + gameId, {
+        method: 'DELETE',
+      })
+      games.value = games.value.filter(game => game.Id !== gameId);
     }
 
     const makeStatusInactive = (id: number, status: "in progress") => {
-    const game = games.value.find(game => game.id === id);
-    if (game) {
-      game.status = "inactive";
-    } 
-    else {
-      console.error(`Game with id ${id} not found`);
-    }
+      const game = games.value.find(game => game.Id === id);
+      if (game) {
+        game.Status = "inactive";
+      } 
+      else {
+        console.error(`Game with id ${id} not found`);
+      }
     }
 
-    return { games, generateId, addGame, makeStatusInactive };
+    return { games, generateId, addGame, makeStatusInactive, loadGames, deleteGame };
   })

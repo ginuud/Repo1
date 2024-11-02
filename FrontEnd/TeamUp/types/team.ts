@@ -1,6 +1,8 @@
+import type { Game } from "./game";
 import type { Player } from "./player";
 export type Team = {
-    id: number;
-    teamname: string;
-    members: Player[];
+    Id: number
+    Name: string
+    Members?: Player[]
+    Game?: Game
   };

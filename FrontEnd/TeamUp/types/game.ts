@@ -1,9 +1,8 @@
 import type { Team } from "./team"
 
 export type Game = {
-    id: number
-   name: string
-   team1name: Team
-   team2name: Team
-   status: 'in progress' | 'inactive'
+    Id: number
+   Name: string
+   Teams: Team[]
+   Status: 'in progress' | 'inactive'
 }

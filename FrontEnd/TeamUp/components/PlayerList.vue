@@ -32,7 +32,15 @@
     }
   ];
 
-  const {players} = usePlayerStore();
+  const playerStore = usePlayerStore();
+
+  const {players} = storeToRefs(playerStore)
+
+  onMounted(() => {
+    playerStore.loadPlayers();
+    console.log("Players loaded:", players.value);
+  })
+
 
     const sort = ref({
     column: 'points',
