@@ -9,28 +9,33 @@ export const usePlayerStore = defineStore('player', () => {
       return ++currentId;
     }
 
-    const addPlayer = (player: Player) => {
-        players.value.push(player)
+    const players = ref<Player[]>([]);
+
+    const addPlayer = async (Player: Player) => {
+      const res = await $fetch('http://localhost:5181/api/Players', {
+        method: 'POST',
+        body: Player,
+      });
+      players.value.push(res)
     }
 
     const deletePlayer = async (playerId: number) => {
-        const index = players.value.findIndex((player) => player.id === playerId);
+        const index = players.value.findIndex((player) => player.Id === playerId);
         if (index !== -1) {
           players.value.splice(index, 1);
       }
     }
 
-    const players = ref<Player[]>([]);
 
     const loadPlayers = async () => {
       players.value = await $fetch<Player[]>('http://localhost:5181/api/Players')
     }
 
     const generateRanks = () => {
-      const sortedPlayers = players.value.slice().sort((a, b) => b.points - a.points);
+      const sortedPlayers = players.value.slice().sort((a, b) => b.Points - a.Points);
   
       sortedPlayers.forEach((player, index) => {
-        player.rank = index + 1;
+        player.Rank = index + 1;
       });
 
       players.value = sortedPlayers;
@@ -39,11 +44,11 @@ export const usePlayerStore = defineStore('player', () => {
     const teamStore = useTeamStore();
 
     const addPointsToWinningTeam = (winningTeam: string) => {
-    const team = teamStore.teams.find(t => t.teamname === winningTeam);
+    const team = teamStore.teams.find(t => t.Name === winningTeam);
     if (team) {
       players.value.forEach((player) => {
-      if (team.members.includes(player)) {
-      player.points = Number(player.points) + 1;
+      if (team.Members.includes(player)) {
+      player.Points = Number(player.Points) + 1;
       }
     });
     

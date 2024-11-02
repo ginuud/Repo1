@@ -6,14 +6,14 @@
       @submit="onSubmit"
       @error="onError"
     >
-    <UFormGroup label="Game name" name="name">
-        <UInput v-model="state.name" type="name"/>
+    <UFormGroup label="Game name" name="Name">
+        <UInput v-model="state.name" type="Name"/>
       </UFormGroup>
-      <UFormGroup label="Team 1 name" name="team1name">
-        <USelect v-model="state.team1name" :options="teamOptions"/>
+      <UFormGroup label="Team 1 name" name="Teams[0]">
+        <USelect v-model="state.Teams[0]" :options="teamOptions"/>
       </UFormGroup>
-      <UFormGroup label="Team 2 name" name="team2name">
-        <USelect v-model="state.team2name" :options="teamOptions"/>
+      <UFormGroup label="Team 2 name" name="Teams[1]">
+        <USelect v-model="state.Teams[1]" :options="teamOptions"/>
       </UFormGroup>
   
       <UButton type="submit"> Start game </UButton>
@@ -26,31 +26,44 @@ import type { FormError, FormErrorEvent, FormSubmitEvent } from "#ui/types";
 import type { Game } from "~/types/game";
 import { computed } from 'vue';
 
-const { addGame, generateId, } = useGameStore();
-const teamsStore = useTeamStore();
+const gameStore = useGameStore();
+const teamStore = useTeamStore();
+
+onMounted(() => {
+    teamStore.loadTeams();
+  })
 
 const state = reactive<Game>({
-        id: generateId(),
-        name: undefined,
-        team1name: undefined,
-        team2name: undefined,
-        status: 'in progress',
+        Id: gameStore.generateId(),
+        Name: undefined,
+        Teams: [],
+        Status: 'in progress',
     });
 
 const validate = (state: any): FormError[] => {
     const errors = [];
-    if (!state.name) 
+    if (!state.Name) 
     errors.push({ path: "name", message: "Required" });
-    if (!state.team1name)
-    errors.push({ path: "team1name", message: "Required" });
-    if (!state.team2name)
-    errors.push({ path: "team2name", message: "Required" });
+    if (!state.Teams[0])
+    errors.push({ path: "Teams[0]", message: "Required" });
+    if (!state.Teams[1])
+    errors.push({ path: "Teams[1]", message: "Required" });
     return errors;
 };
 
-async function onSubmit(event: FormSubmitEvent<any>) {
-    addGame({...state})
+async function onSubmit(event: Event) {
+  event.preventDefault();
+
+  console.log("State before starting game:", state)
+
+  try {
+    await gameStore.addGame({...state})
+    console.log("Game successfully started")
     await navigateTo("/games");
+  }
+  catch (error){
+    console.error("Error in startGame:", error)
+  }
 }
 
 async function onError(event: FormErrorEvent) {
@@ -60,9 +73,9 @@ async function onError(event: FormErrorEvent) {
 }
 
 const teamOptions = computed(() => 
-  teamsStore.teams.map(team => ({
-    value: team.teamname,
-    label: team.teamname 
+teamStore.teams.map(team => ({
+    value: team.name,
+    label: team.name 
   }))
 );
 

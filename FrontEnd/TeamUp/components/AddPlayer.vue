@@ -22,10 +22,10 @@
     import type { FormError, FormErrorEvent, FormSubmitEvent } from "#ui/types";
     import type { Player } from "~/types/player";
   
-    const { addPlayer, generateId, generateRanks } = usePlayerStore();
+    const playerStore = usePlayerStore();
 
     const state = reactive<Player>({
-        id: generateId(),
+        id: playerStore.generateId(),
         name: undefined,
         points: undefined,
     });
@@ -39,12 +39,27 @@
         return errors;
     };
     
-    async function onSubmit(event: FormSubmitEvent<any>) {
-        addPlayer({...state})
-        generateRanks()
-        await navigateTo("/players");
-    }
+    // async function onSubmit(event: FormSubmitEvent<any>) {
+    //     await playerStore.addPlayer({...state})
+    //     generateRanks()
+    //     await navigateTo("/players");
+    // }
     
+    async function onSubmit(event: Event) {
+      event.preventDefault();
+
+      console.log("State before adding player:", state);
+      
+      try {
+          await playerStore.addPlayer({...state});
+          console.log("Player successfully added");
+          await navigateTo("/games");
+      } 
+      catch (error) {
+          console.error("Error in addPlayer:", error);
+      }
+    }
+
     async function onError(event: FormErrorEvent) {
         const element = document.getElementById(event.errors[0].id);
         element?.focus();
