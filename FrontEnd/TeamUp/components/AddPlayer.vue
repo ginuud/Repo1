@@ -26,15 +26,16 @@
 
     const state = reactive<Player>({
         id: generateId(),
-        name: undefined,
-        points: undefined,
+        name: '',
+        points: 0,
+        rank: 0,
     });
 
     const validate = (state: any): FormError[] => {
         const errors = [];
         if (!state.name) 
         errors.push({ path: "name", message: "Required" });
-        if (!state.points)
+        if (state.points === undefined || state.points === null)
         errors.push({ path: "points", message: "Required" });
         return errors;
     };
