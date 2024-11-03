@@ -1,6 +1,6 @@
 export type Player = {
-    id: number
-   name: string
-   points: number
-   rank: number
+    id: number;
+   name: string;
+   points: number;
+   rank: number;
 }
