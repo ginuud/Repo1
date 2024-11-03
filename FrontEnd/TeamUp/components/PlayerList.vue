@@ -38,7 +38,6 @@
     <template #footer>
       <div class="flex justify-end space-x-2">
         <UButton color="red" @click="submitDelete">Delete Player</UButton>
-        <UButton color="blue" @click="cancelDelete">Cancel</UButton>
       </div>
     </template>
   </UCard>
@@ -63,7 +62,6 @@
     <template #footer>
       <div class="flex justify-end space-x-2">
         <UButton color="green" @click="submitPlayer">Save Changes</UButton>
-        <UButton color="blue" @click="cancelEdit">Cancel</UButton>
       </div>
     </template>
   </UCard>
@@ -132,10 +130,6 @@
   }
 };
 
-const cancelDelete = () => {
-  isDeleteModalOpen.value = false;
-};
-
 const openEditModal = (playerId: number) => {
   const player = playerStore.players.find(p => p.id === playerId);
     if (player) {
@@ -154,9 +148,4 @@ const submitPlayer = () => {
   navigateTo("/players");
   }
 };
-
-const cancelEdit = () => {
-  isEditModalOpen.value = false;
-};
-
 </script>
