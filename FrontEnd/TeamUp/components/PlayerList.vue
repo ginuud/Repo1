@@ -5,12 +5,12 @@
       <UTable v-model:sort="sort" :columns="columns" :rows="players">
         <template #actions-data="{ row }">
         <UButton
-          type="button" color="red" variant="ghost" icon="i-heroicons-trash-circle-20-solid"
-          @click="openDeleteModal(row.id)">
-        </UButton>
-        <UButton
           type="button" color="cyan" variant="ghost" icon="i-heroicons-pencil-20-solid"
           @click="openEditModal(row.id)">
+        </UButton>
+        <UButton
+          type="button" color="red" variant="ghost" icon="i-heroicons-trash-20-solid"
+          @click="openDeleteModal(row.id)">
         </UButton>
         </template>
       </UTable>
@@ -38,7 +38,7 @@
     <template #footer>
       <div class="flex justify-end space-x-2">
         <UButton color="red" @click="submitDelete">Delete Player</UButton>
-        <UButton @click="cancelDelete">Cancel</UButton>
+        <UButton color="blue" @click="cancelDelete">Cancel</UButton>
       </div>
     </template>
   </UCard>
@@ -62,8 +62,8 @@
   
     <template #footer>
       <div class="flex justify-end space-x-2">
-        <UButton color="red" @click="submitPlayer">Save Changes</UButton>
-        <UButton @click="cancelEdit">Cancel</UButton>
+        <UButton color="green" @click="submitPlayer">Save Changes</UButton>
+        <UButton color="blue" @click="cancelEdit">Cancel</UButton>
       </div>
     </template>
   </UCard>
