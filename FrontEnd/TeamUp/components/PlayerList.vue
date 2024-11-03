@@ -32,7 +32,7 @@
     </template>
 
     <div class="p-4">
-      <p>Are you sure you want to delete a player:</p>
+      <p>Are you sure you want to delete player: {{ selectedPlayerName }}</p>
     </div>
   
     <template #footer>
@@ -108,6 +108,7 @@
 
   const isDeleteModalOpen = ref(false);
   const selectedPlayerId = ref<number | null>(null);
+  const selectedPlayerName = ref<string | null>(null);
   const isEditModalOpen = ref(false);
   const newName = ref('');
   const newScore = ref<number>(0);
@@ -117,6 +118,7 @@
     const player = playerStore.players.find(p => p.id === playerId);
     if (player) {
 	  selectedPlayerId.value = playerId;
+    selectedPlayerName.value = player.name;
 	  isDeleteModalOpen.value = true;
     }
   };
@@ -126,6 +128,7 @@
     await playerStore.deletePlayer(selectedPlayerId.value);
     isDeleteModalOpen.value = false;
     selectedPlayerId.value = null;
+    selectedPlayerName.value = null;
     navigateTo("/players");
   }
 };
