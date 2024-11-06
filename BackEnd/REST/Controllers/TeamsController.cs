@@ -63,6 +63,20 @@ namespace REST.Controllers
             return CreatedAtAction(nameof(GetTeam), new {id = teamModel.Id}, teamModel.ToTeamDto());
         }
 
+        [HttpPost]
+        public async Task<IActionResult> GenerateTeams([FromBody] GenerateTeamsDto teamsDto)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            
+            var playerIDs = teamsDto.Members.Select(m => m.Id).ToList();
+            var existingPlayers = await repo.GetPlayersByIdsAsync(playerIDs);
+
+            if (existingPlayers == null || existingPlayers.Count != playerIDs.Count)
+            {
+                return BadRequest("Some players are invalid or do not exist.");
+            }
+        }
+
         [HttpPut]
         [Route("{id}")]
         public async Task<IActionResult> Update([FromRoute]int id, [FromBody] UpdateTeamRequestDto updateDto)
