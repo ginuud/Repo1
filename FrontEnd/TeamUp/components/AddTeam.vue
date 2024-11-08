@@ -67,6 +67,17 @@
             teamId: member.value.teamId
         }))
     };
+
+      // Check if all players' teamId attributes are null
+      const allPlayersUnassigned = transformedData.Members.every(member => member.teamId === null);
+
+      if (!allPlayersUnassigned) {
+      console.error("One or more selected players are already assigned to a team.");
+      // You could also use a more user-friendly error display here
+      alert("Please select only players who are not already in a team.");
+      return; // Stop form submission
+}
+
       try {
           await teamStore.addTeam(transformedData);
           console.log("Team successfully added");
