@@ -24,7 +24,7 @@ namespace REST.Data
                  .HasForeignKey(t => t.GameId);
 
             modelBuilder.Entity<Player>().Property(x => x.Id).ValueGeneratedOnAdd();
-            modelBuilder.Entity<Player>().Property(p => p.Id).HasIdentityOptions(startValue: 10);
+            modelBuilder.Entity<Player>().Property(p => p.Id).HasIdentityOptions(startValue: 8);
 
             modelBuilder.Entity<Team>().Property(x => x.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Team>().Property(p => p.Id).HasIdentityOptions(startValue: 6);

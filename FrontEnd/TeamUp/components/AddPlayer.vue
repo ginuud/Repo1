@@ -26,8 +26,9 @@
 
     const state = reactive<Player>({
         id: playerStore.generateId(),
-        name: undefined,
-        points: undefined,
+        name: '',
+        points: 0,
+        rank: 0
     });
 
     const validate = (state: any): FormError[] => {
