@@ -12,5 +12,6 @@ namespace REST.Dtos.Team
         [Required]
         public int TeamsCount { get; set;}
         public List<CreateTeamPlayerDto>? Members { get; set; } = [];
+        public List<string> TeamNames { get; set; } = [];
     }
 }

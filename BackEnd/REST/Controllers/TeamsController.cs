@@ -64,6 +64,7 @@ namespace REST.Controllers
         }
 
         [HttpPost]
+        [Route("generate")]
         public async Task<IActionResult> GenerateTeams([FromBody] GenerateTeamsDto teamsDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -75,6 +76,11 @@ namespace REST.Controllers
             {
                 return BadRequest("Some players are invalid or do not exist.");
             }
+
+            var generatedTeams = await repo.GenerateTeamsAsync(existingPlayers, teamsDto.TeamNames);
+
+            var generatedTeamDtos = generatedTeams.Select(t => t.ToTeamDto()).ToList();
+            return Ok(generatedTeamDtos);
         }
 
         [HttpPut]
