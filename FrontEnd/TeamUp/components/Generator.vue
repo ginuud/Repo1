@@ -51,7 +51,7 @@
 
     const playerOptions = computed(() =>
         playerStore.players.map(player => ({
-            value: player.id,
+            value: player,
             label: player.name,
         }))
     );
@@ -62,6 +62,13 @@
         errors.push({ path: "selectedPlayers", message: "Choose at least 4 players" });
         if (state.numberOfTeams < 2)
         errors.push({ path: "numberOfTeams", message: "At least 2 teams required" });
+
+        const unassignedPlayers = state.selectedPlayers.every(player => player.value.teamId === null);
+        console.log("players validation:", state)
+        if (!unassignedPlayers) {
+          errors.push({ path: "selectedPlayers", message: "One or more selected players are already in a team" });
+        }
+
         return errors;
     };
 
