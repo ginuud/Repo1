@@ -37,7 +37,7 @@
     const { addTeam, generateId, generateTeams, } = useTeamStore();
 
     interface SelectedPlayer {
-      value: number;
+      value: Player;
       label: string;
     }
 
@@ -60,11 +60,11 @@
         const errors = [];
         if (state.selectedPlayers.length < 4)
         errors.push({ path: "selectedPlayers", message: "Choose at least 4 players" });
+
         if (state.numberOfTeams < 2)
         errors.push({ path: "numberOfTeams", message: "At least 2 teams required" });
 
         const unassignedPlayers = state.selectedPlayers.every(player => player.value.teamId === null);
-        console.log("players validation:", state)
         if (!unassignedPlayers) {
           errors.push({ path: "selectedPlayers", message: "One or more selected players are already in a team" });
         }
@@ -73,20 +73,22 @@
     };
 
     async function onSubmit(event: FormSubmitEvent<any>) {
-        const selectedPlayers = state.selectedPlayers
-          .map(selected => selected.value) 
-          .map(id => playerStore.players.find(player => player.id === id))
-          .filter((player): player is Player => player !== undefined);
-        const teams = generateTeams(selectedPlayers, state.numberOfTeams, teamNames);
-        teams.forEach((team, index) => {
-            addTeam({
-                id: generateId(),
-                teamname: teamNames[index],
-                members: team.members,
+        const selectedPlayers = state.selectedPlayers.map(player => player.value);
+        // const selectedPlayers = state.selectedPlayers
+        //   .map(selected => selected.value.Id) 
+        //   .map(id => playerStore.players.find(player => player.id === id))
+        //   .filter((player): player is Player => player !== undefined);
+        console.log("selectedPlayers on submit", selectedPlayers)
+        console.log("state on submit", state)
+        const teams = generateTeams(state.selectedPlayers, state.numberOfTeams, teamNames);
+        try{
+          teams.forEach((team) => {
+              addTeam(team);
             });
-        });
-
-        await navigateTo("/teams");
+            await navigateTo("/teams");
+        } catch(error){
+          console.error("Error in generateTeam:", error)
+        }
     }
     
     async function onError(event: FormErrorEvent) {

@@ -33,12 +33,14 @@ export const useTeamStore = defineStore('team', () => {
     }
 
     const generateTeams = (selectedPlayers: Player[], teamCount: number, teamNames: string[]): Team[] => {
+      console.log("state on submit")
       const sortedPlayers = selectedPlayers.slice().sort((a, b) => b.Points - a.Points);
-
+      console.log("sortedPlayers", sortedPlayers)
       const balancedTeams: { team: Team; points: number }[] = Array.from({ length: teamCount }, (_, i) => ({
         team: { id: generateId(), teamname: teamNames[i], members: [] },
         points: 0, // Temporary tracking of team points for balancing
       }));
+      console.log("balancedTeams", balancedTeams)
   
       sortedPlayers.forEach((player) => {
         const teamWithLeastPlayersAndPoints = balancedTeams.reduce((prev, curr) => 
