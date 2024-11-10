@@ -46,10 +46,13 @@
 
     const validate = (state: any): FormError[] => {
         const errors = [];
+        const allPlayersUnassigned = state.Members.every(member => member.value.teamId === null);
         if (!state.Name) 
         errors.push({ path: "Name", message: "Required" });
         if (state.Members.length < 2)
         errors.push({ path: "Members", message: "Choose at least 2 players" });
+        if (!allPlayersUnassigned)
+        errors.push({path: "Members", message: "Player is already in a team"})
         return errors;
     };
     
@@ -66,17 +69,7 @@
             rank: member.value.rank,
             teamId: member.value.teamId
         }))
-    };
-
-      // Check if all players' teamId attributes are null
-      const allPlayersUnassigned = transformedData.Members.every(member => member.teamId === null);
-
-      if (!allPlayersUnassigned) {
-      console.error("One or more selected players are already assigned to a team.");
-      // You could also use a more user-friendly error display here
-      alert("Please select only players who are not already in a team.");
-      return; // Stop form submission
-}
+      };
 
       try {
           await teamStore.addTeam(transformedData);
