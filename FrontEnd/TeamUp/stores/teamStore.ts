@@ -32,26 +32,18 @@ export const useTeamStore = defineStore('team', () => {
       teams.value = await $fetch<Team[]>('http://localhost:5181/api/Teams')
     }
 
-    const generateTeams = (selectedPlayers: Player[], teamCount: number, teamNames: string[]): Team[] => {
-      const sortedPlayers = selectedPlayers.slice().sort((a, b) => b.Points - a.Points);
-
-      const balancedTeams: { team: Team; points: number }[] = Array.from({ length: teamCount }, (_, i) => ({
-        team: { id: generateId(), teamname: teamNames[i], members: [] },
-        points: 0, // Temporary tracking of team points for balancing
-      }));
-  
-      sortedPlayers.forEach((player) => {
-        const teamWithLeastPlayersAndPoints = balancedTeams.reduce((prev, curr) => 
-          prev.team.Members.length < curr.team.Members.length ||
-          (prev.team.Members.length === curr.team.Members.length && prev.points < curr.points)
-            ? prev
-            : curr
-        );
-        teamWithLeastPlayersAndPoints.team.Members.push(player);
-        teamWithLeastPlayersAndPoints.points += player.Points;
+    const generateTeams = async (selectedPlayers: Player[], numberOfTeams: number, teamNames: string[]): Promise<Team[]> => {
+      const requestData = {
+        players: selectedPlayers,  
+        teamsCount: numberOfTeams,
+        teamNames: teamNames
+      };
+      const generatedTeams = await $fetch<Team[]>('http://localhost:5181/api/Teams/generate', {
+        method: 'POST',
+        body: requestData,
       });
 
-      return balancedTeams.map(({ team }) => team);
+      return generatedTeams;
     };
 
     return { teams, generateId, addTeam, deleteTeam, generateTeams, loadTeams };
