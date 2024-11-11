@@ -63,9 +63,15 @@ namespace REST.Data.Repos
                     .First();
         
                 teamWithLeastPlayersAndPoints.Members.Add(player); 
+                Console.WriteLine($"Assigned player {player.Name} to team {teamWithLeastPlayersAndPoints.Name}");
             }
 
             await CreateMultipleAsync(balancedTeams);
+
+            foreach (var team in balancedTeams)
+            {
+                Console.WriteLine($"Team {team.Name}: {string.Join(", ", team.Members.Select(m => m.Name))}");
+            }
 
             return balancedTeams; 
         }

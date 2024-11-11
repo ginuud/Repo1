@@ -42,7 +42,7 @@ export const useTeamStore = defineStore('team', () => {
         method: 'POST',
         body: requestData,
       });
-
+      console.log("Generated Teams Response:", generatedTeams);
       return generatedTeams;
     };
 

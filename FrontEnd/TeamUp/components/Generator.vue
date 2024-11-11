@@ -49,8 +49,8 @@
     );
 
     const state = reactive({
-      Name: '',
-      selectedPlayers: []as { value: Player; label: string }[],  
+      Name: "",
+      selectedPlayers: [],  
       numberOfTeams: 2,  
     });
 
@@ -69,18 +69,28 @@
 
     async function onSubmit(event: FormSubmitEvent<any>) {
       event.preventDefault();
-      const selectedPlayers = state.selectedPlayers
-        .map((selected) => selected.value)
-        //.map((id) => playerStore.players.find((player) => player.id === id))
-        .filter((player): player is Player => player !== undefined);
-      
-      const generatedTeams = await teamStore.generateTeams(
-        selectedPlayers,  
-        state.numberOfTeams,  
-        teamNames 
-      );
 
-      await navigateTo("/teams");
+      console.log("Selected Players:", state.selectedPlayers);
+
+      const transformedData = state.selectedPlayers
+        .map(player => ({
+          id: player.value.id,
+          name: player.value.name,
+          points: player.value.points,
+          rank: player.value.rank,
+          teamId: player.value.teamId,
+        }));
+
+      console.log("Transformed Player Data:", transformedData);
+      
+      try {
+          await teamStore.generateTeams(transformedData, state.numberOfTeams, teamNames);
+          console.log("Teams successfully added");
+          await navigateTo("/teams");
+      } 
+      catch (error) {
+          console.error("Error in generateTeams:", error);
+      }
     }
 
     async function onError(event: FormErrorEvent) {
