@@ -13,6 +13,6 @@ namespace REST.Dtos.Player
         public string? Name { get; set; }
         [Required]
         public int Points { get; set; }
-        public int Rank { get; set; }
+        //public int Rank { get; set; }
     }
 }

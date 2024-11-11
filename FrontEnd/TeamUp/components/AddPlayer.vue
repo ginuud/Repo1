@@ -7,11 +7,11 @@
       @error="onError"
     >
       <UFormGroup label="Name" name="name">
-        <UInput v-model="state.name" type="name"/>
+        <UInput v-model="state.Name" type="name"/>
       </UFormGroup>
 
       <UFormGroup label="Points" name="points">
-        <UInput v-model="state.points" type="number" placeholder="Enter points" />
+        <UInput v-model="state.Points" type="number" placeholder="Enter points" />
       </UFormGroup>
   
       <UButton type="submit"> Lisa </UButton>
@@ -28,14 +28,14 @@
         id: playerStore.generateId(),
         name: '',
         points: 0,
-        rank: 0
+        //rank: playerStore.generateRanks()
     });
 
     const validate = (state: any): FormError[] => {
         const errors = [];
-        if (!state.name) 
+        if (!state.Name) 
         errors.push({ path: "name", message: "Required" });
-        if (!state.points)
+        if (!state.Points === undefined || state.Points === null)
         errors.push({ path: "points", message: "Required" });
         return errors;
     };

@@ -142,13 +142,15 @@ const submitPlayer = () => {
   }
 };
 
-onMounted(() => {
-  playerStore.loadPlayers();
-  console.log("Players loaded:", players.value);
-})
-  const sort = ref({
-  column: 'points',
-  direction: 'desc'
-})
-
+// onMounted(() => {
+//   playerStore.loadPlayers();
+//   console.log("Players loaded:", players.value);
+// })
+//   const sort = ref({
+//   column: 'points',
+//   direction: 'desc'
+// })
+onMounted(async () => {
+  await playerStore.loadPlayers();
+});
 </script>
