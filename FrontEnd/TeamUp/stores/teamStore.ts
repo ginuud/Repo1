@@ -34,7 +34,7 @@ export const useTeamStore = defineStore('team', () => {
 
     const generateTeams = async (selectedPlayers: Player[], numberOfTeams: number, teamNames: string[]): Promise<Team[]> => {
       const requestData = {
-        players: selectedPlayers,  
+        members: selectedPlayers,  
         teamsCount: numberOfTeams,
         teamNames: teamNames
       };

@@ -74,11 +74,11 @@
 
       const transformedData = state.selectedPlayers
         .map(player => ({
-          id: player.value.id,
-          name: player.value.name,
-          points: player.value.points,
-          rank: player.value.rank,
-          teamId: player.value.teamId,
+          Id: player.value.id,
+          Name: player.value.name,
+          Points: player.value.points,
+          Rank: player.value.rank,
+          TeamId: player.value.teamId,
         }));
 
       console.log("Transformed Player Data:", transformedData);
