@@ -1,0 +1,50 @@
+{
+	"info": {
+		"_postman_id": "f52fe0b0-842e-4452-8736-d1a7ad88295c",
+		"name": "TeamUp",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38119962"
+	},
+	"item": [
+		{
+			"name": "GetPlayerById",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const responseData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Player name is LeBron James\", function () {\r",
+							"    pm.expect(responseData.name).to.eql(\"LeBron James\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/Players/2",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"Players",
+						"2"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
