@@ -45,6 +45,51 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "GetTeamById",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const responseData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Team name is Bulls\", function () {\r",
+							"    pm.expect(responseData.name).to.eql(\"Bulls\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Team has a member named Michael Jordan\", function () {\r",
+							"    let memberNames = responseData.members.map(member => member.name);\r",
+							"    pm.expect(memberNames).to.include(\"Michael Jordan\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/Teams/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"Teams",
+						"1"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
