@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "f52fe0b0-842e-4452-8736-d1a7ad88295c",
+		"_postman_id": "12568ae1-5e44-4500-9421-f2c22573012c",
 		"name": "TeamUp",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "38119962"
+		"_exporter_id": "38120152"
 	},
 	"item": [
 		{
@@ -86,6 +86,39 @@
 						"api",
 						"Teams",
 						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetPlayerByInvalidId",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Playerit ei leita\", function () { \r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/Players/100000000000",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"Players",
+						"100000000000"
 					]
 				}
 			},
