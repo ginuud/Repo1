@@ -45,7 +45,7 @@ services:
         "db:5432",
         "--",
         "dotnet",
-        "/app/TeamUp.dll",
+        "/app/REST.dll",
       ]
   newman:
     image: postman/newman:alpine
