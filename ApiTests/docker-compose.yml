@@ -1,0 +1,68 @@
+services:
+  postgres: 
+    image: postgres:17-alpine
+    container_name: TeamUp-db
+    ports:
+    - 5432:5432
+#    volumes:
+#    - postgres-data:/var/lib/postgresql/data
+    environment:
+    - POSTGRES_PASSWORD=teamup
+    networks:
+    - pg_net
+  pgamdmin4:
+    image: dpage/pgadmin4:8
+    container_name: pgadmin-TeamUp
+    ports:
+    - 8081:80
+    volumes:
+    - pgadmin-data:/var/lib/pgadmin
+    environment:
+    - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+    - PGADMIN_DEFAULT_PASSWORD=admin
+    networks:
+    - pg_net
+
+  back_end:
+    image: ${DOCKER_REGISTRY}/back:${CI_COMMIT_SHA}
+    container_name: back_end
+    environment:
+      - ASPNETCORE_URLS=http://+:5181
+    depends_on:
+      - postgres
+    networks:
+      - pg_net
+      - api_net
+    links:
+      - "postgres:db"
+    volumes:
+      - ./startup:/etc/startup
+    entrypoint:
+      [
+        "/etc/startup/wait-for",
+        "-t",
+        "30",
+        "db:5432",
+        "--",
+        "dotnet",
+        "/app/TeamUp.dll",
+      ]
+  newman:
+    image: postman/newman:alpine
+    entrypoint:
+      ["/etc/startup/wait-for", "-t", "30", "back_end:5181", "--", "newman"]
+    container_name: newman
+    depends_on:
+      - postgres
+      - back_end
+    network_mode: "service:back_end"
+    volumes:
+      - ./startup:/etc/startup
+      - ./newman/:/etc/newman/
+    command: run /etc/newman/teamup.postman_collection.json -e teamup.postman_environment.json
+networks:
+  pg_net:
+  api_net:
+volumes:
+  pgadmin-data:
+# postgres-data:
