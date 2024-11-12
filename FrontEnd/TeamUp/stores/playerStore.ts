@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import type { Player, RankedPlayer } from "~/types/player";
+import type { Player } from "~/types/player";
 
 export const usePlayerStore = defineStore('player', () => {
   let currentId: number = 0;
@@ -13,28 +13,41 @@ export const usePlayerStore = defineStore('player', () => {
 
     const loadPlayers = async () => {
       players.value = await $fetch<Player[]>('http://localhost:5181/api/Players');
+      console.log("Players loaded:", players.value);
+      generateRanks();
     };
-  
-    const rankedPlayers = computed<RankedPlayer[]>(() => {
-      const sortedPlayers = [...players.value].sort((a, b) => b.Points - a.Points);
-  
-      let currentRank = 1;
-      let previousPoints: number | null = null;
-  
-      return sortedPlayers.map((player, index) => {
-        if (previousPoints !== player.Points) {
-          currentRank = index + 1;
-        }
-        previousPoints = player.Points;
-  
-        return {
-          ...player,
-          rank: currentRank
-        };
-      });
-    });
 
-  
+    // const generateRanks = () => {
+    //   const sortedPlayers = players.value.slice().sort((a, b) => b.Points - a.Points);
+    //   console.log("Sorted players by points:", sortedPlayers);
+    //   sortedPlayers.forEach((player, index) => {
+    //     player.Rank = index + 1;
+    //   });
+
+    //   players.value = sortedPlayers;
+    //   console.log("Players after ranking:", players.value);
+    // };
+
+    const generateRanks = async () => {
+      var playersBE = await $fetch<Player[]>('http://localhost:5181/api/Players');
+      console.log("Before sorting:", playersBE.map(player => ({
+        name: player.Name,
+        points: player.Points,
+        rank: player.Rank
+      })));
+
+      playersBE
+          .sort((a, b) => b.Points - a.Points)
+          .forEach((player, index) => {
+              player.Rank = index + 1;
+          });
+
+          console.log("After sorting:", playersBE.map(player => ({
+            name: player.Name,
+            points: player.Points,
+            rank: player.Rank
+          })));
+  };  
 
   const addPlayer = async (Player: Player) => {
     const res = await $fetch('http://localhost:5181/api/Players', {
@@ -43,7 +56,7 @@ export const usePlayerStore = defineStore('player', () => {
     });
     players.value.push(res);
 
-    //generateRanks();
+    generateRanks();
   };
   // const addPlayer = async (player: Player) => {
   //   try {
@@ -81,6 +94,7 @@ export const usePlayerStore = defineStore('player', () => {
     } catch (error) {
       console.error('Error deleting player:', error);
     }
+    generateRanks();
   };
 
   // const updatePlayer = async (selectedPlayerId: number, newName: string, newScore: number) => {
@@ -184,5 +198,5 @@ export const usePlayerStore = defineStore('player', () => {
     }
   };
 
-  return { players: rankedPlayers, generateId, addPlayer, deletePlayer, addPointsToWinningTeam, loadPlayers, updatePlayer};
+  return { players, generateId, addPlayer, deletePlayer, addPointsToWinningTeam, loadPlayers, updatePlayer, generateRanks};
 });

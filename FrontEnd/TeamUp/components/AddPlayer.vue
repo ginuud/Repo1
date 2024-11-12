@@ -28,6 +28,7 @@
         id: playerStore.generateId(),
         name: '',
         points: 0,
+        Rank: 0
         //rank: playerStore.generateRanks()
     });
 

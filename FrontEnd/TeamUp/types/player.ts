@@ -4,10 +4,6 @@ export type Player = {
     Id: number
    Name: string
    Points: number
-   //Rank: number
+   Rank: number
    Team?: Team
-}
-
-export type RankedPlayer = Player & {
-    rank: number
 }

@@ -77,7 +77,7 @@ const playerStore = usePlayerStore();
 const {players} = storeToRefs(playerStore);
 const columns = [
 {
-  key: "rank",
+  key: "Rank",
   label: "Rank",
 },
 {
