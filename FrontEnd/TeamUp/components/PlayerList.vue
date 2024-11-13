@@ -67,11 +67,10 @@
   </UModal>
 </template>
 
-
 <script setup lang ="ts">
 import { usePlayerStore } from '~/stores/playerStore';
+import { ref, onMounted } from 'vue';
 
-type SortDirection = 'asc' | 'desc'
 defineProps<{ title: String }>();
 const playerStore = usePlayerStore();
 const {players} = storeToRefs(playerStore);
@@ -104,11 +103,11 @@ const isDeleteModalOpen = ref(false);
 
 
   const openDeleteModal = (playerId: number) => {
-    const player = playerStore.players.find(p => p.Id === playerId);
+    const player = playerStore.players.find(p => p.id === playerId);
     if (player) {
     isDeleteModalOpen.value = true;
 	  selectedPlayerId.value = playerId;
-    selectedPlayerName.value = player.Name;	  
+    selectedPlayerName.value = player.name;	  
     }
   };
 
@@ -122,13 +121,12 @@ const isDeleteModalOpen = ref(false);
   }
 };
 
-
 const openEditModal = (playerId: number) => {
-  const player = playerStore.players.find(p => p.Id === playerId); 
+  const player = playerStore.players.find(p => p.id === playerId); 
     if (player) {
 	  selectedPlayerId.value = playerId;
-    newName.value = player.Name;
-    newScore.value = player.Points;
+    newName.value = player.name;
+    newScore.value = player.points;
 	  isEditModalOpen.value = true;
   }  
 };
@@ -142,15 +140,8 @@ const submitPlayer = () => {
   }
 };
 
-// onMounted(() => {
-//   playerStore.loadPlayers();
-//   console.log("Players loaded:", players.value);
-// })
-//   const sort = ref({
-//   column: 'points',
-//   direction: 'desc'
-// })
 onMounted(async () => {
   await playerStore.loadPlayers();
 });
 </script>
+

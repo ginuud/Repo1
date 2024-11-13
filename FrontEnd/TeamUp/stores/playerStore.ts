@@ -11,149 +11,72 @@ export const usePlayerStore = defineStore('player', () => {
 
   const players = ref<Player[]>([]);
 
-    const loadPlayers = async () => {
+  const loadPlayers = async () => {
+    try {
       players.value = await $fetch<Player[]>('http://localhost:5181/api/Players');
-      console.log("Players loaded:", players.value);
-      generateRanks();
-    };
-
-    // const generateRanks = () => {
-    //   const sortedPlayers = players.value.slice().sort((a, b) => b.Points - a.Points);
-    //   console.log("Sorted players by points:", sortedPlayers);
-    //   sortedPlayers.forEach((player, index) => {
-    //     player.Rank = index + 1;
-    //   });
-
-    //   players.value = sortedPlayers;
-    //   console.log("Players after ranking:", players.value);
-    // };
-
-    const generateRanks = async () => {
-      var playersBE = await $fetch<Player[]>('http://localhost:5181/api/Players');
-      console.log("Before sorting:", playersBE.map(player => ({
-        name: player.Name,
-        points: player.Points,
-        rank: player.Rank
-      })));
-
-      playersBE
-          .sort((a, b) => b.Points - a.Points)
-          .forEach((player, index) => {
-              player.Rank = index + 1;
-          });
-
-          console.log("After sorting:", playersBE.map(player => ({
-            name: player.Name,
-            points: player.Points,
-            rank: player.Rank
-          })));
+      console.log("Players loaded:", players.value); 
+      generateRanks(); 
+      players.value.sort((a, b) => a.Rank - b.Rank);
+    } catch (error) {
+      console.error('Error loading players:', error);
+      players.value = [];
+    }
+  };
+  
+  const generateRanks = () => {
+    console.log("Players before sorting:", players.value.map(player => ({
+      name: player.name,
+      points: player.points,
+      rank: player.rank
+    })));
+  
+    players.value
+      .slice()
+      .sort((a, b) => {
+        console.log(`Comparing ${a.name} (points: ${a.points}) with ${b.name} (points: ${b.points})`);
+        return b.points - a.points;
+      })
+      .forEach((player, index) => {
+        player.Rank = index + 1;
+      });
   };  
-
+  
   const addPlayer = async (Player: Player) => {
     const res = await $fetch('http://localhost:5181/api/Players', {
       method: 'POST',
       body: Player,
     });
     players.value.push(res);
-
-    generateRanks();
+    loadPlayers();
   };
-  // const addPlayer = async (player: Player) => {
-  //   try {
-  //     const response = await $fetch('http://localhost:5181/api/Players', {
-  //       method: 'POST',
-  //       body: {
-  //         Name: player.Name,
-  //         Points: player.Points,
-  //         TeamId: player.Team
-  //       }
-  //     });
-      
-  //     await loadPlayers(); // Reload all players to ensure correct order
-  //   } catch (error) {
-  //     console.error('Error adding player:', error);
-  //   }
-  // };
 
-
-  // const deletePlayer = async (playerId: number) => {
-  //   await $fetch(`http://localhost:5181/api/Players/${playerId}`, {
-  //     method: 'DELETE',
-  //   });
-  //     const index = players.value.findIndex((player) => player.Id === playerId);
-  //     if (index !== -1) {
-  //       players.value.splice(index, 1);
-  //   }
-  // };
   const deletePlayer = async (playerId: number) => {
     try {
       await $fetch(`http://localhost:5181/api/Players/${playerId}`, {
         method: 'DELETE'
       });
-      await loadPlayers(); // Reload players after deletion
+      await loadPlayers(); 
     } catch (error) {
       console.error('Error deleting player:', error);
     }
-    generateRanks();
+    loadPlayers();
   };
 
-  // const updatePlayer = async (selectedPlayerId: number, newName: string, newScore: number) => {
-  //   const updateData = {
-  //     name: newName,
-  //     points: newScore
-  //   };
-    
-  //   await $fetch(`http://localhost:5181/api/Players/${selectedPlayerId}`, {
-  //     method: 'PUT',
-  //     body: updateData,
-  //   });
-
-  //   const player = players.value.find(p => p.Id === selectedPlayerId);
-  //   if(player){
-  //     player.Name = newName;
-  //     player.Points = newScore;
-  //   }
-  //   //generateRanks();
-  // };
-
-  const updatePlayer = async (selectedPlayerId: number, newName: string, newScore: number) => {
+  const updatePlayer = async (selectedPlayerId: number, newName: string, newScore: number) => { //pooleli
     try {
       await $fetch(`http://localhost:5181/api/Players/${selectedPlayerId}`, {
         method: 'PUT',
         body: {
-          Name: newName,
-          Points: newScore
+          name: newName,
+          points: newScore
         }
       });
-      await loadPlayers(); // Reload players after update
+      await loadPlayers(); 
     } catch (error) {
       console.error('Error updating player:', error);
     }
-  };
-  
+  }; 
 
-  // const loadPlayers = async () => {
-  //   players.value = await $fetch<Player[]>('http://localhost:5181/api/Players');
-  //   //generateRanks();
-  // };
-  // const loadPlayers = async () => {
-  //   try {
-  //     const response = await $fetch<Player[]>('http://localhost:5181/api/Players');
-  //     players.value = response;
-  //   } catch (error) {
-  //     console.error('Error loading players:', error);
-  //     players.value = [];
-  //   }
-  // };
-
-  // const generateRanks = () => {
-  //   const sortedPlayers = players.value.slice().sort((a, b) => b.Points - a.Points);
-  //   sortedPlayers.forEach((player, index) => {
-  //     player.Rank = index + 1;
-  //   });
-  //   players.value = sortedPlayers;
-  // };
-  
   const teamStore = useTeamStore();
 
   // const addPointsToWinningTeam = (winningTeam: string) => {
@@ -173,22 +96,18 @@ export const usePlayerStore = defineStore('player', () => {
 
   const addPointsToWinningTeam = async (winningTeam: string) => {
     try {
-      const team = await useTeamStore().teams.find(t => t.Name === winningTeam);
+      const team = await useTeamStore().teams.find(t => t.name === winningTeam);
       
       if (team) {
-        // Find all players in the winning team
-        const teamPlayers = players.value.filter(player => player.Team === team.Id);
+        const teamPlayers = players.value.filter(player => player.team === team.id);
         
-        // Update points for each player in the winning team
         for (const player of teamPlayers) {
           await updatePlayer(
-            player.Id,
-            player.Name,
-            Number(player.Points) + 1
+            player.id,
+            player.name,
+            Number(player.points) + 1
           );
         }
-        
-        // Reload players to update rankings
         await loadPlayers();
       } else {
         console.error(`Team ${winningTeam} not found`);
