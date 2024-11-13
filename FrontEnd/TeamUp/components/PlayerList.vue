@@ -41,8 +41,7 @@
     console.log("Players loaded:", players.value);
   })
 
-
-    const sort = ref({
+  const sort = ref({
     column: 'points',
     direction: 'desc'
   })

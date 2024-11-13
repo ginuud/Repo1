@@ -28,13 +28,13 @@ export const useGameStore = defineStore('game', () => {
       const res = await $fetch('http://localhost:5181/api/Games/' + gameId, {
         method: 'DELETE',
       })
-      games.value = games.value.filter(game => game.Id !== gameId);
+      games.value = games.value.filter(game => game.id !== gameId);
     }
 
     const makeStatusInactive = (id: number, status: "in progress") => {
-      const game = games.value.find(game => game.Id === id);
+      const game = games.value.find(game => game.id === id);
       if (game) {
-        game.Status = "inactive";
+        game.status = "inactive";
       } 
       else {
         console.error(`Game with id ${id} not found`);
