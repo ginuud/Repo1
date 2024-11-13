@@ -5,12 +5,13 @@
       <button class="start-button" @click="goToStart">Get Started</button>
     </div>
   </template>
+
   
   <script setup>
   const goToStart = () => {
     // Kasutame Nuxt Routerit, et suunata kasutaja teisele lehele
     useRouter().push('/players');
-  };
+  }
   </script>
   
   <style scoped>
