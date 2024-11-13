@@ -15,6 +15,15 @@ namespace REST.Data.Repos
             
             return team;
         }
+
+        public async Task<List<Team>> CreateMultipleAsync(List<Team> teams)
+        {
+            await context.Teams.AddRangeAsync(teams);
+            await context.SaveChangesAsync();
+
+            return teams;
+        }
+
         public async Task<List<Team>> GetAllAsync()
         {
             var teams = context.Teams.Include(m => m.Members).AsQueryable();
@@ -31,6 +40,41 @@ namespace REST.Data.Repos
         }
 
         public async Task<bool> TeamExists(int id) => await context.Teams.AnyAsync(p => p.Id == id);
+
+        public async Task<List<Team>> GenerateTeamsAsync(List<Player> players, List<string> teamNames)
+        {
+            var sortedPlayers = players.OrderByDescending(p => p.Points).ToList();
+            var balancedTeams = new List<Team>();
+    
+            foreach (var teamName in teamNames)
+            {
+                balancedTeams.Add(new Team
+                {
+                    Name = teamName,
+                    Members = new List<Player>()
+                });
+            }
+
+            foreach (var player in sortedPlayers)
+            {
+                var teamWithLeastPlayersAndPoints = balancedTeams
+                    .OrderBy(t => t.Members.Count) 
+                    .ThenBy(t => t.Members.Sum(m => m.Points)) 
+                    .First();
+        
+                teamWithLeastPlayersAndPoints.Members.Add(player); 
+                Console.WriteLine($"Assigned player {player.Name} to team {teamWithLeastPlayersAndPoints.Name}");
+            }
+
+            await CreateMultipleAsync(balancedTeams);
+
+            foreach (var team in balancedTeams)
+            {
+                Console.WriteLine($"Team {team.Name}: {string.Join(", ", team.Members.Select(m => m.Name))}");
+            }
+
+            return balancedTeams; 
+        }
 
         public async Task<Team?> UpdateAsync(int id, UpdateTeamRequestDto teamDto) {           
             

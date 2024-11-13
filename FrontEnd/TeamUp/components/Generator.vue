@@ -28,63 +28,77 @@
   </template>
   
   <script setup lang="ts">
+    import { computed, reactive, onMounted } from 'vue';
     import type { FormError, FormErrorEvent, FormSubmitEvent } from "#ui/types";
     import { useTeamStore } from "~/stores/teamStore";
     import { usePlayerStore } from "~/stores/playerStore";
     import type { Player } from "~/types/player";
 
     const playerStore = usePlayerStore();
-    const { addTeam, generateId, generateTeams, } = useTeamStore();
+    const teamStore = useTeamStore();
 
-    interface SelectedPlayer {
-      value: number;
-      label: string;
-    }
+    onMounted(() => {
+      playerStore.loadPlayers();
+    });
+
+    const playerOptions = computed(() =>
+      playerStore.players.map((player) => ({
+        value: player,
+        label: player.name,
+      }))
+    );
 
     const state = reactive({
-        teamname: '',
-        selectedPlayers: [] as SelectedPlayer[],
-        numberOfTeams: 2,
+      Name: "",
+      selectedPlayers: [],  
+      numberOfTeams: 2,  
     });
 
     const teamNames = reactive(Array.from({ length: state.numberOfTeams }, () => ''));
 
-    const playerOptions = computed(() =>
-        playerStore.players.map(player => ({
-            value: player.id,
-            label: player.name,
-        }))
-    );
-
     const validate = (state: any): FormError[] => {
-        const errors = [];
-        if (state.selectedPlayers.length < 4)
+      const errors = [];
+      if (state.selectedPlayers.length < 4) {
         errors.push({ path: "selectedPlayers", message: "Choose at least 4 players" });
-        if (state.numberOfTeams < 2)
+      }
+      if (state.numberOfTeams < 2) {
         errors.push({ path: "numberOfTeams", message: "At least 2 teams required" });
-        return errors;
+      }
+      return errors;
     };
 
     async function onSubmit(event: FormSubmitEvent<any>) {
-        const selectedPlayers = state.selectedPlayers
-          .map(selected => selected.value) 
-          .map(id => playerStore.players.find(player => player.id === id))
-          .filter((player): player is Player => player !== undefined);
-        const teams = generateTeams(selectedPlayers, state.numberOfTeams, teamNames);
-        teams.forEach((team, index) => {
-            addTeam({
-                id: generateId(),
-                teamname: teamNames[index],
-                members: team.members,
-            });
-        });
+      event.preventDefault();
 
-        await navigateTo("/teams");
+      console.log("Selected Players:", state.selectedPlayers);
+
+      const transformedData = state.selectedPlayers
+        .map(player => ({
+          Id: player.value.id,
+          Name: player.value.name,
+          Points: player.value.points,
+          Rank: player.value.rank,
+          TeamId: player.value.teamId,
+        }));
+
+      console.log("Transformed Player Data:", transformedData);
+      
+      try {
+          await teamStore.generateTeams(transformedData, state.numberOfTeams, teamNames);
+          console.log("Teams successfully added");
+          await navigateTo("/teams");
+      } 
+      catch (error) {
+          console.error("Error in generateTeams:", error);
+      }
     }
-    
+
     async function onError(event: FormErrorEvent) {
-        const element = document.getElementById(event.errors[0].id);
-        element?.focus();
-        element?.scrollIntoView({ behavior: "smooth", block: "center" });
+      const element = document.getElementById(event.errors[0].id);
+      element?.focus();
+      element?.scrollIntoView({ behavior: "smooth", block: "center" });
     }
-  </script>
+
+</script>
+
+    
