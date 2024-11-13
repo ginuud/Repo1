@@ -1,0 +1,199 @@
+{
+	"info": {
+		"_postman_id": "87caa857-ffcd-4dc2-a27d-d2ef154c3888",
+		"name": "TeamUp",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38594810"
+	},
+	"item": [
+		{
+			"name": "GetPlayerById",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const responseData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Player name is LeBron James\", function () {\r",
+							"    pm.expect(responseData.name).to.eql(\"LeBron James\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/Players/2",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"Players",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetTeamById",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const responseData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Team name is Bulls\", function () {\r",
+							"    pm.expect(responseData.name).to.eql(\"Bulls\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Team has a member named Michael Jordan\", function () {\r",
+							"    let memberNames = responseData.members.map(member => member.name);\r",
+							"    pm.expect(memberNames).to.include(\"Michael Jordan\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/Teams/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"Teams",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetPlayerByInvalidId",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Playerit ei leita\", function () { \r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/Players/100000000000",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"Players",
+						"100000000000"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllTeams",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/Teams",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"Teams"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetGameById",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const responseData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Game name is Bulls vs Lakers \", function () {\r",
+							"    pm.expect(responseData.name).to.eql(\"Bulls vs Lakers\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/Games/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"Games",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

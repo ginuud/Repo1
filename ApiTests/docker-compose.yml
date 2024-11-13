@@ -1,0 +1,51 @@
+services:
+  postgres: 
+    image: postgres:17-alpine
+    container_name: TeamUp-db
+    environment:
+    - POSTGRES_PASSWORD=teamup
+    networks:
+    - pg_net
+
+  back_end:
+    image: ${DOCKER_REGISTRY}/back:${CI_COMMIT_SHA}
+    container_name: back_end
+    environment:
+      - ASPNETCORE_URLS=http://+:5181
+    depends_on:
+      - postgres
+    networks:
+      - pg_net
+      - api_net
+    links:
+      - "postgres:db"
+    volumes:
+      - ./startup:/etc/startup
+    entrypoint:
+      [
+        "/etc/startup/wait-for",
+        "-t",
+        "30",
+        "db:5432",
+        "--",
+        "dotnet",
+        "/app/REST.dll",
+      ]
+  newman:
+    image: postman/newman:alpine
+    entrypoint:
+      ["/etc/startup/wait-for", "-t", "30", "back_end:5181", "--", "newman"]
+    container_name: newman
+    depends_on:
+      - postgres
+      - back_end
+    network_mode: "service:back_end"
+    volumes:
+      - ./startup:/etc/startup
+      - ./newman/:/etc/newman/
+    command: run /etc/newman/teamup.postman_collection.json -e teamup.postman_environment.json
+networks:
+  pg_net:
+  api_net:
+volumes:
+  pgadmin-data:
