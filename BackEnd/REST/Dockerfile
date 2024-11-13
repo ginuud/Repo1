@@ -24,4 +24,4 @@ EXPOSE 80
 
 RUN addgroup -S runner && adduser -S runner -G runner
 USER runner
-ENTRYPOINT ["dotnet", "TeamUp.dll"]
+ENTRYPOINT ["dotnet", "REST.dll"]
