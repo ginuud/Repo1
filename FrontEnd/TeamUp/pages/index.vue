@@ -1,6 +1,7 @@
 <template>
     <div class="hero">
-      <h1 class="title">Team UP</h1>
+      <h1 class="title">Welcome to</h1>
+      <h1 class="title2">Team UP!</h1>
       <button class="start-button" @click="goToStart">Get Started</button>
     </div>
   </template>
@@ -24,9 +25,16 @@
   }
   
   .title {
-    font-size: 4rem;
-    font-weight: bold;
+    font-size: 3rem;
+    font-weight: medium;
     color: #333;
+    margin-bottom: 0.1rem;
+  }
+  .title2 {
+    font-size: 8rem;
+    font-family: 'Anton', sans-serif;
+    font-weight: 800;
+    color: #202a79;
     margin-bottom: 1rem;
   }
   
