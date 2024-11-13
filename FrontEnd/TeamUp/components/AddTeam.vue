@@ -13,6 +13,7 @@
     <UFormGroup label="Members" name="Members">
       <USelectMenu v-model="state.Members" :options="playerOptions" multiple placeholder="Select players" />
     </UFormGroup>
+    <p class="text-gray-500">Only players who are not already in a team are shown</p>
 
     <UButton type="submit">Add Team</UButton>
   </UForm>
@@ -33,10 +34,12 @@ onMounted(() => {
 });
 
 const playerOptions = computed(() =>
-  playerStore.players.map((player) => ({
-    value: player,
-    label: player.name,
-  }))
+  playerStore.players
+    .filter((player) => player.teamId === null)
+    .map((player) => ({
+      value: player,
+      label: player.name,
+    }))
 );
 
 const state = reactive<Team>({
@@ -54,11 +57,6 @@ const validateForm = (state: Team): FormError[] => {
 
   if (state.Members.length < 2) {
     errors.push({ path: "Members", message: "Choose at least 2 players" });
-  }
-
-  const unassignedPlayers = state.Members.every(member => member.value.teamId === null);
-  if (!unassignedPlayers) {
-    errors.push({ path: "Members", message: "One or more selected players are already in a team" });
   }
 
   return errors;
