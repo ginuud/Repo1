@@ -24,7 +24,7 @@ namespace REST.Data
                  .HasForeignKey(t => t.GameId);
 
             modelBuilder.Entity<Player>().Property(x => x.Id).ValueGeneratedOnAdd();
-            modelBuilder.Entity<Player>().Property(p => p.Id).HasIdentityOptions(startValue: 10);
+            modelBuilder.Entity<Player>().Property(p => p.Id).HasIdentityOptions(startValue: 8);
 
             modelBuilder.Entity<Team>().Property(x => x.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Team>().Property(p => p.Id).HasIdentityOptions(startValue: 6);
@@ -42,12 +42,7 @@ namespace REST.Data
                 {
                     Id = 2,
                     Name = "Celtics vs Spurs"
-                }
-                // new Game
-                // {
-                //     Id = 3,
-                //     Name = "Wariors"
-                // }                 
+                }                
             );
 
             modelBuilder.Entity<Team>().HasData(
@@ -75,13 +70,6 @@ namespace REST.Data
                     Name = "Spurs",
                     GameId = 2
                 }
-                // new Team
-                // {
-                //     Id = 5,
-                //     Name = "Warriors",
-                //     GameId = 3
-                // }
-
             );
             modelBuilder.Entity<Player>().HasData(
                 new Player
@@ -89,74 +77,50 @@ namespace REST.Data
                     Id = 1,
                     Name = "Michael Jordan",
                     TeamId = 1,
-                    Points = 32292,
-                    Rank = 1
+                    Points = 32292
                 },
                 new Player
                 {
                     Id = 2,
                     Name = "LeBron James",
                     TeamId = 2,
-                    Points = 35367,
-                    Rank = 2
+                    Points = 35367
                 },
                 new Player
                 {
                     Id = 3,
                     Name = "Kobe Bryant",
                     TeamId = 2,
-                    Points = 33643,
-                    Rank = 3
+                    Points = 33643
                 },
                 new Player
                 {
                     Id = 4,
                     Name = "Magic Johnson",
                     TeamId = 2,
-                    Points = 17707,
-                    Rank = 4
+                    Points = 17707
                 },
                 new Player
                 {
                     Id = 5,
                     Name = "Larry Bird",
                     TeamId = 3,
-                    Points = 21791,
-                    Rank = 53
+                    Points = 21791
                 },
                 new Player
                 {
                     Id = 6,
                     Name = "Kawhi Leonard",
                     TeamId = 4,
-                    Points = 13937,
-                    Rank = 27
+                    Points = 13937
                 },
                 new Player
                 {
                     Id = 7,
                     Name = "Victor Wembanyama",
                     TeamId = 4,
-                    Points = 1522,
-                    Rank = 79
+                    Points = 1522
                 }
-                // new Player
-                // {
-                //     Id = 8,
-                //     Name = "Stephen Curry",
-                //     TeamId = 5,
-                //     Points = 23668,
-                //     Rank = 6
-                // },
-                // new Player
-                // {
-                //     Id = 9,
-                //     Name = "Kevin Durant",
-                //     TeamId = 5,
-                //     Points = 28924,
-                //     Rank = 5
-                // }
-
             );
             
         }
