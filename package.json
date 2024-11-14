@@ -1,0 +1,5 @@
+{
+	"dependencies": {
+		"@nuxt/fonts": "^0.10.2"
+	}
+}

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace REST.Models.Classes
 {
-    public class Game
+    public record Game
     {
         public int Id { get; set; }
         public string? Name { get; set; } = string.Empty;

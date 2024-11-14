@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace REST.Models.Classes
 {
-    public class Team
+    public record Team
     {
         public int Id { get; set; }
         public string? Name { get; set; } = string.Empty;
