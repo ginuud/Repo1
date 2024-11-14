@@ -10,6 +10,7 @@ export const useTeamStore = defineStore('team', () => {
       currentId++;
       return currentId;
     }
+    const teams = ref<Team[]>([])
 
     const addTeam = async (team: Team) => {
       const res = await $fetch('http://localhost:5181/api/Teams', {
@@ -20,13 +21,20 @@ export const useTeamStore = defineStore('team', () => {
     }
 
     const deleteTeam = async (teamId: number) => {
-      const index = teams.value.findIndex((team) => team.id === teamId);
-      if (index !== -1) {
-        teams.value.splice(index, 1);
+      try {
+        await $fetch(`http://localhost:5181/api/Teams/${teamId}`, {
+          method: 'DELETE',
+        }); 
+        const index = teams.value.findIndex((team) => team.id === teamId);
+        if (index !== -1) {
+          teams.value.splice(index, 1);
+        }
+        await loadTeams();
+        console.log(`Team with ID ${teamId} deleted and list refreshed.`);
+      } catch (error) {
+        console.error('Error deleting team:', error);
       }
-    }
-
-    const teams = ref<Team[]>([])
+    }    
 
     const loadTeams = async () => {
       teams.value = await $fetch<Team[]>('http://localhost:5181/api/Teams')

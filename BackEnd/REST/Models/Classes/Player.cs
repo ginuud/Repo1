@@ -7,7 +7,6 @@ namespace REST.Models.Classes
         public int Id { get; set; }
         public string? Name { get; set; } = string.Empty;
         public int Points { get; set; }
-        public int Rank { get; set; }
         public int? TeamId { get; set; }
         public Team? Team { get; set; }
     }

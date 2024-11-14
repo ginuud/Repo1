@@ -63,7 +63,6 @@
             id: member.value.id,
             name: member.value.name,
             points: member.value.points,
-            rank: member.value.rank,
             teamId: member.value.teamId
         }))
     };
