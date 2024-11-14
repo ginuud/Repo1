@@ -47,9 +47,9 @@
     const validate = (state: any): FormError[] => {
         const errors = [];
         if (!state.name) 
-        errors.push({ path: "Name", message: "Required" });
+        errors.push({ path: "name", message: "Required" });
         if (state.members.length < 2)
-        errors.push({ path: "Members", message: "Choose at least 2 players" });
+        errors.push({ path: "members", message: "Choose at least 2 players" });
         return errors;
     };
     
