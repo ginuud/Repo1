@@ -95,30 +95,30 @@ const columns = [
 ];
 
 const isDeleteModalOpen = ref(false);
-  const selectedPlayerId = ref<number | null>(null);
-  const selectedPlayerName = ref<string | null>(null);
-  const isEditModalOpen = ref(false);
-  const newName = ref('');
-  const newScore = ref<number>(0);
+const selectedPlayerId = ref<number | null>(null);
+const selectedPlayerName = ref<string | null>(null);
+const currentTeamId = ref<number | null>(null);
+const isEditModalOpen = ref(false);
+const newName = ref('');
+const newScore = ref<number>(0);
 
 
-  const openDeleteModal = (playerId: number) => {
-    const player = playerStore.players.find(p => p.id === playerId);
-    if (player) {
-    isDeleteModalOpen.value = true;
-	  selectedPlayerId.value = playerId;
-    selectedPlayerName.value = player.name;	  
-    }
-  };
-
-  const submitDelete = async() => {
-    if (selectedPlayerId.value !== null) {
-    await playerStore.deletePlayer(selectedPlayerId.value);
-    isDeleteModalOpen.value = false;
-    selectedPlayerId.value = null;
-    selectedPlayerName.value = null;
-    navigateTo("/players");
+const openDeleteModal = (playerId: number) => {
+  const player = playerStore.players.find(p => p.id === playerId);
+  if (player) {
+  isDeleteModalOpen.value = true;
+  selectedPlayerId.value = playerId;
+  selectedPlayerName.value = player.name;	  
   }
+};
+
+const submitDelete = async() => {
+  if (selectedPlayerId.value !== null) {
+  await playerStore.deletePlayer(selectedPlayerId.value);
+  isDeleteModalOpen.value = false;
+  selectedPlayerId.value = null;
+  navigateTo("/players");
+}
 };
 
 const openEditModal = (playerId: number) => {
@@ -127,18 +127,38 @@ const openEditModal = (playerId: number) => {
 	  selectedPlayerId.value = playerId;
     newName.value = player.name;
     newScore.value = player.points;
+    if (player.Team) {
+      currentTeamId.value = player.team.id;
+    }
 	  isEditModalOpen.value = true;
   }  
 };
-
+// const openEditModal = (playerId: number) => {
+//   const player = playerStore.players.find(p => p.id === playerId); 
+//     if (player) {
+// 	  selectedPlayerId.value = playerId;
+//     newName.value = player.name;
+//     newScore.value = player.points;
+// 	  isEditModalOpen.value = true;
+//   }  
+// };
 const submitPlayer = () => {
   if (selectedPlayerId.value !== null && newName.value && newScore.value) {
-	  playerStore.updatePlayer(selectedPlayerId.value, newName.value, newScore.value);
+	  playerStore.updatePlayer(selectedPlayerId.value, newName.value, newScore.value, currentTeamId.value);
 	  isEditModalOpen.value = false;
     selectedPlayerId.value = null;
   navigateTo("/players");
   }
 };
+
+// const submitPlayer = () => {
+//   if (selectedPlayerId.value !== null && newName.value && newScore.value) {
+// 	  playerStore.updatePlayer(selectedPlayerId.value, newName.value, newScore.value);
+// 	  isEditModalOpen.value = false;
+//     selectedPlayerId.value = null;
+//   navigateTo("/players");
+//   }
+// };
 
 onMounted(async () => {
   await playerStore.loadPlayers();

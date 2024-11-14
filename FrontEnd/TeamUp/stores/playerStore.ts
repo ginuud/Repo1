@@ -62,20 +62,59 @@ export const usePlayerStore = defineStore('player', () => {
     loadPlayers();
   };
 
-  const updatePlayer = async (selectedPlayerId: number, newName: string, newScore: number) => { //pooleli
+  // const updatePlayer = async (selectedPlayerId: number, newName: string, newScore: number, teamId: number | null) => { 
+  //   try {
+  //     const body: any = {
+  //       name: newName,
+  //       points: newScore
+  //     };
+  
+  //     if (teamId !== null) {
+  //       body.teamId = teamId;
+  //     }
+  
+  //     const response = await $fetch(`http://localhost:5181/api/Players/${selectedPlayerId}`, {
+  //       method: 'PUT',
+  //       body: body
+  //     });
+  
+  //     await loadPlayers(); 
+  //   } catch (error) {
+  //     console.error('Error updating player:', error);
+  //   }
+  // }; 
+  const updatePlayer = async (selectedPlayerId: number, newName: string, newScore: number, teamId: number | null) => { 
     try {
-      await $fetch(`http://localhost:5181/api/Players/${selectedPlayerId}`, {
+      const body: any = {
+        name: newName,
+        points: newScore,
+        teamId: teamId
+      };
+  
+      const response = await $fetch(`http://localhost:5181/api/Players/${selectedPlayerId}`, {
         method: 'PUT',
-        body: {
-          name: newName,
-          points: newScore
-        }
+        body: body
       });
+  
       await loadPlayers(); 
     } catch (error) {
       console.error('Error updating player:', error);
     }
   }; 
+  // const updatePlayer = async (selectedPlayerId: number, newName: string, newScore: number) => { 
+  //   try {
+  //     await $fetch(`http://localhost:5181/api/Players/${selectedPlayerId}`, {
+  //       method: 'PUT',
+  //       body: {
+  //         name: newName,
+  //         points: newScore
+  //       }
+  //     });
+  //     await loadPlayers(); 
+  //   } catch (error) {
+  //     console.error('Error updating player:', error);
+  //   }
+  // }; 
 
   const teamStore = useTeamStore();
 
