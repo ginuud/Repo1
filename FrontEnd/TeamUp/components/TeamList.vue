@@ -1,5 +1,4 @@
- 
-<template>
+ <template>
   <div v-for="team in teams" :key="team.id" class="team-accordion-item">
     <div class="accordion-header">
       <strong>Team: {{ team.name }}</strong>
