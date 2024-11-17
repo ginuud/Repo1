@@ -6,11 +6,11 @@
       @submit="onSubmit"
       @error="onError"
     >
-    <UFormGroup label="Game name" name="Name">
-        <UInput v-model="state.Name" type="Name"/>
+    <UFormGroup label="Game name" name="name">
+        <UInput v-model="state.name" type="name"/>
       </UFormGroup>
-      <UFormGroup label="Teams" name="Teams">
-        <USelectMenu v-model="state.Teams" :options="teamOptions" multiple placeholder="Select teams" />
+      <UFormGroup label="Teams" name="teams">
+        <USelectMenu v-model="state.teams" :options="teamOptions" multiple placeholder="Select teams" />
       </UFormGroup>
   
       <UButton type="submit"> Start game </UButton>
@@ -31,20 +31,20 @@ onMounted(() => {
   })
 
 const state = reactive<Game>({
-        Id: gameStore.generateId(),
-        Name: undefined,
-        Teams: [],
-        Status: 'in progress',
+        id: gameStore.generateId(),
+        name: "",
+        teams: [],
+        status: 'in progress',
     });
 
 const validate = (state: any): FormError[] => {
     const errors = [];
-    if (!state.Name) 
+    if (!state.name) 
     errors.push({ path: "name", message: "Required" });
-    if (!state.Teams[0])
-    errors.push({ path: "Teams[0]", message: "Required" });
-    if (!state.Teams[1])
-    errors.push({ path: "Teams[1]", message: "Required" });
+    if (!state.teams[0])
+    errors.push({ path: "teams[0]", message: "Required" });
+    if (!state.teams[1])
+    errors.push({ path: "teams[1]", message: "Required" });
     return errors;
 };
 
@@ -54,9 +54,9 @@ async function onSubmit(event: Event) {
   console.log("State before starting game:", state)
 
   const transformedData = {
-    Id: state.Id,
-    Name: state.Name,
-    Teams: state.Teams.map(team => ({
+    id: state.id,
+    name: state.name,
+    teams: state.teams.map(team => ({
         id: team.value.id,
         name: team.value.name,
         members: team.value.members.map(member => ({
@@ -67,7 +67,7 @@ async function onSubmit(event: Event) {
             teamId: member.teamId
         }))
     })),
-    Status: state.Status
+    status: state.status
 };
 
   console.log("Data before starting game:", transformedData)
