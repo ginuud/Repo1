@@ -1,14 +1,28 @@
 <template>
-  <UForm
-    :validate="validateForm"
-    :state="state"
-    class="space-y-4"
-    @submit="onSubmit"
-    @error="onError"
-  >
-    <UFormGroup label="Team name" name="Name">
-      <UInput v-model="state.Name" type="text" />
-    </UFormGroup>
+    <UForm
+      :validate="validate"
+      :state="state"
+      class="space-y-4"
+      @submit="onSubmit"
+      @error="onError"
+    >
+      <UFormGroup label="Team name" name="name">
+        <UInput v-model="state.name" type="name"/>
+      </UFormGroup>
+  
+      <UFormGroup label="Members" name="members">
+        <USelectMenu v-model="state.members" :options="playerOptions" multiple placeholder="Select players" />
+      </UFormGroup>
+  
+      <UButton type="submit"> Lisa </UButton>
+    </UForm>
+  </template>
+  
+  <script setup lang="ts">
+    import type { FormError, FormErrorEvent, FormSubmitEvent } from "#ui/types";
+    import type { Team } from "~/types/team";
+    import { useTeamStore } from "~/stores/teamStore";
+    import { usePlayerStore } from "~/stores/playerStore";
 
     <UFormGroup label="Members" name="Members">
       <USelectMenu v-model="state.Members" :options="playerOptions" multiple placeholder="Select players" />

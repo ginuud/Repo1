@@ -16,7 +16,7 @@ export const usePlayerStore = defineStore('player', () => {
       players.value = await $fetch<Player[]>('http://localhost:5181/api/Players');
       console.log("Players loaded:", players.value); 
       generateRanks(); 
-      players.value.sort((a, b) => a.Rank - b.Rank);
+      players.value.sort((a, b) => a.rank - b.rank);
     } catch (error) {
       console.error('Error loading players:', error);
       players.value = [];
@@ -37,14 +37,14 @@ export const usePlayerStore = defineStore('player', () => {
         return b.points - a.points;
       })
       .forEach((player, index) => {
-        player.Rank = index + 1;
+        player.rank = index + 1;
       });
   };  
   
-  const addPlayer = async (Player: Player) => {
+  const addPlayer = async (player: Player) => {
     const res = await $fetch('http://localhost:5181/api/Players', {
       method: 'POST',
-      body: Player,
+      body: player,
     });
     players.value.push(res);
     loadPlayers();
