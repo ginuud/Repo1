@@ -33,7 +33,6 @@ export const usePlayerStore = defineStore('player', () => {
     players.value
       .slice()
       .sort((a, b) => {
-        console.log(`Comparing ${a.name} (points: ${a.points}) with ${b.name} (points: ${b.points})`);
         return b.points - a.points;
       })
       .forEach((player, index) => {
@@ -62,17 +61,20 @@ export const usePlayerStore = defineStore('player', () => {
     loadPlayers();
   };
 
-  const updatePlayer = async (selectedPlayerId: number, newName: string, newScore: number) => { //pooleli
+  const updatePlayer = async (selectedPlayerId: number, newName: string, newScore: number, teamId: number | null) => { 
     try {
+      console.log('teamId:', teamId);
       await $fetch(`http://localhost:5181/api/Players/${selectedPlayerId}`, {
         method: 'PUT',
         body: {
           name: newName,
-          points: newScore
-        }
+          points: newScore,
+          teamId: teamId,
+        },
       });
       await loadPlayers(); 
-    } catch (error) {
+    } 
+    catch (error) {
       console.error('Error updating player:', error);
     }
   }; 
@@ -94,7 +96,7 @@ export const usePlayerStore = defineStore('player', () => {
   // }
   // };
 
-  const addPointsToWinningTeam = async (winningTeam: string) => {
+  const addPointsToWinningTeam = async (winningTeam: string) => { // ei tööta
     try {
       const team = await useTeamStore().teams.find(t => t.name === winningTeam);
       

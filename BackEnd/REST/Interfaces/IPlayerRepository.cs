@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using REST.Dtos.Player;
 using REST.Models.Classes;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace REST.Interfaces
 {

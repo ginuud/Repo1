@@ -24,6 +24,7 @@ namespace REST.Mappers
             return new Player{
                 Name = playerDto.Name,
                 Points = playerDto.Points,
+                TeamId = playerDto.TeamId
             };
         }
     }

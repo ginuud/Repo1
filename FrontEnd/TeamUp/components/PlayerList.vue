@@ -95,30 +95,30 @@ const columns = [
 ];
 
 const isDeleteModalOpen = ref(false);
-  const selectedPlayerId = ref<number | null>(null);
-  const selectedPlayerName = ref<string | null>(null);
-  const isEditModalOpen = ref(false);
-  const newName = ref('');
-  const newScore = ref<number>(0);
+const selectedPlayerId = ref<number | null>(null);
+const selectedPlayerName = ref<string | null>(null);
+const currentTeamId = ref<number | null>(null);
+const isEditModalOpen = ref(false);
+const newName = ref('');
+const newScore = ref<number>(0);
 
 
-  const openDeleteModal = (playerId: number) => {
-    const player = playerStore.players.find(p => p.id === playerId);
-    if (player) {
-    isDeleteModalOpen.value = true;
-	  selectedPlayerId.value = playerId;
-    selectedPlayerName.value = player.name;	  
-    }
-  };
-
-  const submitDelete = async() => {
-    if (selectedPlayerId.value !== null) {
-    await playerStore.deletePlayer(selectedPlayerId.value);
-    isDeleteModalOpen.value = false;
-    selectedPlayerId.value = null;
-    selectedPlayerName.value = null;
-    navigateTo("/players");
+const openDeleteModal = (playerId: number) => {
+  const player = playerStore.players.find(p => p.id === playerId);
+  if (player) {
+  isDeleteModalOpen.value = true;
+  selectedPlayerId.value = playerId;
+  selectedPlayerName.value = player.name;	  
   }
+};
+
+const submitDelete = async() => {
+  if (selectedPlayerId.value !== null) {
+  await playerStore.deletePlayer(selectedPlayerId.value);
+  isDeleteModalOpen.value = false;
+  selectedPlayerId.value = null;
+  navigateTo("/players");
+}
 };
 
 const openEditModal = (playerId: number) => {
@@ -126,14 +126,18 @@ const openEditModal = (playerId: number) => {
     if (player) {
 	  selectedPlayerId.value = playerId;
     newName.value = player.name;
-    newScore.value = player.points;
+    newScore.value = player.points;    
+    console.log('Player teamid:', player.teamId);
+    currentTeamId.value = player.teamId || null;
+
+    console.log('Current Team ID after assignment:', currentTeamId.value);
 	  isEditModalOpen.value = true;
   }  
 };
 
 const submitPlayer = () => {
-  if (selectedPlayerId.value !== null && newName.value && newScore.value) {
-	  playerStore.updatePlayer(selectedPlayerId.value, newName.value, newScore.value);
+  if (selectedPlayerId.value !== null && newName.value && newScore.value !== null) {
+	  playerStore.updatePlayer(selectedPlayerId.value, newName.value, newScore.value, currentTeamId.value);
 	  isEditModalOpen.value = false;
     selectedPlayerId.value = null;
   navigateTo("/players");

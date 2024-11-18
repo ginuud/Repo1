@@ -12,8 +12,8 @@ namespace REST.Dtos.Player
         [MaxLength(30, ErrorMessage = "Name cannot be over 30 over characters")]
         public string? Name { get; set; }
         [Required]
-        [Range(1, 100)]
+        [Range(0, 10000000)]
         public int Points { get; set; }
-        public int TeamId { get; set; }
+        public int? TeamId { get; set; }
     }
 }
