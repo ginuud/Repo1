@@ -10,75 +10,84 @@
         <UInput v-model="state.name" type="name"/>
       </UFormGroup>
   
-      <UFormGroup label="Members" name="members">
+      <UFormGroup label="Members" name="Members">
         <USelectMenu v-model="state.members" :options="playerOptions" multiple placeholder="Select players" />
       </UFormGroup>
-  
-      <UButton type="submit"> Lisa </UButton>
+      <p class="text-gray-500">Only players who are not already in a team are shown</p>
+
+      <UButton type="submit">Add Team</UButton>
     </UForm>
-  </template>
-  
-  <script setup lang="ts">
-    import type { FormError, FormErrorEvent, FormSubmitEvent } from "#ui/types";
-    import type { Team } from "~/types/team";
-    import { useTeamStore } from "~/stores/teamStore";
-    import { usePlayerStore } from "~/stores/playerStore";
+</template>
 
-    const playerStore = usePlayerStore();
-    const teamStore = useTeamStore();
+<script setup lang="ts">
+import { computed, onMounted, reactive } from "vue";
+import type { FormError, FormErrorEvent, FormSubmitEvent } from "#ui/types";
+import type { Team } from "~/types/team";
+import { useTeamStore } from "~/stores/teamStore";
+import { usePlayerStore } from "~/stores/playerStore";
 
-    onMounted(() => {
-      playerStore.loadPlayers();
-  })
+const playerStore = usePlayerStore();
+const teamStore = useTeamStore();
 
-    const playerOptions = computed(() =>
-    playerStore.players.map((player) => ({
-        value: player,
-        label: player.name,
-    })));
-  
+onMounted(() => {
+  playerStore.loadPlayers();
+});
 
-    const state = reactive<Team>({
-        id: teamStore.generateId(),
-        name: '',
-        members: [],
-    });
+const playerOptions = computed(() =>
+  playerStore.players
+    .filter((player) => player.teamId === null)
+    .map((player) => ({
+      value: player,
+      label: player.name,
+    }))
+);
 
-    const validate = (state: any): FormError[] => {
-        const errors = [];
-        if (!state.name) 
-        errors.push({ path: "name", message: "Required" });
-        if (state.members.length < 2)
-        errors.push({ path: "members", message: "Choose at least 2 players" });
-        return errors;
-    };
-    
-    async function onSubmit(event: FormSubmitEvent<any>) {
+const state = reactive<Team>({
+  id: teamStore.generateId(),
+  name: '',
+  members: [],
+});
 
-      console.log("State before adding team:", state);
-      const transformedData = { //state sisaldab ka value ja label key'sid, seega ei saa otse state'i kasutada
-        id: state.id,
-        name: state.name,
-        members: state.members.map(member => ({
-            id: member.value.id,
-            name: member.value.name,
-            points: member.value.points,
-            teamId: member.value.teamId
-        }))
-    };
-      try {
-          await teamStore.addTeam(transformedData);
-          console.log("Team successfully added");
-          await navigateTo("/teams");
-      } 
-      catch (error) {
-          console.error("Error in addTeam:", error);
-      }
-    }
-    
-    async function onError(event: FormErrorEvent) {
-        const element = document.getElementById(event.errors[0].id);
-        element?.focus();
-        element?.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-  </script>
+const validateForm = (state: Team): FormError[] => {
+  const errors: FormError[] = [];
+
+  if (!state.name) {
+    errors.push({ path: "Name", message: "Team name is required" });
+  }
+
+  if (state.members.length < 2) {
+    errors.push({ path: "Members", message: "Choose at least 2 players" });
+  }
+
+  return errors;
+};
+
+const transformTeamData = () => ({
+  Id: state.id,
+  Name: state.name,
+  Members: state.members.map(({ value: { id, name, points, rank, teamId } }) => ({
+    id,
+    name,
+    points,
+    rank,
+    teamId,
+  })),
+});
+
+async function onSubmit(event: FormSubmitEvent) {
+  try {
+    const teamData = transformTeamData();
+    await teamStore.addTeam(teamData);
+    console.log("Team successfully added:", teamData);
+    await navigateTo("/teams");
+  } catch (error) {
+    console.error("Error in addTeam:", error);
+  }
+}
+
+async function onError(event: FormErrorEvent) {
+  const firstErrorElement = document.getElementById(event.errors[0].id);
+  firstErrorElement?.focus();
+  firstErrorElement?.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+</script>

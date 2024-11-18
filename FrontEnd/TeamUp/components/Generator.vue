@@ -12,6 +12,8 @@
                      multiple placeholder="Select players" />
       </UFormGroup>
 
+      <p class="text-gray-500">Only players who are not already in a team are shown</p>
+
       <UFormGroup label="Number of Teams" name="numberOfTeams">
         <UInput v-model.number="state.numberOfTeams" type="number" />
       </UFormGroup>
@@ -32,7 +34,6 @@
     import type { FormError, FormErrorEvent, FormSubmitEvent } from "#ui/types";
     import { useTeamStore } from "~/stores/teamStore";
     import { usePlayerStore } from "~/stores/playerStore";
-    import type { Player } from "~/types/player";
 
     const playerStore = usePlayerStore();
     const teamStore = useTeamStore();
@@ -42,7 +43,9 @@
     });
 
     const playerOptions = computed(() =>
-      playerStore.players.map((player) => ({
+      playerStore.players
+      .filter((player) => player.teamId === null)
+      .map((player) => ({
         value: player,
         label: player.name,
       }))
@@ -58,12 +61,15 @@
 
     const validate = (state: any): FormError[] => {
       const errors = [];
+
       if (state.selectedPlayers.length < 4) {
         errors.push({ path: "selectedPlayers", message: "Choose at least 4 players" });
       }
+
       if (state.numberOfTeams < 2) {
         errors.push({ path: "numberOfTeams", message: "At least 2 teams required" });
       }
+
       return errors;
     };
 

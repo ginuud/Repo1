@@ -1,11 +1,17 @@
- <template>
-  <div v-for="team in teams" :key="team.id" class="team-accordion-item">
-    <div class="accordion-header">
-      <strong>Team: {{ team.name }}</strong>
-      <button @click="deleteTeam(team.id)" class="delete-button">Delete</button>
-    </div>
-    <div class="accordion-content">
-      Members: {{ team.members?.map(member => member.name).join(', ') || 'No members' }}
+ 
+<template>
+  <div v-if="teams.length === 0" class="text-center text-red-500">
+  	No teams have been added   	 
+	</div>
+  <div v-else>
+    <div v-for="team in teams" :key="team.id" class="team-accordion-item">
+      <div class="accordion-header">
+        <strong>Team: {{ team.name }}</strong>
+        <button @click="deleteTeam(team.id)" class="delete-button">Delete</button>
+      </div>
+      <div class="accordion-content">
+        Members: {{ team.members?.map(member => member.name).join(', ') || 'No members' }}
+      </div>
     </div>
   </div>
 </template>
