@@ -26,26 +26,31 @@
 
     const state = reactive<Player>({
         id: playerStore.generateId(),
-        name: undefined,
-        points: undefined,
+        name: '',
+        points: 0,
+        rank: 0
     });
 
     const validate = (state: any): FormError[] => {
         const errors = [];
         if (!state.name) 
         errors.push({ path: "name", message: "Required" });
-        if (!state.points)
+        if (!state.points === undefined || state.points === null)
         errors.push({ path: "points", message: "Required" });
         return errors;
     };
     
-    async function onSubmit(event: Event) {
-      event.preventDefault();
-
+    async function onSubmit(event: FormSubmitEvent<any>) {
       console.log("State before adding player:", state);
-      
+      const transformedData = { 
+        id: state.id,
+        name: state.name,
+        points: state.points,
+        rank: state.rank,
+        team: state.team
+      };
       try {
-          await playerStore.addPlayer({...state});
+          await playerStore.addPlayer(transformedData);
           console.log("Player successfully added");
           await navigateTo("/players");
       } 

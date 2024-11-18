@@ -11,7 +11,6 @@ namespace REST.Mappers
                 Id = playerModel.Id,
                 Name = playerModel.Name,
                 Points = playerModel.Points,
-                Rank = playerModel.Rank,
                 TeamId = playerModel.TeamId,
             };
         }

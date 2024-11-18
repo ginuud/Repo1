@@ -91,35 +91,33 @@ const columns = [
 
 //const games = computed(() => gameStore.games.map(game => ({ ...game })));
 
-// Modal state
 const isModalOpen = ref(false);
 const selectedGameId = ref<number | null>(null);
 const selectedTeam = ref<'A' | 'B' | null>(null);
 const team1 = ref('');
 const team2 = ref('');
 
-// Open modal and set game data
 const openModal = (gameId: number) => {
-  const game = gameStore.games.find(g => g.Id === gameId);
+  const game = gameStore.games.find(g => g.id === gameId);
   if (game) {
 	selectedGameId.value = gameId;
-	team1.value = game.teams[0] || '';
-	team2.value = game.teams[1] || '';
+	team1.value = game.teams[0].name || '';
+	team2.value = game.teams[1].name || '';
 	isModalOpen.value = true;
   }
 };
 
-// Handle submitting the winner
 const submitWinner = () => {
   if (selectedTeam.value && selectedGameId.value) {
 	playerStore.addPointsToWinningTeam(selectedTeam.value);
 	gameStore.makeStatusInactive(selectedGameId.value, "in progress");
 	isModalOpen.value = false;
+	selectedGameId.value = null;
+	selectedTeam.value = null;
   navigateTo("/players");
   }
 };
 
-// Cancel and close modal
 const cancelSelection = () => {
   isModalOpen.value = false;
 };

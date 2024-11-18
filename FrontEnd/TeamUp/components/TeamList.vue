@@ -1,31 +1,51 @@
-<template>
-    <UAccordion
-    multiple
-      color="green"
-      variant="ghost"
-      size="lg"
-      :items="accordionItems"
-      
-    />
-  </template>
-  <script setup lang="ts">
-  import { useTeamStore } from "~/stores/teamStore" 
-  
-  const teamStore = useTeamStore();
-  const {teams} = storeToRefs(teamStore)
+ <template>
+  <div v-for="team in teams" :key="team.id" class="team-accordion-item">
+    <div class="accordion-header">
+      <strong>Team: {{ team.name }}</strong>
+      <button @click="deleteTeam(team.id)" class="delete-button">Delete</button>
+    </div>
+    <div class="accordion-content">
+      Members: {{ team.members?.map(member => member.name).join(', ') || 'No members' }}
+    </div>
+  </div>
+</template>
 
-  onMounted(() => {
-    teamStore.loadTeams();
-  })
-  
-  // Tuleb ilusamaks teha
-  const accordionItems = computed(() => {
-    console.log("Team values:", teams.value)
-  return teams.value.map((team) => ({
-    label: `Team: ${team.name}`,
-    content: `Members: ${team.members?.map(member => member.name).join(', ') || 'No members'}`
-  }));
+<script setup lang="ts">
+import { useTeamStore } from "~/stores/teamStore";
+import { storeToRefs } from "pinia";
+
+const teamStore = useTeamStore();
+const { teams } = storeToRefs(teamStore);
+
+onMounted(() => {
+  teamStore.loadTeams();
 });
-  </script>
-  
+
+const deleteTeam = async (teamId: number) => {
+  await teamStore.deleteTeam(teamId);
+};
+</script>
+
+<style scoped>
+.team-accordion-item {
+  border: 1px solid #ccc;
+  margin-bottom: 1em;
+  padding: 1em;
+  border-radius: 8px;
+}
+
+.accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.delete-button {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 0.5em 1em;
+  cursor: pointer;
+}
+</style>
   
