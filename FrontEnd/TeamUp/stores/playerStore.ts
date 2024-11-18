@@ -33,7 +33,6 @@ export const usePlayerStore = defineStore('player', () => {
     players.value
       .slice()
       .sort((a, b) => {
-        console.log(`Comparing ${a.name} (points: ${a.points}) with ${b.name} (points: ${b.points})`);
         return b.points - a.points;
       })
       .forEach((player, index) => {
@@ -62,59 +61,23 @@ export const usePlayerStore = defineStore('player', () => {
     loadPlayers();
   };
 
-  // const updatePlayer = async (selectedPlayerId: number, newName: string, newScore: number, teamId: number | null) => { 
-  //   try {
-  //     const body: any = {
-  //       name: newName,
-  //       points: newScore
-  //     };
-  
-  //     if (teamId !== null) {
-  //       body.teamId = teamId;
-  //     }
-  
-  //     const response = await $fetch(`http://localhost:5181/api/Players/${selectedPlayerId}`, {
-  //       method: 'PUT',
-  //       body: body
-  //     });
-  
-  //     await loadPlayers(); 
-  //   } catch (error) {
-  //     console.error('Error updating player:', error);
-  //   }
-  // }; 
   const updatePlayer = async (selectedPlayerId: number, newName: string, newScore: number, teamId: number | null) => { 
     try {
-      const body: any = {
-        name: newName,
-        points: newScore,
-        teamId: teamId
-      };
-  
-      const response = await $fetch(`http://localhost:5181/api/Players/${selectedPlayerId}`, {
+      console.log('teamId:', teamId);
+      await $fetch(`http://localhost:5181/api/Players/${selectedPlayerId}`, {
         method: 'PUT',
-        body: body
+        body: {
+          name: newName,
+          points: newScore,
+          teamId: teamId,
+        },
       });
-  
       await loadPlayers(); 
-    } catch (error) {
+    } 
+    catch (error) {
       console.error('Error updating player:', error);
     }
   }; 
-  // const updatePlayer = async (selectedPlayerId: number, newName: string, newScore: number) => { 
-  //   try {
-  //     await $fetch(`http://localhost:5181/api/Players/${selectedPlayerId}`, {
-  //       method: 'PUT',
-  //       body: {
-  //         name: newName,
-  //         points: newScore
-  //       }
-  //     });
-  //     await loadPlayers(); 
-  //   } catch (error) {
-  //     console.error('Error updating player:', error);
-  //   }
-  // }; 
 
   const teamStore = useTeamStore();
 
@@ -133,7 +96,7 @@ export const usePlayerStore = defineStore('player', () => {
   // }
   // };
 
-  const addPointsToWinningTeam = async (winningTeam: string) => {
+  const addPointsToWinningTeam = async (winningTeam: string) => { // ei tööta
     try {
       const team = await useTeamStore().teams.find(t => t.name === winningTeam);
       

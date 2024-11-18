@@ -126,39 +126,23 @@ const openEditModal = (playerId: number) => {
     if (player) {
 	  selectedPlayerId.value = playerId;
     newName.value = player.name;
-    newScore.value = player.points;
-    if (player.Team) {
-      currentTeamId.value = player.team.id;
-    }
+    newScore.value = player.points;    
+    console.log('Player teamid:', player.teamId);
+    currentTeamId.value = player.teamId || null;
+
+    console.log('Current Team ID after assignment:', currentTeamId.value);
 	  isEditModalOpen.value = true;
   }  
 };
-// const openEditModal = (playerId: number) => {
-//   const player = playerStore.players.find(p => p.id === playerId); 
-//     if (player) {
-// 	  selectedPlayerId.value = playerId;
-//     newName.value = player.name;
-//     newScore.value = player.points;
-// 	  isEditModalOpen.value = true;
-//   }  
-// };
+
 const submitPlayer = () => {
-  if (selectedPlayerId.value !== null && newName.value && newScore.value) {
+  if (selectedPlayerId.value !== null && newName.value && newScore.value !== null) {
 	  playerStore.updatePlayer(selectedPlayerId.value, newName.value, newScore.value, currentTeamId.value);
 	  isEditModalOpen.value = false;
     selectedPlayerId.value = null;
   navigateTo("/players");
   }
 };
-
-// const submitPlayer = () => {
-//   if (selectedPlayerId.value !== null && newName.value && newScore.value) {
-// 	  playerStore.updatePlayer(selectedPlayerId.value, newName.value, newScore.value);
-// 	  isEditModalOpen.value = false;
-//     selectedPlayerId.value = null;
-//   navigateTo("/players");
-//   }
-// };
 
 onMounted(async () => {
   await playerStore.loadPlayers();
