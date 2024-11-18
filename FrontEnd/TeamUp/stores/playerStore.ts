@@ -79,45 +79,5 @@ export const usePlayerStore = defineStore('player', () => {
     }
   }; 
 
-  const teamStore = useTeamStore();
-
-  // const addPointsToWinningTeam = (winningTeam: string) => {
-  // const team = teamStore.teams.find(t => t.Name === winningTeam);
-  // if (team) {
-  //   players.value.forEach((player) => {
-  //     if (team.Members.includes(player)) {
-  //     player.Points = Number(player.Points) + 1;
-  //     }
-  //   });
-  // //generateRanks();
-  // }
-  // else {
-  //   console.error(`Team ${winningTeam} not found`);
-  // }
-  // };
-
-  const addPointsToWinningTeam = async (winningTeam: string) => { // ei tööta
-    try {
-      const team = await useTeamStore().teams.find(t => t.name === winningTeam);
-      
-      if (team) {
-        const teamPlayers = players.value.filter(player => player.team === team.id);
-        
-        for (const player of teamPlayers) {
-          await updatePlayer(
-            player.id,
-            player.name,
-            Number(player.points) + 1
-          );
-        }
-        await loadPlayers();
-      } else {
-        console.error(`Team ${winningTeam} not found`);
-      }
-    } catch (error) {
-      console.error('Error updating winning team points:', error);
-    }
-  };
-
-  return { players, generateId, addPlayer, deletePlayer, addPointsToWinningTeam, loadPlayers, updatePlayer, generateRanks};
+  return { players, generateId, addPlayer, deletePlayer, loadPlayers, updatePlayer, generateRanks};
 });

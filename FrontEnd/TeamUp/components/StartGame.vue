@@ -51,8 +51,6 @@ const validate = (state: any): FormError[] => {
 async function onSubmit(event: Event) {
   event.preventDefault();
 
-  console.log("State before starting game:", state)
-
   const transformedData = {
     id: state.id,
     name: state.name,

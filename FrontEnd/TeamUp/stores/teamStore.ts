@@ -54,5 +54,29 @@ export const useTeamStore = defineStore('team', () => {
       return generatedTeams;
     };
 
-    return { teams, generateId, addTeam, deleteTeam, generateTeams, loadTeams };
+    const playerstore = usePlayerStore()
+
+    const addPointsToTeam = async (team: Team) => {
+      try {
+        if (team) {
+          const teamPlayers = playerstore.players.filter(player => player.teamId === team.id);
+          console.log("teamPlayers", teamPlayers)
+          
+          for (const player of teamPlayers) {
+            await playerstore.updatePlayer(
+              player.id,
+              player.name,
+              Number(player.points) + 1,
+              player.teamId
+            );
+          }
+        } else {
+          console.error(`Team ${team} not found`);
+        }
+      } catch (error) {
+        console.error('Error updating winning team points:', error);
+      }
+    };
+
+    return { teams, generateId, addTeam, deleteTeam, generateTeams, loadTeams, addPointsToTeam };
   })
