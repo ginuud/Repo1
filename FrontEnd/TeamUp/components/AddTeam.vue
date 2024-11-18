@@ -10,27 +10,13 @@
         <UInput v-model="state.name" type="name"/>
       </UFormGroup>
   
-      <UFormGroup label="Members" name="members">
+      <UFormGroup label="Members" name="Members">
         <USelectMenu v-model="state.members" :options="playerOptions" multiple placeholder="Select players" />
       </UFormGroup>
-  
-      <UButton type="submit"> Lisa </UButton>
+      <p class="text-gray-500">Only players who are not already in a team are shown</p>
+
+      <UButton type="submit">Add Team</UButton>
     </UForm>
-  </template>
-  
-  <script setup lang="ts">
-    import type { FormError, FormErrorEvent, FormSubmitEvent } from "#ui/types";
-    import type { Team } from "~/types/team";
-    import { useTeamStore } from "~/stores/teamStore";
-    import { usePlayerStore } from "~/stores/playerStore";
-
-    <UFormGroup label="Members" name="Members">
-      <USelectMenu v-model="state.Members" :options="playerOptions" multiple placeholder="Select players" />
-    </UFormGroup>
-    <p class="text-gray-500">Only players who are not already in a team are shown</p>
-
-    <UButton type="submit">Add Team</UButton>
-  </UForm>
 </template>
 
 <script setup lang="ts">
@@ -57,19 +43,19 @@ const playerOptions = computed(() =>
 );
 
 const state = reactive<Team>({
-  Id: teamStore.generateId(),
-  Name: '',
-  Members: [],
+  id: teamStore.generateId(),
+  name: '',
+  members: [],
 });
 
 const validateForm = (state: Team): FormError[] => {
   const errors: FormError[] = [];
 
-  if (!state.Name) {
+  if (!state.name) {
     errors.push({ path: "Name", message: "Team name is required" });
   }
 
-  if (state.Members.length < 2) {
+  if (state.members.length < 2) {
     errors.push({ path: "Members", message: "Choose at least 2 players" });
   }
 
@@ -77,9 +63,9 @@ const validateForm = (state: Team): FormError[] => {
 };
 
 const transformTeamData = () => ({
-  Id: state.Id,
-  Name: state.Name,
-  Members: state.Members.map(({ value: { id, name, points, rank, teamId } }) => ({
+  Id: state.id,
+  Name: state.name,
+  Members: state.members.map(({ value: { id, name, points, rank, teamId } }) => ({
     id,
     name,
     points,
