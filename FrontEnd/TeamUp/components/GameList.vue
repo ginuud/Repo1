@@ -32,10 +32,20 @@
 
     	<div class="p-4">
       	<p>Select the winner of the game:</p>
-      	<select v-model="selectedTeam" class="border p-2 rounded w-full">
+      	<!-- <select v-model="selectedTeam" class="border p-2 rounded w-full">
         	<option :value="team1">{{ team1.name }}</option>
         	<option :value="team2">{{ team2.name }}</option>
-      	</select>
+      	</select> -->
+		<!-- <UFormGroup label="Members" name="Members">
+        	<USelectMenu v-model="selectedTeam" :options="teamOptions" multiple placeholder="Select winning team" />
+      	</UFormGroup> -->
+		  <div class="p-4">
+  			<p>Select the winner of the game:</p>
+			<UFormGroup label="Winning Team" name="selectedTeam">
+				<USelectMenu v-model="selectedTeam" :options="teamOptions" placeholder="Select winning team"/>
+			</UFormGroup>
+			</div>
+
     	</div>
     
     	<template #footer>
@@ -51,7 +61,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useGameStore } from '#imports';
+import { useGameStore, type Player } from '#imports';
 import { usePlayerStore } from '~/stores/playerStore';
 
 defineProps<{ title: String }>();
@@ -79,23 +89,31 @@ const columns = [
 
 const isModalOpen = ref(false);
 const selectedGameId = ref<number | null>(null);
-const selectedTeam = ref<'A' | 'B' | null>(null);
+const selectedTeam = ref<Team>();
 const team1 = ref('');
 const team2 = ref('');
+
+const teamOptions = ref<{ id: number; name: string; members: Player[] }[]>([]);
 
 const openModal = (gameId: number) => {
   const game = gameStore.games.find(g => g.id === gameId);
   if (game) {
-	selectedGameId.value = gameId;
-	team1.value = game.teams[0] || '';
-	team2.value = game.teams[1] || '';
-	isModalOpen.value = true;
+    selectedGameId.value = gameId;
+	teamOptions.value = game.teams.map((team) => ({
+		value: team,
+		label: team.name
+	}))
+
+	console.log("teamOptions", teamOptions)
+
+    isModalOpen.value = true;
   }
 };
 
 const submitWinner = async () => {
   if (selectedTeam.value && selectedGameId.value) {
-	await teamStore.addPointsToTeam(selectedTeam.value);
+	console.log("selectedTeam",selectedTeam.value.value)
+	await teamStore.addPointsToTeam(selectedTeam.value.value);
 	isModalOpen.value = false;
 	await gameStore.deleteGame(selectedGameId.value)
 	selectedGameId.value = null;
