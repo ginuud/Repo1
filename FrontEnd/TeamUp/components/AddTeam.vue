@@ -1,22 +1,29 @@
 <template>
-    <UForm
-      :validate="validate"
-      :state="state"
-      class="space-y-4"
-      @submit="onSubmit"
-      @error="onError"
-    >
-      <UFormGroup label="Team name" name="name">
-        <UInput v-model="state.name" type="name"/>
-      </UFormGroup>
-  
-      <UFormGroup label="Members" name="Members">
-        <USelectMenu v-model="state.members" :options="playerOptions" multiple placeholder="Select players" />
-      </UFormGroup>
-      <p class="text-gray-500">Only players who are not already in a team are shown</p>
+  <UForm
+    :validate="validateForm"
+    :state="state"
+    class="space-y-4"
+    @submit="onSubmit"
+    @error="onError"
+  >
+    <UFormGroup label="Team name" name="name">
+      <UInput v-model="state.name" type="name"/>
+    </UFormGroup>
 
-      <UButton type="submit">Add Team</UButton>
-    </UForm>
+    <UFormGroup label="Members" name="Members">
+      <USelectMenu 
+        v-model="state.members" 
+        :options="playerOptions" 
+        multiple 
+        searchable
+        searchable-placeholder="Search a player..."
+        placeholder="Select players" 
+      />
+    </UFormGroup>
+    <p class="text-gray-500">Only players who are not already in a team are shown</p>
+
+    <UButton type="submit">Add Team</UButton>
+  </UForm>
 </template>
 
 <script setup lang="ts">
