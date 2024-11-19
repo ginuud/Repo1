@@ -1,33 +1,43 @@
 <template>
-    <UForm
-      :validate="validate"
-      :state="state"
-      class="space-y-4"
-      @submit="onSubmit"
-      @error="onError"
-    >
-      <UFormGroup label="Select Players" name="selectedPlayers">
-        <USelectMenu v-model="state.selectedPlayers" 
-                     :options="playerOptions"
-                     multiple placeholder="Select players" />
-      </UFormGroup>
+  <UForm
+    :validate="validate"
+    :state="state"
+    class="space-y-4"
+    @submit="onSubmit"
+    @error="onError"
+  >
+    <UFormGroup label="Select Players" name="selectedPlayers">
+      <USelectMenu 
+        v-model="state.selectedPlayers" 
+        :options="playerOptions" 
+        multiple 
+        searchable
+        searchable-placeholder="Search a player..."
+        placeholder="Select players who you DO NOT want in the team"
+      >
+        <!-- Fully custom label -->
+        <template #custom-label>
+          Unselect players who you DO NOT want in the team
+        </template>
+      </USelectMenu>
+    </UFormGroup>
 
-      <p class="text-gray-500">Only players who are not already in a team are shown</p>
+    <p class="text-gray-500">Only players who are not already in a team are shown</p>
 
-      <UFormGroup label="Number of Teams" name="numberOfTeams">
-        <UInput v-model.number="state.numberOfTeams" type="number" />
-      </UFormGroup>
+    <UFormGroup label="Number of Teams" name="numberOfTeams">
+      <UInput v-model.number="state.numberOfTeams" type="number" />
+    </UFormGroup>
 
-      <UFormGroup label="Team Names" name="teamNames">
-        <div v-for="index in state.numberOfTeams" :key="index">
-            <UInput v-model="teamNames[index - 1]" type="text" placeholder="Enter team name" />
-        </div>
-      </UFormGroup>
-  
-      <UButton type="submit"> Generate Teams </UButton>
+    <UFormGroup label="Team Names" name="teamNames">
+      <div v-for="index in state.numberOfTeams" :key="index">
+        <UInput v-model="teamNames[index - 1]" type="text" placeholder="Enter team name" />
+      </div>
+    </UFormGroup>
 
-    </UForm>
-  </template>
+    <UButton type="submit"> Generate Teams </UButton>
+  </UForm>
+</template>
+
   
   <script setup lang="ts">
     import { computed, reactive, onMounted } from 'vue';
@@ -58,6 +68,11 @@
     });
 
     const teamNames = reactive(Array.from({ length: state.numberOfTeams }, () => ''));
+
+    // Watch playerOptions to set default selectedPlayers
+    watch(playerOptions, (newOptions) => {
+        state.selectedPlayers = [...newOptions]; // Initialize selectedPlayers with all players
+      }, { immediate: true });
 
     const validate = (state: any): FormError[] => {
       const errors = [];
