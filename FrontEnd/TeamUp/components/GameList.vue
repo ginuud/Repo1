@@ -32,20 +32,11 @@
 
     	<div class="p-4">
       	<p>Select the winner of the game:</p>
-      	<!-- <select v-model="selectedTeam" class="border p-2 rounded w-full">
-        	<option :value="team1">{{ team1.name }}</option>
-        	<option :value="team2">{{ team2.name }}</option>
-      	</select> -->
-		<!-- <UFormGroup label="Members" name="Members">
-        	<USelectMenu v-model="selectedTeam" :options="teamOptions" multiple placeholder="Select winning team" />
-      	</UFormGroup> -->
 		  <div class="p-4">
-  			<p>Select the winner of the game:</p>
-			<UFormGroup label="Winning Team" name="selectedTeam">
+			<UFormGroup name="selectedTeam">
 				<USelectMenu v-model="selectedTeam" :options="teamOptions" placeholder="Select winning team"/>
 			</UFormGroup>
-			</div>
-
+		</div>
     	</div>
     
     	<template #footer>
@@ -75,9 +66,7 @@ const {games} = storeToRefs(gameStore)
 
 onMounted(() => {
     playerStore.loadPlayers();
-    console.log("Players loaded:", players.value);
 	gameStore.loadGames();
-	console.log("Games loaded:", games.value)
   })
 
 const columns = [
@@ -90,21 +79,19 @@ const columns = [
 const isModalOpen = ref(false);
 const selectedGameId = ref<number | null>(null);
 const selectedTeam = ref<Team>();
-const team1 = ref('');
-const team2 = ref('');
 
-const teamOptions = ref<{ id: number; name: string; members: Player[] }[]>([]);
+
+let teamOptions = ref<{ id: number; name: string; members: Player[] }[]>([]);
 
 const openModal = (gameId: number) => {
   const game = gameStore.games.find(g => g.id === gameId);
+
   if (game) {
     selectedGameId.value = gameId;
-	teamOptions.value = game.teams.map((team) => ({
+	teamOptions = game.teams.map((team) => ({
 		value: team,
 		label: team.name
 	}))
-
-	console.log("teamOptions", teamOptions)
 
     isModalOpen.value = true;
   }
@@ -112,12 +99,12 @@ const openModal = (gameId: number) => {
 
 const submitWinner = async () => {
   if (selectedTeam.value && selectedGameId.value) {
-	console.log("selectedTeam",selectedTeam.value.value)
+
 	await teamStore.addPointsToTeam(selectedTeam.value.value);
 	isModalOpen.value = false;
+
 	await gameStore.deleteGame(selectedGameId.value)
-	selectedGameId.value = null;
-	selectedTeam.value = null;
+
   	navigateTo("/players");
   }
 };
