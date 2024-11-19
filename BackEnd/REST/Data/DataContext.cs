@@ -8,6 +8,7 @@ namespace REST.Data
         public DbSet<Player> Players { get; set; }
         public DbSet<Team> Teams { get; set; }
         public DbSet<Game> Games { get; set; }
+        public DbSet<User>? UserList { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder){
             base.OnModelCreating(modelBuilder);
@@ -31,6 +32,16 @@ namespace REST.Data
 
             modelBuilder.Entity<Game>().Property(x => x.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Game>().Property(p => p.Id).HasIdentityOptions(startValue: 3);
+
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    Id = 1,
+                    Username = "test1",
+                    // parool on test1
+                    Password = "St9tpNN2zrinRGNUgKWCy4JjZRFEorSQ0Zg3a/8m7k4="
+                }
+            );
 
             modelBuilder.Entity<Game>().HasData(
                 new Game

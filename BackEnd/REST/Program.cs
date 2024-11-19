@@ -21,7 +21,8 @@ builder.Services
     .AddDbContext<DataContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("Default")))
     .AddScoped<IPlayerRepository, PlayersRepo>()
     .AddScoped<ITeamRepository, TeamsRepo>()
-    .AddScoped<IGameRepository, GamesRepo>();
+    .AddScoped<IGameRepository, GamesRepo>()
+    .AddScoped<UsersRepo>();
 
 builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
     {
