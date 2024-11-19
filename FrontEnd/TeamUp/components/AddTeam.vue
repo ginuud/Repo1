@@ -52,8 +52,12 @@ const playerOptions = computed(() =>
 const state = reactive<Team>({
   id: teamStore.generateId(),
   name: '',
-  members: [],
+  members: [],  
 });
+
+watch(playerOptions, (newOptions) => {
+        state.members = [...newOptions]; // Initialize selectedPlayers with all players
+      }, { immediate: true });
 
 const validateForm = (state: Team): FormError[] => {
   const errors: FormError[] = [];
