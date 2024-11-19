@@ -16,11 +16,11 @@ namespace REST.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] User login)
         {
-            var isLoginSuccessful = await repo.Login(login);
+            var token = await repo.Login(login);
 
-            if (isLoginSuccessful)
+            if (!string.IsNullOrEmpty(token))
             {
-                return Ok();
+                return Ok(token);
             }
             else
             {

@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using REST.Interfaces;
 using REST.Mappers;
 using REST.Dtos.Game;
+using Microsoft.AspNetCore.Authorization;
 
 namespace REST.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class GamesController : ControllerBase

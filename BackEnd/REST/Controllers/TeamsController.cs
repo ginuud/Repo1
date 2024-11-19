@@ -8,9 +8,11 @@ using REST.Dtos.Team;
 using REST.Interfaces;
 using REST.Mappers;
 using REST.Models.Classes;
+using Microsoft.AspNetCore.Authorization;
 
 namespace REST.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class TeamsController : ControllerBase
