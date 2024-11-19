@@ -13,7 +13,7 @@
         multiple 
         searchable
         searchable-placeholder="Search a player..."
-        placeholder="Select players" 
+        placeholder="Select players who you DO NOT want in the team" 
       />
     </UFormGroup>
 
@@ -63,6 +63,11 @@
     });
 
     const teamNames = reactive(Array.from({ length: state.numberOfTeams }, () => ''));
+
+    // Watch playerOptions to set default selectedPlayers
+    watch(playerOptions, (newOptions) => {
+        state.selectedPlayers = [...newOptions]; // Initialize selectedPlayers with all players
+      }, { immediate: true });
 
     const validate = (state: any): FormError[] => {
       const errors = [];
