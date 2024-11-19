@@ -13,8 +13,13 @@
         multiple 
         searchable
         searchable-placeholder="Search a player..."
-        placeholder="Select players who you DO NOT want in the team" 
-      />
+        placeholder="Select players who you DO NOT want in the team"
+      >
+        <!-- Fully custom label -->
+        <template #custom-label>
+          Unselect players who you DO NOT want in the team
+        </template>
+      </USelectMenu>
     </UFormGroup>
 
     <p class="text-gray-500">Only players who are not already in a team are shown</p>
@@ -25,14 +30,14 @@
 
     <UFormGroup label="Team Names" name="teamNames">
       <div v-for="index in state.numberOfTeams" :key="index">
-          <UInput v-model="teamNames[index - 1]" type="text" placeholder="Enter team name" />
+        <UInput v-model="teamNames[index - 1]" type="text" placeholder="Enter team name" />
       </div>
     </UFormGroup>
 
     <UButton type="submit"> Generate Teams </UButton>
-
   </UForm>
 </template>
+
   
   <script setup lang="ts">
     import { computed, reactive, onMounted } from 'vue';
