@@ -54,5 +54,33 @@ export const useTeamStore = defineStore('team', () => {
       return generatedTeams;
     };
 
-    return { teams, generateId, addTeam, deleteTeam, generateTeams, loadTeams };
+    const playerstore = usePlayerStore()
+
+    const addPointsToTeam = async (team: Team) => {
+      if (!team) {
+        console.error('Invalid team:', team);
+        return;
+      }
+    
+      try {
+        console.log('teamPlayers', team.id);
+        const teamPlayers = playerstore.players.filter(player => player.teamId === team.id);
+    
+        await Promise.all(
+          teamPlayers.map(player =>
+            playerstore.updatePlayer(
+              player.id,
+              player.name,
+              player.points + 1,
+              player.teamId
+            )
+          )
+        );
+      } catch (error) {
+        console.error('Error updating team points:', error);
+      }
+    };
+    
+
+    return { teams, generateId, addTeam, deleteTeam, generateTeams, loadTeams, addPointsToTeam };
   })

@@ -8,17 +8,6 @@
 
 	<div v-else>
   	<UTable :columns="columns" :rows="games">
-    	<template #status-data="{ row }">
-      	<UBadge
-        	v-if="row.status === 'in progress'" color="green" variant="subtle">
-        	In progress
-      	</UBadge>
-      	<UBadge
-        	v-else-if="row.status === 'inactive'" color="red" variant="subtle">
-        	Inactive
-      	</UBadge>
-    	</template>
-
     	<template #actions-data="{ row }">
       	<!-- Open modal instead of redirecting -->
       	<UButton
@@ -43,10 +32,11 @@
 
     	<div class="p-4">
       	<p>Select the winner of the game:</p>
-      	<select v-model="selectedTeam" class="border p-2 rounded w-full">
-        	<option :value="team1">{{ team1 }}</option>
-        	<option :value="team2">{{ team2 }}</option>
-      	</select>
+		  <div class="p-4">
+			<UFormGroup name="selectedTeam">
+				<USelectMenu v-model="selectedTeam" :options="teamOptions" placeholder="Select winning team"/>
+			</UFormGroup>
+		</div>
     	</div>
     
     	<template #footer>
@@ -61,60 +51,61 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { useGameStore } from '#imports';
-import { useRouter } from 'vue-router';
+import { ref } from 'vue';
+import { useGameStore, type Player } from '#imports';
 import { usePlayerStore } from '~/stores/playerStore';
 
 defineProps<{ title: String }>();
 
 const gameStore = useGameStore();
 const playerStore = usePlayerStore();
+const teamStore = useTeamStore();
 
 const {players} = storeToRefs(playerStore)
 const {games} = storeToRefs(gameStore)
 
 onMounted(() => {
     playerStore.loadPlayers();
-    console.log("Players loaded:", players.value);
 	gameStore.loadGames();
-	console.log("Games loaded:", games.value)
   })
 
 const columns = [
   { key: "name", label: "Game" },
   { key: "teams.0.name", label: "Team 1" },
   { key: "teams.1.name", label: "Team 2" },
-  { key: "status", label: "Status" },
   { key: "actions", label: "End game" },
 ];
 
-//const games = computed(() => gameStore.games.map(game => ({ ...game })));
-
 const isModalOpen = ref(false);
 const selectedGameId = ref<number | null>(null);
-const selectedTeam = ref<'A' | 'B' | null>(null);
-const team1 = ref('');
-const team2 = ref('');
+const selectedTeam = ref<Team>();
+
+
+let teamOptions = ref<{ id: number; name: string; members: Player[] }[]>([]);
 
 const openModal = (gameId: number) => {
   const game = gameStore.games.find(g => g.id === gameId);
+
   if (game) {
-	selectedGameId.value = gameId;
-	team1.value = game.teams[0].name || '';
-	team2.value = game.teams[1].name || '';
-	isModalOpen.value = true;
+    selectedGameId.value = gameId;
+	teamOptions = game.teams.map((team) => ({
+		value: team,
+		label: team.name
+	}))
+
+    isModalOpen.value = true;
   }
 };
 
-const submitWinner = () => {
+const submitWinner = async () => {
   if (selectedTeam.value && selectedGameId.value) {
-	playerStore.addPointsToWinningTeam(selectedTeam.value);
-	gameStore.makeStatusInactive(selectedGameId.value, "in progress");
+
+	await teamStore.addPointsToTeam(selectedTeam.value.value);
 	isModalOpen.value = false;
-	selectedGameId.value = null;
-	selectedTeam.value = null;
-  navigateTo("/players");
+
+	await gameStore.deleteGame(selectedGameId.value)
+
+  	navigateTo("/players");
   }
 };
 
