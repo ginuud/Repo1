@@ -39,7 +39,7 @@ namespace REST.Data.Repos
 
         public async Task<Player?> UpdateAsync(int id, UpdatePlayerRequestDto playerDto) 
         {
-            var existingPlayer = await context.Players.FirstOrDefaultAsync(x => x.Id == id);
+            var existingPlayer = await context.Players.FirstOrDefaultAsync(x => x.Id == id && x.OrganizationId == playerDto.OrganizationId);
 
             if (existingPlayer == null) {
                 return null;
@@ -53,9 +53,9 @@ namespace REST.Data.Repos
             return existingPlayer;
         }
 
-        public async Task<Player?> DeleteAsync(int id) 
+        public async Task<Player?> DeleteAsync(int id, int organizationId) 
         {
-            var playerModel = await context.Players.FirstOrDefaultAsync(x => x.Id == id);
+            var playerModel = await context.Players.FirstOrDefaultAsync(x => x.Id == id && x.OrganizationId == organizationId);
 
             if (playerModel == null) {
                 return null;

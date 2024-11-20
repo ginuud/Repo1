@@ -15,7 +15,7 @@ namespace REST.Interfaces
         Task<Player?> GetByIdAsync(int id, int organizationId);
         Task<Player> CreateAsync(Player playerModel);
         Task<Player?> UpdateAsync(int id, UpdatePlayerRequestDto playerDto);
-        Task<Player?> DeleteAsync(int id);
+        Task<Player?> DeleteAsync(int id, int organizationId);
         Task<bool> PlayerExists(int id);
     }
 }

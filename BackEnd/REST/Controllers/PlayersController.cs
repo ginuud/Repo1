@@ -54,6 +54,8 @@ namespace REST.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             
+            var organizationId = GetOrganizationId();
+            playerDto.OrganizationId = organizationId;
             var playerModel = playerDto.ToPlayerFromCreate();
             await repo.CreateAsync(playerModel);
 
@@ -66,6 +68,8 @@ namespace REST.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
+            var organizationId = GetOrganizationId();
+            updateDto.OrganizationId = organizationId;
             var playerModel = await repo.UpdateAsync(id, updateDto);
 
             if (playerModel == null) return NotFound();
@@ -75,11 +79,11 @@ namespace REST.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task<ActionResult> Delete([FromRoute]int id)
+        public async Task<ActionResult> Delete([FromRoute]int id, int organizationId)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var playerModel = await repo.DeleteAsync(id);
+            var playerModel = await repo.DeleteAsync(id, organizationId);
 
             if (playerModel == null) return NotFound("Player doesn't exist");
 
