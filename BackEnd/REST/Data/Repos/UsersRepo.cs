@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using REST.Models.Classes;
+using System.Security.Claims;
+using REST.Interfaces;
 
 namespace REST.Data.Repos
 {
@@ -31,6 +33,7 @@ namespace REST.Data.Repos
                 return "";
             }
 
+            login.OrganizationId = dbUser.OrganizationId;
             return GenerateJSONWebToken(login);
         }
 
@@ -52,7 +55,7 @@ namespace REST.Data.Repos
 
             var token = new JwtSecurityToken(_config["Jwt:Issuer"],
                 _config["Jwt:Issuer"],
-                null,
+                new List<Claim> { new Claim("organizationId", user.OrganizationId.ToString()) },
                 expires: DateTime.Now.AddMinutes(10),
                 signingCredentials: credentials);
 

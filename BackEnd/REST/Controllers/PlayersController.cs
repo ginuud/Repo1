@@ -9,6 +9,7 @@ using REST.Interfaces;
 using REST.Mappers;
 using REST.Models.Classes;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace REST.Controllers
 {
@@ -27,7 +28,8 @@ namespace REST.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var players = await repo.GetAllAsync();
+            var organizationId = GetOrganizationId();
+            var players = await repo.GetAllAsync(organizationId);
             var playerDto = players.Select(t => t.ToPlayerDto());
 
             return Ok(playerDto);
@@ -39,7 +41,8 @@ namespace REST.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var player = await repo.GetByIdAsync(id);
+            var organizationId = GetOrganizationId();
+            var player = await repo.GetByIdAsync(id, organizationId);
 
             if (player == null) return NotFound();
 
@@ -81,6 +84,12 @@ namespace REST.Controllers
             if (playerModel == null) return NotFound("Player doesn't exist");
 
             return Ok(playerModel);
+        }
+
+        private int GetOrganizationId()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            return int.Parse(identity!.FindFirst("organizationId")!.Value);
         }
     }
 }

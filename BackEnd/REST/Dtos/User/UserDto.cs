@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace REST.Models.Classes
+namespace REST.Dtos.User
 {
-    public class User
+    public class UserDto
     {
         public int Id { get; set; }
         public string Username { get; set; } = "";

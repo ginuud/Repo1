@@ -12,5 +12,6 @@ namespace REST.Models.Classes
         public List<Player>? Members { get; set; } = [];
         public int? GameId { get; set; }
         public Game? Game { get; set; } 
+        public int OrganizationId { get; set; }
     }
 }

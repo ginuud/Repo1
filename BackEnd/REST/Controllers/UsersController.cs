@@ -13,14 +13,14 @@ namespace REST.Controllers
     {
         private readonly UsersRepo repo = repo;
 
-        [HttpPost]
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] User login)
         {
             var token = await repo.Login(login);
 
             if (!string.IsNullOrEmpty(token))
             {
-                return Ok(token);
+                return Ok(new { Token = token });
             }
             else
             {
