@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import type { Team } from "~/types/team";
 import type { Player } from '~/types/player';
-import { useApi } from '~/composables/useApi';
+import { useAuth } from '~/composables/useAuth';
 
 export const useTeamStore = defineStore("team", () => {
     let currentId: number = 0;
@@ -12,10 +12,10 @@ export const useTeamStore = defineStore("team", () => {
       return currentId;
     }
     const teams = ref<Team[]>([])
-    const api = useApi();
+    const auth = useAuth();
 
     const addTeam = async (team: Team) => {
-      const res = await api.customFetch("Teams", {
+      const res = await auth.fetchWithToken("Teams", {
         method: 'POST',
         body: team,
       });
@@ -24,7 +24,7 @@ export const useTeamStore = defineStore("team", () => {
 
     const deleteTeam = async (teamId: number) => {
       try {
-        await $fetch(`http://localhost:5181/api/Teams/${teamId}`, {
+        await auth.fetchWithToken("Teams" + teamId, {
           method: 'DELETE',
         }); 
         const index = teams.value.findIndex((team) => team.id === teamId);
@@ -39,7 +39,7 @@ export const useTeamStore = defineStore("team", () => {
     }    
 
     const loadTeams = async () => {
-      teams.value = await api.customFetch<Team[]>("Teams")
+      teams.value = await auth.fetchWithToken<Team[]>("Teams")
     }
 
     const generateTeams = async (selectedPlayers: Player[], numberOfTeams: number, teamNames: string[]): Promise<Team[]> => {
@@ -48,7 +48,7 @@ export const useTeamStore = defineStore("team", () => {
         teamsCount: numberOfTeams,
         teamNames: teamNames
       };
-      const generatedTeams = await api.customFetch<Team[]>("Teams/generate", {
+      const generatedTeams = await auth.fetchWithToken<Team[]>("Teams/generate", {
         method: 'POST',
         body: requestData,
       });
@@ -64,7 +64,6 @@ export const useTeamStore = defineStore("team", () => {
       }
     
       try {
-        console.log('teamPlayers', team.id);
         const teamPlayers = playerstore.players.filter(player => player.teamId === team.id);
     
         await Promise.all(

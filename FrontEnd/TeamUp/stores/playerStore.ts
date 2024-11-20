@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { useApi } from '~/composables/useApi';
+import { useAuth } from '~/composables/useAuth';
 import type { Player } from "~/types/player";
 
 export const usePlayerStore = defineStore("player", () => {
@@ -10,12 +10,12 @@ export const usePlayerStore = defineStore("player", () => {
     return ++currentId;
   }
 
-  const api = useApi();
+  const auth = useAuth();
   const players = ref<Player[]>([]);
 
   const loadPlayers = async () => {
     try {
-      players.value = await api.customFetch<Player[]>("Players");
+      players.value = await auth.fetchWithToken<Player[]>("Players");
       generateRanks(); 
       players.value.sort((a, b) => a.rank - b.rank);
     } catch (error) {
@@ -36,7 +36,7 @@ export const usePlayerStore = defineStore("player", () => {
   };  
   
   const addPlayer = async (player: Player) => {
-    const res = await api.customFetch("Players", {
+    const res = await auth.fetchWithToken("Players", {
       method: 'POST',
       body: player,
     });
@@ -46,7 +46,7 @@ export const usePlayerStore = defineStore("player", () => {
 
   const deletePlayer = async (playerId: number) => {
     try {
-      await $fetch(`http://localhost:5181/api/Players/${playerId}`, {
+      await auth.fetchWithToken("Players" + playerId, {
         method: 'DELETE'
       });
       await loadPlayers(); 
@@ -59,7 +59,7 @@ export const usePlayerStore = defineStore("player", () => {
   const updatePlayer = async (selectedPlayerId: number, newName: string, newScore: number, teamId: number | null) => { 
     try {
       console.log('teamId:', teamId);
-      await $fetch(`http://localhost:5181/api/Players/${selectedPlayerId}`, {
+      await auth.fetchWithToken("Players" + selectedPlayerId, {
         method: 'PUT',
         body: {
           name: newName,
