@@ -8,6 +8,7 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
     '@nuxtjs/tailwindcss',
     'shadcn-nuxt',
+    '@nuxt/image',
   ],
   shadcn: {
     /**
@@ -24,4 +25,5 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {exercisesApiUrl: "https://localhost:5181/api/"}
   },
+  css: ['~/assets/css/tailwind.css']
 });

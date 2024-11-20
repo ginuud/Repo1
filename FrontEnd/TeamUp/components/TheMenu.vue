@@ -1,51 +1,60 @@
 <!-- <template>
   <UHorizontalNavigation
-  v-if = "route.name !== 'index'"
-    :links="links"
-    class="border-b border-gray-200 dark:border-gray-800"
-  />
-</template> -->
-
-
-<template>
-  <UHorizontalNavigation
     v-if="route.name !== 'index'"
     :links="links"
     class="border-b border-gray-200 dark:border-gray-800 flex justify-center text-purple-500"
-  />
-</template>
+    >
+  </UHorizontalNavigation>
+  <div>
+    <Logo />
+  </div>
+</template> -->
 
 <script setup lang="ts">
-const route = useRoute();
+import {
+  Menubar,
+  MenubarMenu,
+  MenubarTrigger,
+} from '@/components/ui/menubar'
 
-const links = [
+const items = ref([
   {
     label: "Players",
-    to: "/players",
+    path: "/players",
   },
   {
     label: "Add players",
-    to: "/add-player",
+    path: "/add-player",
   },
   {
     label: "Add teams",
-    to: "/add-team",
+    path: "/add-team",
   },
   {
     label: "Teams",
-    to: "/teams",
+    path: "/teams",
   },
   {
     label: "Start Game",
-    to: "/start-game",
+    path: "/start-game",
   },
   {
     label: "Games",
-    to: "/games",
+    path: "/games",
   },
   {
     label: "Team generation",
-    to: "/team-generator",
+    path: "/team-generator",
   },
-];
+]);
 </script>
+
+<template>
+  <Menubar class="justify-center">
+    <MenubarMenu v-for="(item, index) in items" :key="index" class= "justify-center">
+      <a :href="item.path">
+        <MenubarTrigger>{{ item.label }}</MenubarTrigger>
+      </a>
+    </MenubarMenu>
+  </Menubar>
+</template>
