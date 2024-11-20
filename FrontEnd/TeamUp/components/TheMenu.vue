@@ -1,8 +1,17 @@
-<template>
+<!-- <template>
   <UHorizontalNavigation
   v-if = "route.name !== 'index'"
     :links="links"
     class="border-b border-gray-200 dark:border-gray-800"
+  />
+</template> -->
+
+
+<template>
+  <UHorizontalNavigation
+    v-if="route.name !== 'index'"
+    :links="links"
+    class="border-b border-gray-200 dark:border-gray-800 flex justify-center text-purple-500"
   />
 </template>
 
