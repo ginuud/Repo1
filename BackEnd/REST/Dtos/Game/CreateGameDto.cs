@@ -16,5 +16,6 @@ namespace REST.Dtos.Game
         [Required]
         //[MaxListLength(5, ErrorMessage = "Teams list cannot contain more than 5 teams.")]
         public List<TeamDto>? Teams { get; set; }
+        public int OrganizationId { get; set; } 
     }
 }
