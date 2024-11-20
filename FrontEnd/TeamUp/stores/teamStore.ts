@@ -2,8 +2,9 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import type { Team } from "~/types/team";
 import type { Player } from '~/types/player';
+import { useApi } from '~/composables/useApi';
 
-export const useTeamStore = defineStore('team', () => {
+export const useTeamStore = defineStore("team", () => {
     let currentId: number = 0;
 
     function generateId(): number {
@@ -11,9 +12,10 @@ export const useTeamStore = defineStore('team', () => {
       return currentId;
     }
     const teams = ref<Team[]>([])
+    const api = useApi();
 
     const addTeam = async (team: Team) => {
-      const res = await $fetch('http://localhost:5181/api/Teams', {
+      const res = await api.customFetch("Teams", {
         method: 'POST',
         body: team,
       });
@@ -37,7 +39,7 @@ export const useTeamStore = defineStore('team', () => {
     }    
 
     const loadTeams = async () => {
-      teams.value = await $fetch<Team[]>('http://localhost:5181/api/Teams')
+      teams.value = await api.customFetch<Team[]>("Teams")
     }
 
     const generateTeams = async (selectedPlayers: Player[], numberOfTeams: number, teamNames: string[]): Promise<Team[]> => {
@@ -46,11 +48,10 @@ export const useTeamStore = defineStore('team', () => {
         teamsCount: numberOfTeams,
         teamNames: teamNames
       };
-      const generatedTeams = await $fetch<Team[]>('http://localhost:5181/api/Teams/generate', {
+      const generatedTeams = await api.customFetch<Team[]>("Teams/generate", {
         method: 'POST',
         body: requestData,
       });
-      console.log("Generated Teams Response:", generatedTeams);
       return generatedTeams;
     };
 

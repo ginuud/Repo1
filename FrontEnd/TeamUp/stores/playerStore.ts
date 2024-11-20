@@ -1,20 +1,21 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import { useApi } from '~/composables/useApi';
 import type { Player } from "~/types/player";
 
-export const usePlayerStore = defineStore('player', () => {
+export const usePlayerStore = defineStore("player", () => {
   let currentId: number = 0;
 
   function generateId(): number {
     return ++currentId;
   }
 
+  const api = useApi();
   const players = ref<Player[]>([]);
 
   const loadPlayers = async () => {
     try {
-      players.value = await $fetch<Player[]>('http://localhost:5181/api/Players');
-      console.log("Players loaded:", players.value); 
+      players.value = await api.customFetch<Player[]>("Players");
       generateRanks(); 
       players.value.sort((a, b) => a.rank - b.rank);
     } catch (error) {
@@ -24,12 +25,6 @@ export const usePlayerStore = defineStore('player', () => {
   };
   
   const generateRanks = () => {
-    console.log("Players before sorting:", players.value.map(player => ({
-      name: player.name,
-      points: player.points,
-      rank: player.rank
-    })));
-  
     players.value
       .slice()
       .sort((a, b) => {
@@ -41,7 +36,7 @@ export const usePlayerStore = defineStore('player', () => {
   };  
   
   const addPlayer = async (player: Player) => {
-    const res = await $fetch('http://localhost:5181/api/Players', {
+    const res = await api.customFetch("Players", {
       method: 'POST',
       body: player,
     });

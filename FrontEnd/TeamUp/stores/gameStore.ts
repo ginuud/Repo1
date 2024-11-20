@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import { useApi } from '~/composables/useApi';
 import type { Game } from "~/types/game";
 
-export const useGameStore = defineStore('game', () => {
+export const useGameStore = defineStore("game", () => {
     let currentId: number = 0;
 
     function generateId(): number {
@@ -10,14 +11,15 @@ export const useGameStore = defineStore('game', () => {
       return currentId;
     }
 
+    const api = useApi();
     const games = ref<Game[]>([])
 
     const loadGames = async () => {
-      games.value = await $fetch<Game[]>('http://localhost:5181/api/Games')
+      games.value = await api.customFetch<Game[]>("Games")
     }
     
     const addGame = async (game: Game) => {
-      const res = await $fetch('http://localhost:5181/api/Games', {
+      const res = await api.customFetch("Games", {
         method: 'POST',
         body: game,
       });
@@ -25,7 +27,7 @@ export const useGameStore = defineStore('game', () => {
     }
 
     const deleteGame = async (gameId: number) => {
-      const res = await $fetch('http://localhost:5181/api/Games/' + gameId, {
+      const res = await api.customFetch("Games" + gameId, {
         method: 'DELETE',
       })
       games.value = games.value.filter(game => game.id !== gameId);
