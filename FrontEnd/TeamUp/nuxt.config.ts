@@ -2,6 +2,9 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
+  colorMode:{
+    preference: "light"
+  },
   modules: [
     '@nuxt/ui',
     '@pinia/nuxt',
@@ -9,6 +12,7 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     'shadcn-nuxt',
     '@nuxt/image',
+    '@nuxt/icon'
   ],
   shadcn: {
     /**

@@ -23,37 +23,21 @@ const items = ref([
     path: "/players",
   },
   {
-    label: "Add players",
-    path: "/add-player",
-  },
-  {
-    label: "Add teams",
-    path: "/add-team",
-  },
-  {
     label: "Teams",
     path: "/teams",
-  },
-  {
-    label: "Start Game",
-    path: "/start-game",
   },
   {
     label: "Games",
     path: "/games",
   },
-  {
-    label: "Team generation",
-    path: "/team-generator",
-  },
-]);
+])
 </script>
 
 <template>
-  <Menubar class="justify-center">
-    <MenubarMenu v-for="(item, index) in items" :key="index" class= "justify-center">
+  <Menubar class="justify-center gap-8 flex hover:scale-[101%] transition cursor-pointer" >
+    <MenubarMenu v-for="(item, index) in items" :key="index" >
       <a :href="item.path">
-        <MenubarTrigger>{{ item.label }}</MenubarTrigger>
+        <MenubarTrigger class="flex items-center gap-2 px-2 py-1 transition rounded cursor-pointer hover:bg-neutral-100">{{ item.label }}</MenubarTrigger>
       </a>
     </MenubarMenu>
   </Menubar>
