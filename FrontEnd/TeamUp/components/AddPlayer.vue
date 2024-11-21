@@ -22,9 +22,13 @@
     </template>
 
     <div class="p-4">
+      <UFormGroup label="Player name" name="name">
       <UInput v-model="name" color="cyan" variant="outline" placeholder="Player name" />
-      <p v-if="errors.name" class="text-red-500 text-sm mt-1">{{ errors.name }}</p>
-      <UInput v-model="points" type="number" color="cyan" variant="outline" placeholder="Player points" />
+        <p v-if="errors.name" class="text-red-500 text-sm mt-1">{{ errors.name }}</p>
+      </UFormGroup>
+      <UFormGroup label="Points" name="points">
+        <UInput v-model="points" type="number" color="cyan" variant="outline" placeholder="Player points" />
+      </UFormGroup>
     </div>
   
     <template #footer>
@@ -74,6 +78,5 @@ const addPlayer = async() => {
     points.value = null;
   }
 };
-
 
 </script>

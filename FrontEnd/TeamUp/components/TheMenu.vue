@@ -23,10 +23,6 @@ const links = [
     to: "/teams",
   },
   {
-    label: "Start Game",
-    to: "/start-game",
-  },
-  {
     label: "Games",
     to: "/games",
   },
