@@ -19,7 +19,7 @@
       </div>
     </template>
 
-    <div class="p-4 sapce-y-4">
+    <div class="p-4 space-y-4">
       <UFormGroup label="Game name" name="name">
         <UInput v-model="name" color="cyan" variant="outline" placeholder="Game name" />
         <p v-if="errors.name" class="text-red-500 text-sm mt-1">{{ errors.name }}</p>
@@ -35,6 +35,8 @@
           placeholder="Select 2 teams" />
           <p v-if="errors.teams" class="text-red-500 text-sm mt-1">{{ errors.teams }}</p>
       </UFormGroup>
+
+        <UCheckbox v-model="deleteTeams" name="deleteTeams" label="Delete teams when game ends" />
     </div>
   
     <template #footer>
@@ -58,6 +60,7 @@ const isStartGameModalOpen = ref(false);
 const name = ref('');
 const selectedTeams  = ref([]);
 const errors = reactive({ name: null as string | null, teams: null as string | null });
+const deleteTeams = ref(false);
 
 const teamOptions = computed(() => 
   teamStore.teams
@@ -74,7 +77,8 @@ const validate = (): boolean => {
 const openStartGameModal = () => {
   isStartGameModalOpen.value = true;
   name.value = '';
-  selectedTeams.value = [];  	  
+  selectedTeams.value = [];
+  deleteTeams.value = false;  	  
 };
 
 const startGame = async() => {
@@ -83,14 +87,15 @@ const startGame = async() => {
       id: gameStore.generateId(),
       name: name.value,
       teams: selectedTeams.value.map(option => option.value),
-      status: 'in progress',
+      deleteTeams: deleteTeams.value,
     });
     isStartGameModalOpen.value = false;
   }
 };
 
 onMounted(() => {
-    teamStore.loadTeams();
-  })
+  gameStore.loadGames();
+  teamStore.loadTeams();
+})
 </script>
 
