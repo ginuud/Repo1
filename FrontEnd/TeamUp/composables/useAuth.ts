@@ -8,13 +8,14 @@ export const useAuth = () => {
   const api = useApi();
 
   const isAuthenticated = computed(() => !!activeToken.value);
+  console.log("Is authenticated after login:", isAuthenticated.value);
 
   const logIn = async (user: User) => {
     const token = await api.customFetch<{ token: string }>("users/login", {
       method: "POST",
       body: user,
     })
-
+    console.log("Token received:", token);
     activeToken.value = token.token;
 
     return true;
