@@ -56,7 +56,8 @@
 
     <div class="p-4">
         <UInput v-model="newName" color="cyan" variant="outline" placeholder="Player name" />
-        <UInput v-model="newScore" type="number" color="cyan" variant="outline" placeholder="Player score" />
+        <p v-if="errors.newName" class="text-red-500 text-sm mt-1">{{ errors.newName }}</p>
+        <UInput v-model="newScore" type="number" color="cyan" variant="outline" placeholder="Player score" :errors="errors.newScore"/>
     </div>
     <template #footer>
       <div class="flex justify-end space-x-2">
@@ -102,7 +103,6 @@ const isEditModalOpen = ref(false);
 const newName = ref('');
 const newScore = ref<number>(0);
 
-
 const openDeleteModal = (playerId: number) => {
   const player = playerStore.players.find(p => p.id === playerId);
   if (player) {
@@ -121,6 +121,15 @@ const submitDelete = async() => {
 }
 };
 
+const errors = reactive<{ newName: string | null}>({
+  newName: null,
+});
+
+const validateEditForm = () => {
+  errors.newName = newName.value.trim() ? null : 'Required';
+  return !errors.newName;
+};
+
 const openEditModal = (playerId: number) => {
   const player = playerStore.players.find(p => p.id === playerId); 
     if (player) {
@@ -136,11 +145,13 @@ const openEditModal = (playerId: number) => {
 };
 
 const submitPlayer = () => {
-  if (selectedPlayerId.value !== null && newName.value && newScore.value !== null) {
-	  playerStore.updatePlayer(selectedPlayerId.value, newName.value, newScore.value, currentTeamId.value);
-	  isEditModalOpen.value = false;
-    selectedPlayerId.value = null;
-  navigateTo("/players");
+  if (validateEditForm()) {
+    if (selectedPlayerId.value !== null) {
+      playerStore.updatePlayer(selectedPlayerId.value, newName.value, newScore.value, currentTeamId.value);
+      isEditModalOpen.value = false;
+      selectedPlayerId.value = null;
+    navigateTo("/players");
+    }
   }
 };
 
