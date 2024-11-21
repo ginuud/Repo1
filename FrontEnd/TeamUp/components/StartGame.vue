@@ -10,7 +10,13 @@
         <UInput v-model="state.name" type="name"/>
       </UFormGroup>
       <UFormGroup label="Teams" name="teams">
-        <USelectMenu v-model="state.teams" :options="teamOptions" multiple placeholder="Select teams" />
+        <USelectMenu
+          v-model="state.teams"
+          :options="teamOptions"
+          multiple
+          searchable
+          searchable-placeholder="Search team..."
+          placeholder="Select 2 teams" />
       </UFormGroup>
   
       <UButton type="submit"> Start game </UButton>
@@ -30,6 +36,15 @@ onMounted(() => {
     teamStore.loadTeams();
   })
 
+const teamOptions = computed(() => 
+  teamStore.teams
+  .filter((team) => team.gameId === null)
+  .map(team => ({
+    value: team,
+    label: team.name
+  }))
+);
+
 const state = reactive<Game>({
         id: gameStore.generateId(),
         name: "",
@@ -37,14 +52,12 @@ const state = reactive<Game>({
         status: 'in progress',
     });
 
-const validate = (state: any): FormError[] => {
+const validate = (state: Game): FormError[] => {
     const errors = [];
     if (!state.name) 
     errors.push({ path: "name", message: "Required" });
-    if (!state.teams[0])
-    errors.push({ path: "teams[0]", message: "Required" });
-    if (!state.teams[1])
-    errors.push({ path: "teams[1]", message: "Required" });
+    if (state.teams.length != 2 )
+    errors.push({ path: "teams", message: "Choose 2 teams" });
     return errors;
 };
 
@@ -84,12 +97,5 @@ async function onError(event: FormErrorEvent) {
     element?.focus();
     element?.scrollIntoView({ behavior: "smooth", block: "center" });
 }
-
-const teamOptions = computed(() => 
-teamStore.teams.map(team => ({
-    value: team,
-    label: team.name 
-  }))
-);
 
 </script>

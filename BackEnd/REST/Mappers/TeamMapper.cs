@@ -13,6 +13,7 @@ namespace REST.Mappers
                 Id = teamModel.Id,
                 Name = teamModel.Name,
                 Members = teamModel.Members.Select(c => c.ToPlayerDto()).ToList(),
+                GameId = teamModel.GameId
             };
         }
         public static Team ToTeamFromCreate(this CreateTeamDto teamDto, List<Player> members){
