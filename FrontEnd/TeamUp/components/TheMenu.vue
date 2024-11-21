@@ -36,8 +36,9 @@ const items = ref([
 <template>
   <Menubar class="justify-center gap-8 flex hover:scale-[101%] transition cursor-pointer" >
     <MenubarMenu v-for="(item, index) in items" :key="index" >
-      <a :href="item.path">
-        <MenubarTrigger class="flex items-center gap-2 px-2 py-1 transition rounded cursor-pointer hover:bg-neutral-100">{{ item.label }}</MenubarTrigger>
+      <a :href="item.path" className="text-slate-400">
+        <MenubarTrigger class="flex items-center gap-2 px-2 py-1 transition 
+        rounded cursor-pointer hover:bg-neutral-100 text-lg">{{ item.label }}</MenubarTrigger>
       </a>
     </MenubarMenu>
   </Menubar>

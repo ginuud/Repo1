@@ -41,7 +41,6 @@
 </template>
   
 <script setup lang="ts">
-import type { Player, FormError } from "~/types/player";
 import { ref, reactive } from 'vue';
 import { usePlayerStore } from '~/stores/playerStore';
 

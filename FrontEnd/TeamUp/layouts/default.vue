@@ -1,6 +1,8 @@
 <template>
     <div>
         <TheMenu />
-      <slot />
+      <div class="mt-4">
+        <slot />
+      </div>
     </div>
   </template>
