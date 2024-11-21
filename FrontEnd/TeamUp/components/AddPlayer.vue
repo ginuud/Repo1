@@ -1,67 +1,79 @@
 <template>
-    <UForm
-      :validate="validate"
-      :state="state"
-      class="space-y-4"
-      @submit="onSubmit"
-      @error="onError"
-    >
-      <UFormGroup label="Name" name="name">
-        <UInput v-model="state.name" type="name"/>
-      </UFormGroup>
+  <UButton 
+    :ui="{ rounded: 'rounded-full' }"
+    icon="i-heroicons-plus"
+    size="md"
+    color="primary"
+    variant="solid"
+    label="Add player"
+    :trailing="false"
+    @click="openAddPlayerModal">
+  </UButton>
 
-      <UFormGroup label="Points" name="points">
-        <UInput v-model="state.points" type="number" placeholder="Enter points" />
-      </UFormGroup>
-  
-      <UButton type="submit"> Lisa </UButton>
-    </UForm>
-  </template>
-  
-  <script setup lang="ts">
-    import type { FormError, FormErrorEvent, FormSubmitEvent } from "#ui/types";
-    import type { Player } from "~/types/player";
-  
-    const playerStore = usePlayerStore();
+  <UModal v-model="isAddPlayerModalOpen" prevent-close>
+  <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+    <template #header>
+      <div class="flex items-center justify-between">
+        <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
+          Add player
+        </h3>
+        <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="isAddPlayerModalOpen = false" />
+      </div>
+    </template>
 
-    const state = reactive<Player>({
-        id: playerStore.generateId(),
-        name: '',
-        points: 0,
-        rank: 0
+    <div class="p-4">
+      <UInput v-model="name" color="cyan" variant="outline" placeholder="Player name" />
+      <p v-if="errors.name" class="text-red-500 text-sm mt-1">{{ errors.name }}</p>
+      <UInput v-model="points" type="number" color="cyan" variant="outline" placeholder="Player points" />
+    </div>
+  
+    <template #footer>
+      <div class="flex justify-end space-x-2">
+        <UButton color="green" @click="addPlayer">Add player</UButton>
+      </div>
+    </template>
+  </UCard>
+  </UModal>
+</template>
+  
+<script setup lang="ts">
+import type { Player, FormError } from "~/types/player";
+import { ref, reactive } from 'vue';
+import { usePlayerStore } from '~/stores/playerStore';
+
+const playerStore = usePlayerStore();
+
+const isAddPlayerModalOpen = ref(false);
+const name = ref('');
+const points = ref<number>(0);
+const errors = reactive<{ name: string | null}>({
+  name: null,
+});
+
+const validate = () => {
+  errors.name = name.value ? null : 'Required';
+  return !errors.name;
+};
+
+const openAddPlayerModal = () => {
+  isAddPlayerModalOpen.value = true;
+  points.value = 0;
+  name.value = '';	  
+};
+
+const addPlayer = async() => {
+  if (validate()) {
+    await playerStore.addPlayer({
+      id: playerStore.generateId(),
+      name: name.value,
+      points: points.value,
+      rank: 0,
     });
+    isAddPlayerModalOpen.value = false;
+    name.value = '';
+    points.value = null;
+  }
+};
 
-    const validate = (state: any): FormError[] => {
-        const errors = [];
-        if (!state.name) 
-        errors.push({ path: "name", message: "Required" });
-        if (!state.points === undefined || state.points === null)
-        errors.push({ path: "points", message: "Required" });
-        return errors;
-    };
-    
-    async function onSubmit(event: FormSubmitEvent<any>) {
-      console.log("State before adding player:", state);
-      const transformedData = { 
-        id: state.id,
-        name: state.name,
-        points: state.points,
-        rank: state.rank,
-        team: state.team
-      };
-      try {
-          await playerStore.addPlayer(transformedData);
-          console.log("Player successfully added");
-          await navigateTo("/players");
-      } 
-      catch (error) {
-          console.error("Error in addPlayer:", error);
-      }
-    }
 
-    async function onError(event: FormErrorEvent) {
-        const element = document.getElementById(event.errors[0].id);
-        element?.focus();
-        element?.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-  </script>
+</script>

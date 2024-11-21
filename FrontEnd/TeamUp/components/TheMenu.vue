@@ -15,10 +15,6 @@ const links = [
     to: "/players",
   },
   {
-    label: "Add players",
-    to: "/add-player",
-  },
-  {
     label: "Add teams",
     to: "/add-team",
   },
