@@ -12,8 +12,8 @@ using REST.Data;
 namespace REST.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241111101852_RemoveRankFromPlayer")]
-    partial class RemoveRankFromPlayer
+    [Migration("20241120203828_AddGameIdToTeam")]
+    partial class AddGameIdToTeam
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

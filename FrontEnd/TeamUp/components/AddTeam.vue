@@ -10,7 +10,7 @@
       <UInput v-model="state.name" type="name"/>
     </UFormGroup>
 
-    <UFormGroup label="Members" name="Members">
+    <UFormGroup label="Members" name="members">
       <USelectMenu 
         v-model="state.members" 
         :options="playerOptions" 

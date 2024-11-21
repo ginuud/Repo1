@@ -4,5 +4,6 @@ export type Team = {
     id: number
     name: string
     members?: Player[]
+    gameId?: number | null;
     game?: Game
   };
