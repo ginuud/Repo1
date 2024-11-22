@@ -1,14 +1,17 @@
 <template>
   <UButton 
-    :ui="{ rounded: 'rounded-full' }"
+    :ui="{ 
+      rounded: 'rounded-full',
+     }"
     icon="i-heroicons-plus"
     size="md"
-    color="primary"
+    color="purple"
     variant="solid"
     label="Add player"
     :trailing="false"
-    @click="openAddPlayerModal">
-  </UButton>
+    @click="openAddPlayerModal"
+    class="m-4">
+    </UButton>
 
   <UModal v-model="isAddPlayerModalOpen" prevent-close>
   <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">

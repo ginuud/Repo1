@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="hero">
 	<h1 class="text-xl text-center">{{ title }}</h1>
 
 	<div v-if="games.length === 0" class="text-center text-red-500">
@@ -111,5 +111,11 @@ onMounted(() => {
 	gameStore.loadGames();
 })
 </script>
+
+<style scoped>
+  .hero {
+    background-color: #e8e8d9;
+  }
+  </style>
 
 

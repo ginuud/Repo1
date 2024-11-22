@@ -2,7 +2,7 @@
     <div>
         <TheMenu />
       <div class="mt-4">
-        <slot />
+        <slot/>
       </div>
     </div>
   </template>

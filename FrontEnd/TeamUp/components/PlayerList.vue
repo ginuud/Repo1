@@ -2,10 +2,22 @@
 <div>
     <h1 class="text-xl text-center">{{ title }}</h1>
     <template v-if="players.length > 0">
-      <UTable v-model:sort="sort" :columns="columns" :rows="players">
+      <UTable :ui="{
+        base: 'font-medium',
+        th: {
+          color: 'text-black-900',
+          size: 'text-la'
+        },
+        td: {
+          color: 'text-gray-600'
+        }
+      }"
+      v-model:sort="sort" :columns="columns" :rows="players" class="ml-40 mr-40 mb-20" :sort-button="{
+        color: '#757575'
+        }">
         <template #actions-data="{ row }">
         <UButton
-          type="button" color="cyan" variant="ghost" icon="i-heroicons-pencil-20-solid"
+          type="button" color="purple" variant="ghost" icon="i-heroicons-pencil-20-solid"
           @click="openEditModal(row.id)">
         </UButton>
         <UButton
@@ -72,7 +84,7 @@
 import { usePlayerStore } from '~/stores/playerStore';
 import { ref, onMounted } from 'vue';
 
-defineProps<{ title: String }>();
+const props = defineProps<{ title: String }>();
 const playerStore = usePlayerStore();
 const {players} = storeToRefs(playerStore);
 const columns = [
