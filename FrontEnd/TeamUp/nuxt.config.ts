@@ -5,6 +5,7 @@ export default defineNuxtConfig({
   modules: ['@nuxt/ui', '@pinia/nuxt', '@nuxt/fonts'],
   imports :{dirs: ["types/*.ts"]},
   runtimeConfig: {
+    //siin on https või ilma s
     public: {exercisesApiUrl: "https://localhost:5181/api/"}
   },
 });
