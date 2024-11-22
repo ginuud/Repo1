@@ -5,7 +5,7 @@
 namespace REST.Migrations
 {
     /// <inheritdoc />
-    public partial class AddGameIdToTeam : Migration
+    public partial class UserAndGameId : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

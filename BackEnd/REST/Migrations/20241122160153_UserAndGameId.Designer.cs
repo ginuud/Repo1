@@ -12,8 +12,8 @@ using REST.Data;
 namespace REST.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241121122812_AddUser")]
-    partial class AddUser
+    [Migration("20241122160153_UserAndGameId")]
+    partial class UserAndGameId
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
