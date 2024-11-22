@@ -20,7 +20,7 @@ export const useGameStore = defineStore("game", () => {
     
     const addGame = async (game: Game) => {
       const {deleteTeams, ...gameWithoutDeleteTeams } = game;
-      const res = await $fetch('http://localhost:5181/api/Games', {
+      const res = await auth.fetchWithToken("Games", {
         method: 'POST',
         body: gameWithoutDeleteTeams,
       });
