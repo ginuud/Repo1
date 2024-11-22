@@ -9,24 +9,22 @@
 	<div v-else>
   	<UTable :columns="columns" :rows="games">
     	<template #actions-data="{ row }">
-      	<!-- Open modal instead of redirecting -->
       	<UButton
         	type="button" color="red" variant="ghost" icon="i-heroicons-stop-circle-20-solid"
-        	@click="openModal(row.id)">
+        	@click="openEndGameModal(row.id)">
       	</UButton>
     	</template>
   	</UTable>
 	</div>
 
-	<!-- Modal for selecting winner -->
-	<UModal v-model="isModalOpen" prevent-close>
+	<UModal v-model="isEndGameModalOpen" prevent-close>
   	<UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
     	<template #header>
       	<div class="flex items-center justify-between">
         	<h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
           	Select Winner
         	</h3>
-        	<UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="isModalOpen = false" />
+        	<UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="isEndGameModalOpen = false" />
       	</div>
     	</template>
 
@@ -41,7 +39,7 @@
     
     	<template #footer>
       	<div class="flex justify-end space-x-2">
-        	<UButton @click="submitWinner">Submit Winner</UButton>
+        	<UButton color="green" @click="submitWinner">Submit Winner</UButton>
         	<UButton color="red" @click="cancelSelection">Cancel</UButton>
       	</div>
     	</template>
@@ -64,11 +62,6 @@ const teamStore = useTeamStore();
 const {players} = storeToRefs(playerStore)
 const {games} = storeToRefs(gameStore)
 
-onMounted(() => {
-    playerStore.loadPlayers();
-	gameStore.loadGames();
-  })
-
 const columns = [
   { key: "name", label: "Game" },
   { key: "teams.0.name", label: "Team 1" },
@@ -76,14 +69,13 @@ const columns = [
   { key: "actions", label: "End game" },
 ];
 
-const isModalOpen = ref(false);
+const isEndGameModalOpen = ref(false);
 const selectedGameId = ref<number | null>(null);
 const selectedTeam = ref<Team>();
 
-
 let teamOptions = ref<{ id: number; name: string; members: Player[] }[]>([]);
 
-const openModal = (gameId: number) => {
+const openEndGameModal = (gameId: number) => {
   const game = gameStore.games.find(g => g.id === gameId);
 
   if (game) {
@@ -93,25 +85,60 @@ const openModal = (gameId: number) => {
 		label: team.name
 	}))
 
-    isModalOpen.value = true;
+    isEndGameModalOpen.value = true;
   }
 };
 
-const submitWinner = async () => {
-  if (selectedTeam.value && selectedGameId.value) {
+const deleteTeamsWhenChecked= async (gameId: number) => {
+	console.log("deleteTeamsWhenChecked called with gameId:", gameId);
+	const game = gameStore.games.find(g => g.id === gameId);
+	if (game) {
+    const gameTeams = game.teams;
+	console.log("Teams associated with game:", gameTeams);
 
-	await teamStore.addPointsToTeam(selectedTeam.value.value);
-	isModalOpen.value = false;
-
-	await gameStore.deleteGame(selectedGameId.value)
-
-  	navigateTo("/players");
+    for (const team of gameTeams) {
+      console.log("Deleting team:", team.id);
+      await teamStore.deleteTeam(team.id); 
+    }
   }
+}
+
+const submitWinner = async () => {
+  	if (selectedTeam.value && selectedGameId.value) {
+	await teamStore.addPointsToTeam(selectedTeam.value.value);
+	
+	const game = gameStore.games.find(g => g.id === selectedGameId.value);
+    if (!game) {
+      console.error("Game not found with ID:", selectedGameId.value);
+      return;
+    }
+
+	if (game.deleteTeams)
+  	{
+      	await deleteTeamsWhenChecked(selectedGameId.value);
+    } else {
+      console.log("deleteTeams is false, skipping team deletion.");
+    }
+
+	try {
+      console.log("Deleting game with id:", selectedGameId.value);
+      await gameStore.deleteGame(selectedGameId.value);
+    } catch (error) {
+      console.error("Failed to delete game:", selectedGameId.value, error);
+    }
+  	isEndGameModalOpen.value = false;
+	navigateTo("/players");	
+	}
 };
 
 const cancelSelection = () => {
-  isModalOpen.value = false;
+  isEndGameModalOpen.value = false;
 };
+
+onMounted(() => {
+    playerStore.loadPlayers();
+	gameStore.loadGames();
+})
 </script>
 
 

@@ -19,11 +19,12 @@ export const useGameStore = defineStore("game", () => {
     }
     
     const addGame = async (game: Game) => {
-      const res = await auth.fetchWithToken("Games", {
+      const {deleteTeams, ...gameWithoutDeleteTeams } = game;
+      const res = await $fetch('http://localhost:5181/api/Games', {
         method: 'POST',
-        body: game,
+        body: gameWithoutDeleteTeams,
       });
-      games.value.push(res)
+      games.value.push({...res, deleteTeams: game.deleteTeams})
     }
 
     const deleteGame = async (gameId: number) => {
@@ -33,15 +34,15 @@ export const useGameStore = defineStore("game", () => {
       games.value = games.value.filter(game => game.id !== gameId);
     }
 
-    const makeStatusInactive = (id: number, status: "in progress") => {
-      const game = games.value.find(game => game.id === id);
-      if (game) {
-        game.status = "inactive";
-      } 
-      else {
-        console.error(`Game with id ${id} not found`);
-      }
-    }
+    // const makeStatusInactive = (id: number, status: "in progress") => {
+    //   const game = games.value.find(game => game.id === id);
+    //   if (game) {
+    //     game.status = "inactive";
+    //   } 
+    //   else {
+    //     console.error(`Game with id ${id} not found`);
+    //   }
+    // }
 
-    return { games, generateId, addGame, makeStatusInactive, loadGames, deleteGame };
+    return { games, generateId, addGame, loadGames, deleteGame };
   })
