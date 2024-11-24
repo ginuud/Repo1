@@ -1,3 +1,11 @@
+<style>
+.custom-button {
+  background-color: #202a79;
+  color: #fff;
+}
+
+</style>
+
 <template>
   <UButton
     :ui="{
@@ -5,12 +13,12 @@
     }"
     icon="i-heroicons-plus"
     size="md"
-    color="purple"
     variant="solid"
     label="Add player"
     :trailing="false"
     @click="openAddPlayerModal"
     class="m-4"
+    :style="{ backgroundColor: '#202a79', color: '#fff' }"
   >
   </UButton>
 

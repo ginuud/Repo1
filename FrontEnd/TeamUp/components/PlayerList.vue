@@ -24,7 +24,7 @@
         <template #actions-data="{ row }">
           <UButton
             type="button"
-            color="purple"
+            color="black"
             variant="ghost"
             icon="i-heroicons-pencil-20-solid"
             @click="openEditModal(row.id)"

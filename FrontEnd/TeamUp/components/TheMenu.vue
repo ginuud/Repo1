@@ -51,7 +51,7 @@ const links = ref([
     class="justify-center hero"
     :ui="{
       after: '',
-      active: 'text-purple-700 dark:text-purple-400',
+      active: 'dark:text-[#202a79]',
       base: 'rounded-md flex font-medium text-xl px-8 py-8',
     }"
   />
