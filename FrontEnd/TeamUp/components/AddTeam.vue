@@ -7,20 +7,22 @@
     @error="onError"
   >
     <UFormGroup label="Team name" name="name">
-      <UInput v-model="state.name" type="name"/>
+      <UInput v-model="state.name" type="name" />
     </UFormGroup>
 
     <UFormGroup label="Members" name="members">
-      <USelectMenu 
-        v-model="state.members" 
-        :options="playerOptions" 
-        multiple 
+      <USelectMenu
+        v-model="state.members"
+        :options="playerOptions"
+        multiple
         searchable
         searchable-placeholder="Search a player..."
-        placeholder="Select players" 
+        placeholder="Select players"
       />
     </UFormGroup>
-    <p class="text-gray-500">Only players who are not already in a team are shown</p>
+    <p class="text-gray-500">
+      Only players who are not already in a team are shown
+    </p>
 
     <UButton type="submit">Add Team</UButton>
   </UForm>
@@ -51,13 +53,17 @@ const playerOptions = computed(() =>
 
 const state = reactive<Team>({
   id: teamStore.generateId(),
-  name: '',
-  members: [],  
+  name: "",
+  members: [],
 });
 
-watch(playerOptions, (newOptions) => {
-        state.members = [...newOptions]; // Initialize selectedPlayers with all players
-      }, { immediate: true });
+watch(
+  playerOptions,
+  (newOptions) => {
+    state.members = [...newOptions]; // Initialize selectedPlayers with all players
+  },
+  { immediate: true }
+);
 
 const validateForm = (state: Team): FormError[] => {
   const errors: FormError[] = [];
@@ -76,13 +82,15 @@ const validateForm = (state: Team): FormError[] => {
 const transformTeamData = () => ({
   Id: state.id,
   Name: state.name,
-  Members: state.members.map(({ value: { id, name, points, rank, teamId } }) => ({
-    id,
-    name,
-    points,
-    rank,
-    teamId,
-  })),
+  Members: state.members.map(
+    ({ value: { id, name, points, rank, teamId } }) => ({
+      id,
+      name,
+      points,
+      rank,
+      teamId,
+    })
+  ),
 });
 
 async function onSubmit(event: FormSubmitEvent) {

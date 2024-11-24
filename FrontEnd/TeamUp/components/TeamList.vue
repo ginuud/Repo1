@@ -1,16 +1,20 @@
- 
 <template>
   <div v-if="teams.length === 0" class="text-center text-red-500">
-  	No teams have been added   	 
-	</div>
+    No teams have been added
+  </div>
   <div v-else>
     <div v-for="team in teams" :key="team.id" class="team-accordion-item">
       <div class="accordion-header">
         <strong>Team: {{ team.name }}</strong>
-        <button @click="deleteTeam(team.id)" class="delete-button">Delete</button>
+        <button @click="deleteTeam(team.id)" class="delete-button">
+          Delete
+        </button>
       </div>
       <div class="accordion-content">
-        Members: {{ team.members?.map(member => member.name).join(', ') || 'No members' }}
+        Members:
+        {{
+          team.members?.map((member) => member.name).join(", ") || "No members"
+        }}
       </div>
     </div>
   </div>
@@ -54,4 +58,3 @@ const deleteTeam = async (teamId: number) => {
   cursor: pointer;
 }
 </style>
-  

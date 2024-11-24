@@ -1,3 +1,3 @@
 <template>
-    <TeamList title="Teams list"/>
+  <TeamList title="Teams list" />
 </template>

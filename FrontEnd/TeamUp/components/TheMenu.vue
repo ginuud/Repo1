@@ -11,11 +11,7 @@
 </template> -->
 
 <script setup lang="ts">
-import {
-  Menubar,
-  MenubarMenu,
-  MenubarTrigger,
-} from '@/components/ui/menubar'
+import { Menubar, MenubarMenu, MenubarTrigger } from "@/components/ui/menubar";
 
 const route = useRoute();
 
@@ -32,7 +28,7 @@ const links = ref([
     label: "Games",
     to: "/games",
   },
-])
+]);
 </script>
 
 <!-- <template>
@@ -50,20 +46,19 @@ const links = ref([
 
 <template>
   <UHorizontalNavigation
-  v-if = "route.name !== 'index'"
+    v-if="route.name !== 'index'"
     :links="links"
     class="justify-center hero"
     :ui="{
       after: '',
       active: 'text-purple-700 dark:text-purple-400',
-      base: 'rounded-md flex font-medium text-xl px-8 py-8'
-      }"
+      base: 'rounded-md flex font-medium text-xl px-8 py-8',
+    }"
   />
 </template>
 
-
 <style scoped>
-  .hero {
-    background-color: #e8e8d9;
-  }
-  </style>
+.hero {
+  background-color: #e8e8d9;
+}
+</style>

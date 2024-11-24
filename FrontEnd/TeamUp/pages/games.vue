@@ -1,4 +1,4 @@
 <template>
-    <StartGame title="Start game"/>
-    <GameList title="Your games"/>
+  <StartGame title="Start game" />
+  <GameList title="Your games" />
 </template>

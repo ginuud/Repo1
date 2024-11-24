@@ -1,4 +1,4 @@
 <template>
-    <AddPlayer title="Add player"/>
-    <PlayerList/>
+  <AddPlayer title="Add player" />
+  <PlayerList />
 </template>

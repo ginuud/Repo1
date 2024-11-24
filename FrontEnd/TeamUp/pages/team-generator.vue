@@ -1,4 +1,3 @@
-
 <template>
-    <Generator title="Team Generation"/>
+  <Generator title="Team Generation" />
 </template>

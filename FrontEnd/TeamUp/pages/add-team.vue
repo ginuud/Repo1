@@ -1,3 +1,3 @@
 <template>
-    <AddTeam title="Add team"/>
+  <AddTeam title="Add team" />
 </template>
