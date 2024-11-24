@@ -1,18 +1,4 @@
-<!-- <template>
-  <UHorizontalNavigation
-    v-if="route.name !== 'index'"
-    :links="links"
-    class="border-b border-gray-200 dark:border-gray-800 flex justify-center text-purple-500"
-    >
-  </UHorizontalNavigation>
-  <div>
-    <Logo />
-  </div>
-</template> -->
-
 <script setup lang="ts">
-import { Menubar, MenubarMenu, MenubarTrigger } from "@/components/ui/menubar";
-
 const route = useRoute();
 
 const links = ref([
@@ -45,17 +31,29 @@ const links = ref([
 </template> -->
 
 <template>
-  <UHorizontalNavigation
-    v-if="route.name !== 'index'"
-    :links="links"
-    class="justify-center hero"
-    :ui="{
-      after: '',
-      active: 'dark:text-[#202a79]',
-      base: 'rounded-md flex font-medium text-xl px-8 py-8',
-    }"
-  />
+  <div class="flex items-center justify-between px-8 py-2">
+    <!-- Logo Image -->
+    <img src="@/components/teamup.png" alt="TeamUp logo" class="w-24 h-auto" />
+
+    <!-- Spacer -->
+    <div class="flex-1 pl-10"></div>
+
+    <!-- Navigation Bar -->
+    <UHorizontalNavigation
+      v-if="route.name !== 'index'"
+      :links="links"
+      class="hero"
+      :ui="{
+        after: '',
+        active: 'dark:text-[#202a79]',
+        base: 'rounded-md font-medium text-xl px-4 py-8',
+      }"
+    />
+    <AddPlayer></AddPlayer>
+  </div>
 </template>
+
+
 
 <style scoped>
 .hero {
