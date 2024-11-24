@@ -28,11 +28,12 @@
         ring: '',
         divide: 'divide-y divide-gray-100 dark:divide-gray-800',
       }"
+      class="hero"
     >
       <template #header>
         <div class="flex items-center justify-between">
           <h3
-            class="text-base font-semibold leading-6 text-gray-900 dark:text-white"
+            class="text-base font-semibold leading-6 text-gray-900"
           >
             Add player
           </h3>
@@ -50,7 +51,7 @@
         <UFormGroup label="Player name" name="name">
           <UInput
             v-model="name"
-            color="cyan"
+            color="black"
             variant="outline"
             placeholder="Player name"
           />
@@ -62,7 +63,7 @@
           <UInput
             v-model="points"
             type="number"
-            color="cyan"
+            color="black"
             variant="outline"
             placeholder="Player points"
           />
@@ -116,3 +117,9 @@ const addPlayer = async () => {
   }
 };
 </script>
+
+<style scoped>
+.hero {
+  background-color: #e8e8d9;
+}
+</style>

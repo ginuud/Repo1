@@ -50,13 +50,14 @@
     <UCard
       :ui="{
         ring: '',
-        divide: 'divide-y divide-gray-100 dark:divide-gray-800',
+        divide: 'divide-y divide-gray-900',
       }"
+      class="hero"
     >
       <template #header>
         <div class="flex items-center justify-between">
           <h3
-            class="text-base font-semibold leading-6 text-gray-900 dark:text-white"
+            class="text-base font-semibold leading-6 text-gray-900"
           >
             Delete player
           </h3>
@@ -230,3 +231,9 @@ onMounted(async () => {
   await playerStore.loadPlayers();
 });
 </script>
+
+<style scoped>
+.hero {
+  background-color: #e8e8d9;
+}
+</style>
