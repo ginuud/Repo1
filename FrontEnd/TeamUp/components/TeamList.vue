@@ -3,7 +3,7 @@
     No teams have been added
   </div>
   <div v-else>
-    <div v-for="team in teams" :key="team.id" class="team-accordion-item">
+    <div v-for="team in teams" :key="team.id" class="team-accordion-item ml-40 mr-40 mb-20">
       <div class="accordion-header">
         <strong>Team: {{ team.name }}</strong>
         <button @click="deleteTeam(team.id)" class="delete-button">
@@ -56,5 +56,6 @@ const deleteTeam = async (teamId: number) => {
   border: none;
   padding: 0.5em 1em;
   cursor: pointer;
+  border-radius: 10px;
 }
 </style>

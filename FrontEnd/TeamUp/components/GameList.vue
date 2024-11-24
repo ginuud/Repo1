@@ -7,7 +7,21 @@
     </div>
 
     <div v-else>
-      <UTable :columns="columns" :rows="games">
+      <UTable
+        :ui="{
+          base: 'font-medium',
+          th: {
+            color: 'text-black-900',
+            size: 'text-la',
+          },
+          td: {
+            color: 'text-gray-600',
+          },
+        }"
+        :columns="columns"
+        :rows="games"
+        class="ml-40 mr-40 mb-20"
+      >
         <template #actions-data="{ row }">
           <UButton
             type="button"
