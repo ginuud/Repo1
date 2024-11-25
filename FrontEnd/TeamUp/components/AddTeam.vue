@@ -141,7 +141,6 @@ const validateAddTeam = (state: typeof addTeamForm): FormError[] => {
   return errors;
 };
 
-// Submission handlers
 async function submitGenerateTeams(event: FormSubmitEvent) {
   event.preventDefault();
   try {
@@ -188,7 +187,6 @@ function handleError(event: FormErrorEvent) {
   firstErrorElement?.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
-// Tabs configuration
 const tabs = [
   {
     key: "generateTeams",

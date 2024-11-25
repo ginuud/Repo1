@@ -1,42 +1,46 @@
  
 <template>
+  <!-- Wrapper -->
   <div>
-    <!-- Add Team Button -->
-    <div class="flex justify-start mb-4">
-      <UButton 
-        type="button" 
-        color="green" 
-        variant="outline" 
-        @click="navigateToAddTeam"
-        class="flex items-center space-x-2"
-      >
-        <i class="i-heroicons-plus-circle-20-solid"></i>
-        <span>Add Team</span>
-      </UButton>
-    </div>
+    <UButton 
+      :ui="{ rounded: 'rounded-full' }"
+      size="md"
+      color="primary"
+      variant="solid"
+      label="+ Add team"
+      @click="navigateToAddTeam"
+      class="add-team-button"
+    >
+    </UButton>
 
-    <!-- Teams List -->
-    <div v-if="teams.length === 0" class="text-center text-red-500">
-      No teams have been added
-    </div>
-    <div v-else>
-      <div v-for="team in teams" :key="team.id" class="team-accordion-item">
-        <div class="accordion-header">
-          <strong>Team: {{ team.name }}</strong>
-          <button @click="deleteTeam(team.id)" class="delete-button">Delete</button>
-        </div>
-        <div class="accordion-content">
-          Members: {{ team.members?.map(member => member.name).join(', ') || 'No members' }}
+    <!-- Add margin between button and teams list -->
+    <div class="mt-4">
+      <!-- Teams List -->
+      <div v-if="teams.length === 0" class="text-center text-red-500">
+        No teams have been added
+      </div>
+      <div v-else>
+        <div v-for="team in teams" :key="team.id" class="team-accordion-item">
+          <div class="accordion-header">
+            <strong>Team: {{ team.name }}</strong>
+            <button @click="deleteTeam(team.id)" class="delete-button">Delete</button>
+          </div>
+          <div class="accordion-content">
+            Members: {{ team.members?.map(member => member.name).join(', ') || 'No members' }}
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
 
+
 <script setup lang="ts">
 import { useTeamStore } from "~/stores/teamStore";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
+//import { AddTeam } from "#build/components";
+//import AddTeam from "~/pages/add-team.vue";
 
 const teamStore = useTeamStore();
 const { teams } = storeToRefs(teamStore);
