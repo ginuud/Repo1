@@ -57,9 +57,8 @@
       <template #header>
         <div class="flex items-center justify-between">
           <h3
-            class="text-base font-semibold leading-6 text-gray-900"
-          >
-            Delete player
+            class="text-base font-semibold leading-6 text-gray-900  dark:text-white"
+          >Delete player
           </h3>
           <UButton
             color="gray"
@@ -87,8 +86,9 @@
     <UCard
       :ui="{
         ring: '',
-        divide: 'divide-y divide-gray-100 dark:divide-gray-800',
+        divide: 'divide-y divide-gray-900',
       }"
+      class="hero"
     >
       <template #header>
         <div class="flex items-center justify-between">
@@ -108,6 +108,10 @@
       </template>
 
       <div class="p-4">
+        <h3
+          class="text-base font-semibold leading-6 text-gray-900 dark:text-white"
+          >Name
+        </h3>
         <UInput
           v-model="newName"
           color="cyan"
@@ -117,6 +121,10 @@
         <p v-if="errors.newName" class="text-red-500 text-sm mt-1">
           {{ errors.newName }}
         </p>
+        <h3
+          class="text-base font-semibold leading-6 text-gray-900 dark:text-white"
+          >Points
+        </h3>
         <UInput
           v-model="newScore"
           type="number"

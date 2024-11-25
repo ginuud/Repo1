@@ -39,8 +39,9 @@
       <UCard
         :ui="{
           ring: '',
-          divide: 'divide-y divide-gray-100 dark:divide-gray-800',
+          divide: 'divide-y divide-gray-900',
         }"
+		class="hero"
       >
         <template #header>
           <div class="flex items-center justify-between">
@@ -60,16 +61,19 @@
         </template>
 
         <div class="p-4">
-          <p>Select the winner of the game:</p>
-          <div class="p-4">
+			<h3
+          	class="text-base font-semibold leading-6 text-gray-900 dark:text-white"
+          	>Select the winner of the game:
+        	</h3>
             <UFormGroup name="selectedTeam">
               <USelectMenu
                 v-model="selectedTeam"
                 :options="teamOptions"
                 placeholder="Select winning team"
+				color="cyan"
+          		variant="outline"
               />
             </UFormGroup>
-          </div>
         </div>
 
         <template #footer>
