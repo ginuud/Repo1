@@ -33,40 +33,32 @@
         </div>
       </template>
 
-      <div class="p-4 sapce-y-4">
-        <UFormGroup label="Game name" name="name">
-          <UInput
-            v-model="name"
-            color="cyan"
-            variant="outline"
-            placeholder="Game name"
-          />
-          <p v-if="errors.name" class="text-red-500 text-sm mt-1">
-            {{ errors.name }}
-          </p>
-        </UFormGroup>
+    <div class="p-4 space-y-4">
+      <UFormGroup label="Game name" name="name">
+        <UInput v-model="name" color="cyan" variant="outline" placeholder="Game name" />
+        <p v-if="errors.name" class="text-red-500 text-sm mt-1">{{ errors.name }}</p>
+      </UFormGroup>
 
-        <UFormGroup label="Teams" name="teams">
-          <USelectMenu
-            v-model="selectedTeams"
-            :options="teamOptions"
-            multiple
-            searchable
-            searchable-placeholder="Search teams..."
-            placeholder="Select 2 teams"
-          />
-          <p v-if="errors.teams" class="text-red-500 text-sm mt-1">
-            {{ errors.teams }}
-          </p>
-        </UFormGroup>
+      <UFormGroup label="Teams" name="teams">
+        <USelectMenu
+          v-model="selectedTeams"
+          :options="teamOptions"
+          multiple
+          searchable
+          searchable-placeholder="Search teams..."
+          placeholder="Select 2 teams" />
+          <p v-if="errors.teams" class="text-red-500 text-sm mt-1">{{ errors.teams }}</p>
+      </UFormGroup>
+
+        <UCheckbox v-model="deleteTeams" name="deleteTeams" label="Delete teams when game ends" />
+    </div>
+  
+    <template #footer>
+      <div class="flex justify-end space-x-2">
+        <UButton color="green" @click="startGame">Start game</UButton>
       </div>
-
-      <template #footer>
-        <div class="flex justify-end space-x-2">
-          <UButton color="green" @click="startGame">Start game</UButton>
-        </div>
-      </template>
-    </UCard>
+    </template>
+  </UCard>
   </UModal>
 </template>
 
@@ -79,12 +71,10 @@ const gameStore = useGameStore();
 const teamStore = useTeamStore();
 
 const isStartGameModalOpen = ref(false);
-const name = ref("");
-const selectedTeams = ref([]);
-const errors = reactive({
-  name: null as string | null,
-  teams: null as string | null,
-});
+const name = ref('');
+const selectedTeams  = ref([]);
+const errors = reactive({ name: null as string | null, teams: null as string | null });
+const deleteTeams = ref(false);
 
 const teamOptions = computed(() =>
   teamStore.teams
@@ -101,8 +91,9 @@ const validate = (): boolean => {
 
 const openStartGameModal = () => {
   isStartGameModalOpen.value = true;
-  name.value = "";
+  name.value = '';
   selectedTeams.value = [];
+  deleteTeams.value = false;  	  
 };
 
 const startGame = async () => {
@@ -110,14 +101,15 @@ const startGame = async () => {
     await gameStore.addGame({
       id: gameStore.generateId(),
       name: name.value,
-      teams: selectedTeams.value.map((option) => option.value),
-      status: "in progress",
+      teams: selectedTeams.value.map(option => option.value),
+      deleteTeams: deleteTeams.value,
     });
     isStartGameModalOpen.value = false;
   }
 };
 
 onMounted(() => {
+  gameStore.loadGames();
   teamStore.loadTeams();
-});
+})
 </script>

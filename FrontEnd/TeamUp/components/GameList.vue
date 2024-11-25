@@ -124,15 +124,46 @@ const openEndGameModal = (gameId: number) => {
   }
 };
 
-const submitWinner = async () => {
-  if (selectedTeam.value && selectedGameId.value) {
-    await teamStore.addPointsToTeam(selectedTeam.value.value);
-    isEndGameModalOpen.value = false;
+const deleteTeamsWhenChecked= async (gameId: number) => {
+	console.log("deleteTeamsWhenChecked called with gameId:", gameId);
+	const game = gameStore.games.find(g => g.id === gameId);
+	if (game) {
+    const gameTeams = game.teams;
+	console.log("Teams associated with game:", gameTeams);
 
-    await gameStore.deleteGame(selectedGameId.value);
-
-    navigateTo("/players");
+    for (const team of gameTeams) {
+      console.log("Deleting team:", team.id);
+      await teamStore.deleteTeam(team.id); 
+    }
   }
+}
+
+const submitWinner = async () => {
+  	if (selectedTeam.value && selectedGameId.value) {
+	await teamStore.addPointsToTeam(selectedTeam.value.value);
+	
+	const game = gameStore.games.find(g => g.id === selectedGameId.value);
+    if (!game) {
+      console.error("Game not found with ID:", selectedGameId.value);
+      return;
+    }
+
+	if (game.deleteTeams)
+  	{
+      	await deleteTeamsWhenChecked(selectedGameId.value);
+    } else {
+      console.log("deleteTeams is false, skipping team deletion.");
+    }
+
+	try {
+      console.log("Deleting game with id:", selectedGameId.value);
+      await gameStore.deleteGame(selectedGameId.value);
+    } catch (error) {
+      console.error("Failed to delete game:", selectedGameId.value, error);
+    }
+  	isEndGameModalOpen.value = false;
+	navigateTo("/players");	
+	}
 };
 
 const cancelSelection = () => {
