@@ -27,9 +27,6 @@
                 searchable-placeholder="Search a player..."
                 placeholder="Select players"
               >
-                <template #custom-label>
-                  Unselect players who you DO NOT want in the team
-                </template>
               </USelectMenu>
             </UFormGroup>
 
@@ -116,7 +113,12 @@ const addTeamForm = reactive({
   members: [],
 });
 
-// Validation functions
+
+watch(playerOptions, (newOptions) => {
+  generateTeamsForm.selectedPlayers = [...newOptions];
+}, { immediate: true });
+
+
 const validateGenerateTeams = (state: typeof generateTeamsForm): FormError[] => {
   const errors: FormError[] = [];
   if (state.selectedPlayers.length < 4) {
@@ -191,12 +193,12 @@ const tabs = [
   {
     key: "generateTeams",
     label: "Generate Teams",
-    description: "Select players and specify the number of teams to generate.",
+    description: "Unselect players who you DO NOT want in the team and specify the number of teams to generate.",
   },
   {
     key: "addTeam",
     label: "Add Team",
-    description: "Create a custom team by selecting members and naming it.",
+    description: "Create a custom team by selecting players and naming it.",
   },
 ];
 </script>
