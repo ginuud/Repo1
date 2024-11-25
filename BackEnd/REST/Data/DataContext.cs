@@ -54,7 +54,14 @@ namespace REST.Data
                     // parool on test1
                     Password = "St9tpNN2zrinRGNUgKWCy4JjZRFEorSQ0Zg3a/8m7k4=",
                     OrganizationId = 1,
-                }
+                },
+                new User
+                    {
+                        Id = 2,
+                        Username = "test2",
+                        Password = "zWoe4T9h2Hj9G4dyUtWwcKwV6zMR1Q0yr3Uch+xSze8=", // test2
+                        OrganizationId = 2,
+                    }
             );
 
             modelBuilder.Entity<Game>().HasData(
@@ -100,6 +107,18 @@ namespace REST.Data
                     Name = "Spurs",
                     GameId = 2,
                     OrganizationId = 1
+                },
+                new Team
+                {
+                    Id = 5,
+                    Name = "IT",
+                    OrganizationId = 2
+                },
+                new Team
+                {
+                    Id = 6,
+                    Name = "Kiired ja vihased",
+                    OrganizationId = 2
                 }
             );
             modelBuilder.Entity<Player>().HasData(
