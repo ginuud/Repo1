@@ -1,6 +1,6 @@
 <template>
   <div>
-    <UButton 
+    <UButton
       :ui="{ rounded: 'rounded-full' }"
       icon="i-heroicons-plus"
       size="md"
@@ -17,20 +17,29 @@
         No teams have been added
       </div>
       <div v-else>
-        <div v-for="team in teams" :key="team.id" class="team-accordion-item">
+        <div
+          v-for="team in teams"
+          :key="team.id"
+          class="team-accordion-item ml-40 mr-40 mb-20"
+        >
           <div class="accordion-header">
             <strong>Team: {{ team.name }}</strong>
-            <button @click="deleteTeam(team.id)" class="delete-button">Delete</button>
+            <button @click="deleteTeam(team.id)" class="delete-button">
+              Delete
+            </button>
           </div>
           <div class="accordion-content">
-            Members: {{ team.members?.map(member => member.name).join(', ') || 'No members' }}
+            Members:
+            {{
+              team.members?.map((member) => member.name).join(", ") ||
+              "No members"
+            }}
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
-
 
 <script setup lang="ts">
 import { useTeamStore } from "~/stores/teamStore";
@@ -44,7 +53,7 @@ const { teams } = storeToRefs(teamStore);
 const router = useRouter();
 
 const navigateToAddTeam = () => {
-  router.push('/add-team'); // Replace with your actual "Add Team" route
+  router.push("/add-team"); // Replace with your actual "Add Team" route
 };
 
 onMounted(() => {
