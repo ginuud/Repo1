@@ -43,6 +43,12 @@
             </UFormGroup>
 
             <UButton type="submit">Generate Teams</UButton>
+            <UButton 
+              type="button"
+              @click="cancel" 
+              class="ml-2"
+              color="red">
+              Cancel</UButton>
           </UForm>
         </div>
 
@@ -71,6 +77,12 @@
             <p class="text-gray-500">Only players who are not already in a team are shown</p>
 
             <UButton type="submit">Add Team</UButton>
+            <UButton 
+              type="button"
+              @click="cancel" 
+              class="ml-2"
+              color="red">
+              Cancel</UButton>
           </UForm>
         </div>
       </UCard>
@@ -84,9 +96,11 @@ import { computed, reactive, onMounted, watch } from "vue";
 import type { FormError, FormErrorEvent, FormSubmitEvent } from "#ui/types";
 import { useTeamStore } from "~/stores/teamStore";
 import { usePlayerStore } from "~/stores/playerStore";
+import { useRouter } from 'vue-router';
 
 const teamStore = useTeamStore();
 const playerStore = usePlayerStore();
+const router = useRouter(); 
 
 onMounted(() => {
   playerStore.loadPlayers();
@@ -153,7 +167,8 @@ async function submitGenerateTeams(event: FormSubmitEvent) {
     }));
     await teamStore.generateTeams(transformedPlayers, generateTeamsForm.numberOfTeams, generateTeamsForm.teamNames);
     console.log("Teams successfully generated");
-    await navigateTo("/teams");
+    await router.push("/teams");
+   // await navigateTo("/teams");
   } catch (error) {
     console.error("Error generating teams:", error);
   }
@@ -175,7 +190,8 @@ async function submitAddTeam(event: FormSubmitEvent) {
     };
     await teamStore.addTeam(teamData);
     console.log("Team successfully added:", teamData);
-    await navigateTo("/teams");
+    await router.push("/teams");
+    //await navigateTo("/teams");
   } catch (error) {
     console.error("Error adding team:", error);
   }
@@ -186,6 +202,10 @@ function handleError(event: FormErrorEvent) {
   firstErrorElement?.focus();
   firstErrorElement?.scrollIntoView({ behavior: "smooth", block: "center" });
 }
+
+const cancel = () => {
+  router.push("/teams");  // Redirect back to the teams list when cancel is clicked
+};
 
 const tabs = [
   {
