@@ -25,7 +25,7 @@
                 multiple 
                 searchable
                 searchable-placeholder="Search a player..."
-                placeholder="Select players who you DO NOT want in the team"
+                placeholder="Select players"
               >
                 <template #custom-label>
                   Unselect players who you DO NOT want in the team
@@ -115,12 +115,6 @@ const addTeamForm = reactive({
   name: "",
   members: [],
 });
-
-// Watchers to handle dynamic updates
-watch(playerOptions, (newOptions) => {
-  generateTeamsForm.selectedPlayers = [...newOptions]; // Prepopulate selected players
-  addTeamForm.members = [...newOptions]; // Prepopulate available players for team members
-}, { immediate: true });
 
 // Validation functions
 const validateGenerateTeams = (state: typeof generateTeamsForm): FormError[] => {
