@@ -1,21 +1,19 @@
  
 <template>
-  <!-- Wrapper -->
   <div>
     <UButton 
       :ui="{ rounded: 'rounded-full' }"
+      icon="i-heroicons-plus"
       size="md"
       color="primary"
       variant="solid"
-      label="+ Add team"
+      label="Add team"
       @click="navigateToAddTeam"
       class="add-team-button"
     >
     </UButton>
 
-    <!-- Add margin between button and teams list -->
     <div class="mt-4">
-      <!-- Teams List -->
       <div v-if="teams.length === 0" class="text-center text-red-500">
         No teams have been added
       </div>
