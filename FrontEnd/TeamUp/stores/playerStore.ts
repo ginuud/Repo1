@@ -46,7 +46,7 @@ export const usePlayerStore = defineStore("player", () => {
 
   const deletePlayer = async (playerId: number) => {
     try {
-      await auth.fetchWithToken("Players" + playerId, {
+      await auth.fetchWithToken(`Players/${playerId}`, {
         method: 'DELETE'
       });
       await loadPlayers(); 
@@ -59,7 +59,7 @@ export const usePlayerStore = defineStore("player", () => {
   const updatePlayer = async (selectedPlayerId: number, newName: string, newScore: number, teamId: number | null) => { 
     try {
       console.log('teamId:', teamId);
-      await auth.fetchWithToken("Players" + selectedPlayerId, {
+      await auth.fetchWithToken(`Players/${selectedPlayerId}`, {
         method: 'PUT',
         body: {
           name: newName,

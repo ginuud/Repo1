@@ -28,7 +28,7 @@ export const useGameStore = defineStore("game", () => {
     }
 
     const deleteGame = async (gameId: number) => {
-      const res = await auth.fetchWithToken("Games" + gameId, {
+      const res = await auth.fetchWithToken(`Games/${gameId}`, {
         method: 'DELETE',
       })
       games.value = games.value.filter(game => game.id !== gameId);

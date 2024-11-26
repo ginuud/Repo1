@@ -10,7 +10,7 @@ namespace REST.Interfaces
         Task<List<Player>> GetPlayersByIdsAsync(List<int> playerIds, int organizationId);
         Task<Team> CreateAsync(Team teamModel);
         Task<List<Team>> CreateMultipleAsync(List<Team> teams);
-        Task<List<Team>> GenerateTeamsAsync(List<Player> players, List<string> teamNames);
+        Task<List<Team>> GenerateTeamsAsync(List<Player> players, List<string> teamNames, int organizationId);
         Task<Team?> UpdateAsync(int id, UpdateTeamRequestDto teamDto);
         Task<Team?> DeleteAsync(int id, int organizationId);
         Task<bool> TeamExists(int id);

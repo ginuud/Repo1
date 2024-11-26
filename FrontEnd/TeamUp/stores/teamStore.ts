@@ -24,7 +24,7 @@ export const useTeamStore = defineStore("team", () => {
 
     const deleteTeam = async (teamId: number) => {
       try {
-        await auth.fetchWithToken("Teams" + teamId, {
+        await auth.fetchWithToken(`Teams/${teamId}`, {
           method: 'DELETE',
         }); 
         const index = teams.value.findIndex((team) => team.id === teamId);

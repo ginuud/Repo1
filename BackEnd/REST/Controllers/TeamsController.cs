@@ -85,7 +85,7 @@ namespace REST.Controllers
                 return BadRequest("Some players are invalid or do not exist.");
             }
 
-            var generatedTeams = await repo.GenerateTeamsAsync(existingPlayers, teamsDto.TeamNames);
+            var generatedTeams = await repo.GenerateTeamsAsync(existingPlayers, teamsDto.TeamNames, organizationId);
 
             var generatedTeamDtos = generatedTeams.Select(t => t.ToTeamDto()).ToList();
             return Ok(generatedTeamDtos);
@@ -107,10 +107,11 @@ namespace REST.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task<ActionResult> Delete([FromRoute]int id, int organizationId)
+        public async Task<ActionResult> Delete([FromRoute]int id)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
+            var organizationId = GetOrganizationId();
             var teamModel = await repo.DeleteAsync(id, organizationId);
 
             if (teamModel == null) return NotFound("Team doesn't exist");

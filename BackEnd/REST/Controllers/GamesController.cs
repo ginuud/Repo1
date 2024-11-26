@@ -76,10 +76,11 @@ namespace REST.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromRoute]int id, int organizationId)
+        public async Task<IActionResult> Delete([FromRoute]int id)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
+            var organizationId = GetOrganizationId();
             var gameModel = await repo.DeleteAsync(id, organizationId);
 
             if (gameModel == null) return NotFound("Game doesn't exist");
