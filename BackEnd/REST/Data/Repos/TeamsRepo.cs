@@ -47,7 +47,7 @@ namespace REST.Data.Repos
 
         public async Task<bool> TeamExists(int id) => await context.Teams.AnyAsync(p => p.Id == id);
 
-        public async Task<List<Team>> GenerateTeamsAsync(List<Player> players, List<string> teamNames)
+        public async Task<List<Team>> GenerateTeamsAsync(List<Player> players, List<string> teamNames, int organizationId)
         {
             var sortedPlayers = players.OrderByDescending(p => p.Points).ToList();
             var balancedTeams = new List<Team>();
@@ -57,7 +57,8 @@ namespace REST.Data.Repos
                 balancedTeams.Add(new Team
                 {
                     Name = teamName,
-                    Members = new List<Player>()
+                    Members = new List<Player>(),
+                    OrganizationId = organizationId
                 });
             }
 
