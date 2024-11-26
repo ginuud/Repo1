@@ -1,8 +1,13 @@
 <template>
   <UTabs :items="tabs" class="w-full">
     <template #item="{ item }">
-      <UCard>
-        <template #header>
+      <UCard
+      :ui="{
+        ring: '',
+        divide: 'divide-y divide-gray-900',
+      }"
+      class="hero">
+        <template #header>          
           <p class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
             {{ item.label }}
           </p>
@@ -26,6 +31,8 @@
                 searchable
                 searchable-placeholder="Search a player..."
                 placeholder="Select players"
+                color="cyan"
+                variant="outline"
               >
               </USelectMenu>
             </UFormGroup>
@@ -33,12 +40,14 @@
             <p class="text-gray-500">Only players who are not already in a team are shown</p>
 
             <UFormGroup label="Number of Teams" name="numberOfTeams">
-              <UInput v-model.number="generateTeamsForm.numberOfTeams" type="number" />
+              <UInput v-model.number="generateTeamsForm.numberOfTeams" type="number" color="cyan"
+              variant="outline"/>
             </UFormGroup>
 
             <UFormGroup label="Team Names" name="teamNames">
               <div v-for="index in generateTeamsForm.numberOfTeams" :key="index">
-                <UInput v-model="generateTeamsForm.teamNames[index - 1]" type="text" placeholder="Enter team name" />
+                <UInput v-model="generateTeamsForm.teamNames[index - 1]" type="text" placeholder="Enter team name" color="cyan"
+                variant="outline"/>
               </div>
             </UFormGroup>
 
@@ -60,7 +69,7 @@
             @error="handleError"
           >
             <UFormGroup label="Team Name" name="name">
-              <UInput v-model="addTeamForm.name" />
+              <UInput v-model="addTeamForm.name" color="cyan" variant="outline"/>
             </UFormGroup>
 
             <UFormGroup label="Members" name="members">
@@ -71,6 +80,8 @@
                 searchable
                 searchable-placeholder="Search a player..."
                 placeholder="Select players"
+                color="cyan"
+                variant="outline"
               />
             </UFormGroup>
 

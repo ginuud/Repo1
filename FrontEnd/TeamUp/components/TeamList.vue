@@ -67,7 +67,7 @@ const deleteTeam = async (teamId: number) => {
 
 <style scoped>
 .team-accordion-item {
-  border: 1px solid #ccc;
+  border: 1px solid #3ec4dc;
   margin-bottom: 1em;
   padding: 1em;
   border-radius: 8px;
