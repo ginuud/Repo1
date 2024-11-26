@@ -13,5 +13,6 @@ namespace REST.Dtos.User
         public required string Username { get; set; }
         [Required]
         public required string Password { get; set; }
+        public int OrganizationId { get; set; }
     }
 }
