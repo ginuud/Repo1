@@ -15,20 +15,12 @@ const links = [
     to: "/players",
   },
   {
-    label: "Add teams",
-    to: "/add-team",
-  },
-  {
     label: "Teams",
     to: "/teams",
   },
   {
     label: "Games",
     to: "/games",
-  },
-  {
-    label: "Team generation",
-    to: "/team-generator",
   },
 ];
 </script>
