@@ -6,6 +6,6 @@ export default defineNuxtConfig({
   imports :{dirs: ["types/*.ts"]},
   runtimeConfig: {
     //siin on https või ilma s (enne oli s'ga)
-    public: {exercisesApiUrl: "https://localhost:5181/api/"}
+    public: {exercisesApiUrl: "http://localhost:5181/api/"}
   },
 });
