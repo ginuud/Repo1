@@ -11,11 +11,11 @@ namespace REST.Interfaces
 {
     public interface IPlayerRepository
     {
-        Task<List<Player>> GetAllAsync();
-        Task<Player?> GetByIdAsync(int id);
+        Task<List<Player>> GetAllAsync(int organizationId);
+        Task<Player?> GetByIdAsync(int id, int organizationId);
         Task<Player> CreateAsync(Player playerModel);
         Task<Player?> UpdateAsync(int id, UpdatePlayerRequestDto playerDto);
-        Task<Player?> DeleteAsync(int id);
+        Task<Player?> DeleteAsync(int id, int organizationId);
         Task<bool> PlayerExists(int id);
     }
 }

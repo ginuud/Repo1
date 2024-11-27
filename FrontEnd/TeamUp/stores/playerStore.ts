@@ -1,20 +1,21 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import { useAuth } from '~/composables/useAuth';
 import type { Player } from "~/types/player";
 
-export const usePlayerStore = defineStore('player', () => {
+export const usePlayerStore = defineStore("player", () => {
   let currentId: number = 0;
 
   function generateId(): number {
     return ++currentId;
   }
 
+  const auth = useAuth();
   const players = ref<Player[]>([]);
 
   const loadPlayers = async () => {
     try {
-      players.value = await $fetch<Player[]>('http://localhost:5181/api/Players');
-      console.log("Players loaded:", players.value); 
+      players.value = await auth.fetchWithToken<Player[]>("Players");
       generateRanks(); 
       players.value.sort((a, b) => a.rank - b.rank);
     } catch (error) {
@@ -24,12 +25,6 @@ export const usePlayerStore = defineStore('player', () => {
   };
   
   const generateRanks = () => {
-    console.log("Players before sorting:", players.value.map(player => ({
-      name: player.name,
-      points: player.points,
-      rank: player.rank
-    })));
-  
     players.value
       .slice()
       .sort((a, b) => {
@@ -41,7 +36,7 @@ export const usePlayerStore = defineStore('player', () => {
   };  
   
   const addPlayer = async (player: Player) => {
-    const res = await $fetch('http://localhost:5181/api/Players', {
+    const res = await auth.fetchWithToken("Players", {
       method: 'POST',
       body: player,
     });
@@ -51,7 +46,7 @@ export const usePlayerStore = defineStore('player', () => {
 
   const deletePlayer = async (playerId: number) => {
     try {
-      await $fetch(`http://localhost:5181/api/Players/${playerId}`, {
+      await auth.fetchWithToken(`Players/${playerId}`, {
         method: 'DELETE'
       });
       await loadPlayers(); 
@@ -64,7 +59,7 @@ export const usePlayerStore = defineStore('player', () => {
   const updatePlayer = async (selectedPlayerId: number, newName: string, newScore: number, teamId: number | null) => { 
     try {
       console.log('teamId:', teamId);
-      await $fetch(`http://localhost:5181/api/Players/${selectedPlayerId}`, {
+      await auth.fetchWithToken(`Players/${selectedPlayerId}`, {
         method: 'PUT',
         body: {
           name: newName,

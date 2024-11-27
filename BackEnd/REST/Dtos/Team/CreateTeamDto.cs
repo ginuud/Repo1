@@ -11,5 +11,6 @@ namespace REST.Dtos.Team
         [MaxLength(30, ErrorMessage = "Name cannot be over 30 over characters")]
         public string? Name { get; set; }
         public List<CreateTeamPlayerDto>? Members { get; set; } = [];
+        public int OrganizationId { get; set; }
     }
 } 

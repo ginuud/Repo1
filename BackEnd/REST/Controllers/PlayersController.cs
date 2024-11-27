@@ -8,9 +8,12 @@ using REST.Dtos.Player;
 using REST.Interfaces;
 using REST.Mappers;
 using REST.Models.Classes;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace REST.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class PlayersController : ControllerBase
@@ -25,7 +28,8 @@ namespace REST.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var players = await repo.GetAllAsync();
+            var organizationId = GetOrganizationId();
+            var players = await repo.GetAllAsync(organizationId);
             var playerDto = players.Select(t => t.ToPlayerDto());
 
             return Ok(playerDto);
@@ -37,7 +41,8 @@ namespace REST.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var player = await repo.GetByIdAsync(id);
+            var organizationId = GetOrganizationId();
+            var player = await repo.GetByIdAsync(id, organizationId);
 
             if (player == null) return NotFound();
 
@@ -49,6 +54,8 @@ namespace REST.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             
+            var organizationId = GetOrganizationId();
+            playerDto.OrganizationId = organizationId;
             var playerModel = playerDto.ToPlayerFromCreate();
             await repo.CreateAsync(playerModel);
 
@@ -61,6 +68,8 @@ namespace REST.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
+            var organizationId = GetOrganizationId();
+            updateDto.OrganizationId = organizationId;
             var playerModel = await repo.UpdateAsync(id, updateDto);
 
             if (playerModel == null) return NotFound();
@@ -74,11 +83,18 @@ namespace REST.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var playerModel = await repo.DeleteAsync(id);
+            var organizationId = GetOrganizationId();
+            var playerModel = await repo.DeleteAsync(id, organizationId);
 
             if (playerModel == null) return NotFound("Player doesn't exist");
 
             return Ok(playerModel);
+        }
+
+        private int GetOrganizationId()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            return int.Parse(identity!.FindFirst("organizationId")!.Value);
         }
     }
 }

@@ -12,19 +12,22 @@ namespace REST.Mappers
                 Name = playerModel.Name,
                 Points = playerModel.Points,
                 TeamId = playerModel.TeamId,
+                OrganizationId = playerModel.OrganizationId
             };
         }
         public static Player ToPlayerFromCreate(this CreatePlayerDto playerDto){
             return new Player{
                 Name = playerDto.Name,
                 Points = playerDto.Points,
+                OrganizationId = playerDto.OrganizationId
             };
         }
         public static Player ToPlayerFromUpdate(this UpdatePlayerRequestDto playerDto){
             return new Player{
                 Name = playerDto.Name,
                 Points = playerDto.Points,
-                TeamId = playerDto.TeamId
+                TeamId = playerDto.TeamId,
+                OrganizationId = playerDto.OrganizationId
             };
         }
     }

@@ -19,15 +19,22 @@ namespace REST.Data.Repos
             return game;
         }
 
-        public async Task<List<Game>> GetAllAsync()
+        public async Task<List<Game>> GetAllAsync(int organizationId)
         {
             var games = context.Games.Include(t => t.Teams).AsQueryable();
 
-            return await games.ToListAsync();
+            return await games.Where(x => x.OrganizationId == organizationId).ToListAsync();
         }
-        public async Task<Game?> GetByIdAsync(int id) => await context.Games
-        .Include(t => t.Teams)
-        .FirstOrDefaultAsync(i => i.Id == id);
+        public async Task<Game?> GetByIdAsync(int id, int organizationId) {
+
+            var dbGame = await context.Games
+                .Include(t => t.Teams)
+                .FirstOrDefaultAsync(i => i.Id == id);
+            if(dbGame?.OrganizationId != organizationId){
+                return null;
+            }
+            return dbGame;
+        } 
 
         public async Task<List<Team>> GetTeamsByIdsAsync(List<int> teamIds)
         {
@@ -40,7 +47,7 @@ namespace REST.Data.Repos
             
             var existingGame = await context.Games
             .Include(g => g.Teams)
-            .FirstOrDefaultAsync(x => x.Id == id);
+            .FirstOrDefaultAsync(x => x.Id == id && x.OrganizationId == gameDto.OrganizationId);
 
             if (existingGame == null) {
                 return null;
@@ -59,8 +66,8 @@ namespace REST.Data.Repos
             return existingGame;
         }
 
-        public async Task<Game?> DeleteAsync(int id) {
-            var gameModel = await context.Games.Include(g => g.Teams).FirstOrDefaultAsync(x => x.Id == id);
+        public async Task<Game?> DeleteAsync(int id, int organizationId) {
+            var gameModel = await context.Games.Include(g => g.Teams).FirstOrDefaultAsync(x => x.Id == id && x.OrganizationId == organizationId);
 
             if (gameModel == null) {
                 return null;

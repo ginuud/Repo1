@@ -9,12 +9,12 @@ namespace REST.Interfaces
 {
     public interface IGameRepository
     {
-        Task<List<Game>> GetAllAsync();
-        Task<Game?> GetByIdAsync(int id);
+        Task<List<Game>> GetAllAsync(int organizationId);
+        Task<Game?> GetByIdAsync(int id, int organizationId);
         Task<List<Team>> GetTeamsByIdsAsync(List<int> teamIds);
         Task<Game> CreateAsync(Game gameModel);       
         Task<Game?> UpdateAsync(int id, UpdateGameRequestDto gameDto);
-        Task<Game?> DeleteAsync(int id);
+        Task<Game?> DeleteAsync(int id, int organizationId);
         Task<bool> GameExists(int id);
     }
 }

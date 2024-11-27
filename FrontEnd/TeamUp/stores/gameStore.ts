@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import { useAuth } from '~/composables/useAuth';
 import type { Game } from "~/types/game";
 
-export const useGameStore = defineStore('game', () => {
+export const useGameStore = defineStore("game", () => {
     let currentId: number = 0;
 
     function generateId(): number {
@@ -10,15 +11,16 @@ export const useGameStore = defineStore('game', () => {
       return currentId;
     }
 
+    const auth = useAuth();
     const games = ref<Game[]>([])
 
     const loadGames = async () => {
-      games.value = await $fetch<Game[]>('http://localhost:5181/api/Games')
+      games.value = await auth.fetchWithToken<Game[]>("Games")
     }
     
     const addGame = async (game: Game) => {
       const {deleteTeams, ...gameWithoutDeleteTeams } = game;
-      const res = await $fetch('http://localhost:5181/api/Games', {
+      const res = await auth.fetchWithToken("Games", {
         method: 'POST',
         body: gameWithoutDeleteTeams,
       });
@@ -26,7 +28,7 @@ export const useGameStore = defineStore('game', () => {
     }
 
     const deleteGame = async (gameId: number) => {
-      const res = await $fetch('http://localhost:5181/api/Games/' + gameId, {
+      const res = await auth.fetchWithToken(`Games/${gameId}`, {
         method: 'DELETE',
       })
       games.value = games.value.filter(game => game.id !== gameId);

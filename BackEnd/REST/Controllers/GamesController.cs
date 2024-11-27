@@ -2,9 +2,12 @@ using Microsoft.AspNetCore.Mvc;
 using REST.Interfaces;
 using REST.Mappers;
 using REST.Dtos.Game;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace REST.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class GamesController : ControllerBase
@@ -18,16 +21,18 @@ namespace REST.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var games = await repo.GetAllAsync();
-
+             var organizationId = GetOrganizationId();
+            var games = await repo.GetAllAsync(organizationId);
             var gameDto = games.Select(t => t.ToGameDto());
             return Ok(gameDto);
         }
         
         [HttpGet("{id}")]
         public async Task<IActionResult> GetGame([FromRoute] int id){
-            var game = await repo.GetByIdAsync(id);
 
+            var organizationId = GetOrganizationId();
+            var game = await repo.GetByIdAsync(id, organizationId);
+        
             if (game == null){
                 return NotFound();
             }
@@ -38,7 +43,8 @@ namespace REST.Controllers
         public async Task<IActionResult> Create([FromBody] CreateGameDto gameDto){
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            
+            var organizationId = GetOrganizationId();
+            gameDto.OrganizationId = organizationId;
             var teamIDs = gameDto.Teams.Select(t => t.Id).ToList();
             var existingTeams = await repo.GetTeamsByIdsAsync(teamIDs);
 
@@ -57,6 +63,8 @@ namespace REST.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+             var organizationId = GetOrganizationId();
+              updateDto.OrganizationId = organizationId;
             var gameModel = await repo.UpdateAsync(id, updateDto);
 
             if (gameModel == null)
@@ -72,11 +80,18 @@ namespace REST.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var gameModel = await repo.DeleteAsync(id);
+            var organizationId = GetOrganizationId();
+            var gameModel = await repo.DeleteAsync(id, organizationId);
 
             if (gameModel == null) return NotFound("Game doesn't exist");
 
             return Ok(gameModel);
+        }
+
+        private int GetOrganizationId()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            return int.Parse(identity!.FindFirst("organizationId")!.Value);
         }
 
     }

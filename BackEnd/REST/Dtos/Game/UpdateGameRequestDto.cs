@@ -14,6 +14,7 @@ namespace REST.Dtos.Game
         
         [Required]
         public List<int>? TeamIds { get; set; }
+        public int OrganizationId{ get; set; }
         
     }
 }
