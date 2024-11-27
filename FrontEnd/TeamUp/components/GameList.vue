@@ -14,6 +14,11 @@
         	@click="openEndGameModal(row.id)">
       	</UButton>
     	</template>
+		<template #status-data="{ row }">
+          <span :class="row.isActive ? 'text-green-500' : 'text-red-500'">
+            {{ row.isActive ? 'Active' : 'Inactive' }}
+          </span>
+        </template>
   	</UTable>
 	</div>
 
@@ -66,6 +71,7 @@ const columns = [
   { key: "name", label: "Game" },
   { key: "teams.0.name", label: "Team 1" },
   { key: "teams.1.name", label: "Team 2" },
+  { key: "status", label: "Status" },
   { key: "actions", label: "End game" },
 ];
 
