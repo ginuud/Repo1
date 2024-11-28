@@ -1,11 +1,13 @@
 <template>
   <UButton
     :ui="{ rounded: 'rounded-full' }"
+    icon="i-heroicons-play"
     size="md"
-    color="purple"
     variant="solid"
     label="Start game"
     @click="openStartGameModal"
+    class="m-4"
+    :style="{ backgroundColor: '#202a79', color: '#fff' }"
   >
   </UButton>
 

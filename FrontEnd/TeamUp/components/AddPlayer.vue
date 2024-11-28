@@ -1,16 +1,6 @@
-<style>
-.custom-button {
-  background-color: #202a79;
-  color: #fff;
-}
-
-</style>
-
 <template>
   <UButton
-    :ui="{
-      rounded: 'rounded-full',
-    }"
+    :ui="{rounded: 'rounded-full'}"
     icon="i-heroicons-plus"
     size="md"
     variant="solid"
@@ -26,14 +16,13 @@
     <UCard
       :ui="{
         ring: '',
-        divide: 'divide-y divide-gray-100 dark:divide-gray-800',
+        divide: 'divide-y divide-gray-100',
       }"
-      class="hero"
     >
       <template #header>
         <div class="flex items-center justify-between">
           <h3
-            class="text-base font-semibold leading-6 text-gray-900"
+            class="text-base font-semibold leading-6 text-white"
           >
             Add player
           </h3>
@@ -51,7 +40,7 @@
         <UFormGroup label="Player name" name="name">
           <UInput
             v-model="name"
-            color="black"
+            color="purple"
             variant="outline"
             placeholder="Player name"
           />
@@ -63,7 +52,7 @@
           <UInput
             v-model="points"
             type="number"
-            color="black"
+            color="purple"
             variant="outline"
             placeholder="Player points"
           />
@@ -118,8 +107,3 @@ const addPlayer = async () => {
 };
 </script>
 
-<style scoped>
-.hero {
-  background-color: #e8e8d9;
-}
-</style>

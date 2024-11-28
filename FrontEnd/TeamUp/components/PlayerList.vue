@@ -3,13 +3,14 @@
     <div v-if="players.length === 0" class="text-center text-red-500">
       No players have been added
     </div>
-    <div class="mb-4 table-container">
+    <div class="mb-4 table-container flex items-center justify-between">
       <input
         v-model="searchQuery"
         type="text"
         placeholder="Search players..."
         class="search-input focus:ring-cyan-300"  
       />
+      <AddPlayer />
     </div>
     <div v-if="filteredPlayers.length === 0" class="text-center text-red-500">
       No players match your search.
@@ -150,6 +151,7 @@
 <script setup lang="ts">
 import { usePlayerStore } from "~/stores/playerStore";
 import { ref, onMounted, computed } from "vue";
+import AddPlayer from "./AddPlayer.vue";
 
 defineProps<{ title: String }>();
 const playerStore = usePlayerStore();
