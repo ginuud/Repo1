@@ -1,7 +1,5 @@
 <template>
   <div class="hero">
-    <h1 class="text-xl text-center">{{ title }}</h1>
-
     <div class="mb-4 table-container">
       <input
         v-model="searchQuery"
@@ -27,7 +25,7 @@
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow v-for="game in filteredGames" :key="game.id">
+          <TableRow v-for="game in filteredGames" :key="game.id" class="border-b border-black">
             <TableCell>{{ game.name }}</TableCell>
             <TableCell>{{ game.teams[0]?.name || 'N/A' }}</TableCell>
             <TableCell>{{ game.teams[1]?.name || 'N/A' }}</TableCell>
@@ -52,13 +50,10 @@
           ring: '',
           divide: 'divide-y divide-gray-900',
         }"
-		class="hero"
       >
         <template #header>
           <div class="flex items-center justify-between">
-            <h3
-              class="text-base font-semibold leading-6 text-gray-900 dark:text-white"
-            >
+            <h3 class="text-base font-semibold leading-6 text-white" >
               Select Winner
             </h3>
             <UButton
@@ -73,7 +68,7 @@
 
         <div class="p-4">
 			<h3
-          	class="text-base font-semibold leading-6 text-gray-900 dark:text-white"
+          	class="text-base font-semibold leading-6 text-white"
           	>Select the winner of the game:
         	</h3>
             <UFormGroup name="selectedTeam">
@@ -81,8 +76,8 @@
                 v-model="selectedTeam"
                 :options="teamOptions"
                 placeholder="Select winning team"
-				color="cyan"
-          		variant="outline"
+				        color="purple"
+          		  variant="outline"
               />
             </UFormGroup>
         </div>
@@ -247,7 +242,7 @@ onMounted(() => {
 
 .header-cell {
   font-weight: bold;
-  color: #06011a; /* Tumehall tekst */
+  color: #06011a; 
 }
 
 .Table th,
