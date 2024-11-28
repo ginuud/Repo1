@@ -2,7 +2,7 @@
   <UButton
     :ui="{ rounded: 'rounded-full' }"
     size="md"
-    color="primary"
+    color="purple"
     variant="solid"
     label="Start game"
     @click="openStartGameModal"
@@ -13,13 +13,12 @@
     <UCard
       :ui="{
         ring: '',
-        divide: 'divide-y divide-gray-100 dark:divide-gray-800',
+        divide: 'divide-y divide-gray-100',
       }"
     >
       <template #header>
         <div class="flex items-center justify-between">
-          <h3
-            class="text-base font-semibold leading-6 text-gray-900 dark:text-white"
+          <h3 class="text-base font-semibold leading-6 text-white "
           >
             Start game
           </h3>
@@ -35,13 +34,14 @@
 
     <div class="p-4 space-y-4">
       <UFormGroup label="Game name" name="name">
-        <UInput v-model="name" color="cyan" variant="outline" placeholder="Game name" />
+        <UInput v-model="name" color="purple" variant="outline" placeholder="Game name" />
         <p v-if="errors.name" class="text-red-500 text-sm mt-1">{{ errors.name }}</p>
       </UFormGroup>
 
       <UFormGroup label="Teams" name="teams">
         <USelectMenu
           v-model="selectedTeams"
+          color="purple"
           :options="teamOptions"
           multiple
           searchable

@@ -1,12 +1,17 @@
 <template>
   <div class="hero">
-    <div class="mb-4 table-container">
+    <div v-if="games.length === 0" class="text-center text-red-500">
+      No games have been played
+    </div>
+
+    <div class="mb-4 table-container flex items-center justify-between">
       <input
         v-model="searchQuery"
         type="text"
         placeholder="Search games or teams..."
         class="search-input focus:ring-cyan-300"
       />
+      <StartGame />
     </div>
 
     <div v-if="filteredGames.length === 0" class="text-center text-red-500">
@@ -67,8 +72,7 @@
         </template>
 
         <div class="p-4">
-			<h3
-          	class="text-base font-semibold leading-6 text-white"
+			    <h3 class="text-base font-semibold leading-6 text-white"
           	>Select the winner of the game:
         	</h3>
             <UFormGroup name="selectedTeam">
@@ -98,6 +102,7 @@
 import { ref, computed } from "vue";
 import { useGameStore, type Player } from "#imports";
 import { usePlayerStore } from "~/stores/playerStore";
+import StartGame from "./StartGame.vue";
 
 defineProps<{ title: String }>();
 
@@ -121,13 +126,6 @@ const filteredGames = computed(() => {
     )
   );
 });
-
-const columns = [
-  { key: "name", label: "Game" },
-  { key: "teams.0.name", label: "Team 1" },
-  { key: "teams.1.name", label: "Team 2" },
-  { key: "actions", label: "End game" },
-];
 
 const isEndGameModalOpen = ref(false);
 const selectedGameId = ref<number | null>(null);
@@ -202,53 +200,5 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.hero {
-  background-color: #cee7f8;
-}
-
-.search-input {
-  background-color: white; /* Valge taust */
-  color: #333; /* Teksti värv */
-  width: 300px; /* Laius */
-  padding: 8px 12px; /* Sisu ruum */
-  border: 1px solid #9f57e2; /* Piirjoon */
-  border-radius: 4px; /* Ümarad nurgad */
-  box-shadow: 0 4px 4px rgb(142, 69, 238); /* Kerge vari */
-  font-size: 15px; 
-}
-.search-input:focus {
-  outline: none; /* Eemaldab brauseri vaikimisi fookuse piirjoone */
-  border-color: #9f57e2; /* Tsüaani värvi piirjoon */
-  box-shadow: 0 0 5px rgba(142, 69, 238, 0.5); /* Tsüaani värvi varjuefekt */
-}
-
-.table-container {
-  max-width: 90%; 
-  margin: 0 auto; 
-  padding: 20px; 
-}
-
-.Table {
-  width: 100%;
-  border-spacing: 0;
-  border-collapse: collapse; 
-}
-.Table tr:hover{
-  background: none
-}
-.header-row {
-  box-shadow: 0 5px 15px rgb(142, 69, 238);
-}
-
-.header-cell {
-  font-weight: bold;
-  color: #06011a; 
-}
-
-.Table th,
-.Table td {
-  padding: 10px;
-  text-align: left;
-}
-
+  @import "@/assets/css/tableStyle.css"; 
 </style> 
