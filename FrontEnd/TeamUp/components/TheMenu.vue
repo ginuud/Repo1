@@ -1,6 +1,29 @@
+<template>
+  <div class="bg-gray-800 text-white">
+    <div class="flex items-center justify-between py-4 px-6">
+      <img src="@/components/teamup.png" alt="TeamUp logo" class="w-24 h-auto mr-4" />
+
+      <nav class="flex space-x-4">
+        <router-link
+          v-for="link in links"
+          :key="link.label"
+          :to="link.to"
+          class="text-lg px-4 py-2 rounded hover:bg-gray-600"
+        >
+          {{ link.label }}
+        </router-link>
+      </nav>
+    </div>
+  </div>
+</template>
+
 <script setup lang="ts">
+import { ref } from "vue";
+import { useRoute } from "vue-router";
+
 const route = useRoute();
 
+// Linkide andmed
 const links = ref([
   {
     label: "Players",
@@ -17,27 +40,25 @@ const links = ref([
 ]);
 </script>
 
-<template>
-  <div class="flex items-center justify-between px-8 py-2">
-    <img src="@/components/teamup.png" alt="TeamUp logo" class="w-24 h-auto" />
-
-    <div class="flex-1 pl-10"></div>
-
-    <UHorizontalNavigation
-      v-if="route.name !== 'index'"
-      :links="links"
-      class="hero"
-      :ui="{
-        after: '',
-        active: 'dark:text-[#202a79]',
-        base: 'rounded-md font-medium text-xl px-4 py-8',
-      }"
-    />
-  </div>
-</template>
-
 <style scoped>
-.hero {
-  background-color: #e8e8d9;
+/* Paigutus ja stiil */
+.bg-gray-800 {
+  background-color: transparent; /* Tume hall taust */
+}
+
+/* Lingid */
+.router-link-active {
+  border: 3px solid #7f12e6;
+  border-radius: 6px;
+}
+
+nav a {
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+nav a:hover {
+  background-color: #7f12e6; /* Hover efekt */
 }
 </style>
+
