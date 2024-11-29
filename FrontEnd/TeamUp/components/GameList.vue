@@ -1,51 +1,50 @@
 <template>
-  <div class="hero">
-    <div v-if="games.length === 0" class="text-center text-red-500">
-      No games have been played
-    </div>
+  <div v-if="games.length === 0" class="text-center text-red-500">
+    No games have been played
+  </div>
 
-    <div class="mb-4 table-container flex items-center justify-between">
-      <input
-        v-model="searchQuery"
-        type="text"
-        placeholder="Search games or teams..."
-        class="search-input focus:ring-cyan-300"
-      />
-      <StartGame />
-    </div>
+  <div class="mb-4 table-container flex items-center justify-between">
+    <input
+      v-model="searchQuery"
+      type="text"
+      placeholder="Search games or teams..."
+      class="search-input"
+    />
+    <StartGame />
+  </div>
 
-    <div v-if="filteredGames.length === 0" class="text-center text-red-500">
-      No games match your search.
-    </div>
+  <div v-if="filteredGames.length === 0" class="text-center text-red-500">
+    No games match your search.
+  </div>
 
-    <div v-else>
-      <div class="table-container">
-        <Table class="Table">
-        <TableHeader>
-          <TableRow class="header-row">
-            <TableCell class="header-cell">Game</TableCell>
-            <TableCell class="header-cell">Team 1</TableCell>
-            <TableCell class="header-cell">Team 2</TableCell>
-            <TableCell class="header-cell">Actions</TableCell>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <TableRow v-for="game in filteredGames" :key="game.id" class="border-b border-black">
-            <TableCell>{{ game.name }}</TableCell>
-            <TableCell>{{ game.teams[0]?.name || 'N/A' }}</TableCell>
-            <TableCell>{{ game.teams[1]?.name || 'N/A' }}</TableCell>
-            <TableCell>
-              <UButton
-                type="button"
-                color="red"
-                variant="ghost"
-                icon="i-heroicons-stop-circle-20-solid"
-                @click="openEndGameModal(game.id)"
-              >
-              </UButton>
-            </TableCell>
-          </TableRow>
-        </TableBody>
+  <div v-else>
+    <div class="table-container">
+      <Table class="Table">
+      <TableHeader>
+        <TableRow class="header-row">
+          <TableCell class="header-cell">Game</TableCell>
+          <TableCell class="header-cell">Team 1</TableCell>
+          <TableCell class="header-cell">Team 2</TableCell>
+          <TableCell class="header-cell">Actions</TableCell>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        <TableRow v-for="game in filteredGames" :key="game.id" class="border-b border-black">
+          <TableCell>{{ game.name }}</TableCell>
+          <TableCell>{{ game.teams[0]?.name || 'N/A' }}</TableCell>
+          <TableCell>{{ game.teams[1]?.name || 'N/A' }}</TableCell>
+          <TableCell>
+            <UButton
+              type="button"
+              color="red"
+              variant="ghost"
+              icon="i-heroicons-stop-circle-20-solid"
+              @click="openEndGameModal(game.id)"
+            >
+            </UButton>
+          </TableCell>
+        </TableRow>
+      </TableBody>
       </Table>
     </div>
 
@@ -94,7 +93,6 @@
         </template>
       </UCard>
     </UModal>
-  </div>
   </div>
 </template>
 

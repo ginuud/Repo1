@@ -17,12 +17,11 @@
         ring: '',
         divide: 'divide-y divide-gray-100',
       }"
-    >
+      >
       <template #header>
         <div class="flex items-center justify-between">
           <h3 class="text-base font-semibold leading-6 text-white "
-          >
-            Start game
+          >Start game
           </h3>
           <UButton
             color="gray"
@@ -34,33 +33,35 @@
         </div>
       </template>
 
-    <div class="p-4 space-y-4">
-      <UFormGroup label="Game name" name="name">
-        <UInput v-model="name" color="purple" variant="outline" placeholder="Game name" />
-        <p v-if="errors.name" class="text-red-500 text-sm mt-1">{{ errors.name }}</p>
-      </UFormGroup>
+      <div class="p-4">
+        <UFormGroup label="Game name" name="name">
+          <UInput v-model="name" color="purple" variant="outline" placeholder="Game name" />
+          <p v-if="errors.name" class="text-red-500 text-sm mt-1">{{ errors.name }}</p>
+        </UFormGroup>
 
-      <UFormGroup label="Teams" name="teams">
-        <USelectMenu
-          v-model="selectedTeams"
-          color="purple"
-          :options="teamOptions"
-          multiple
-          searchable
-          searchable-placeholder="Search teams..."
-          placeholder="Select 2 teams" />
-          <p v-if="errors.teams" class="text-red-500 text-sm mt-1">{{ errors.teams }}</p>
-      </UFormGroup>
+        <UFormGroup label="Teams" name="teams" >
+          <div style="margin-bottom: 0.5rem;">
+          <USelectMenu
+            v-model="selectedTeams"
+            color="purple"
+            :options="teamOptions"
+            multiple
+            searchable
+            searchable-placeholder="Search teams..."
+            placeholder="Select 2 teams" />
+            <p v-if="errors.teams" class="text-red-500 text-sm mt-1">{{ errors.teams }}</p>
+          </div>
+        </UFormGroup>
 
-        <UCheckbox v-model="deleteTeams" name="deleteTeams" label="Delete teams when game ends" />
-    </div>
-  
-    <template #footer>
-      <div class="flex justify-end space-x-2">
-        <UButton color="green" @click="startGame">Start game</UButton>
+        <UCheckbox v-model="deleteTeams" name="deleteTeams" label="Delete teams when game ends"  />
       </div>
-    </template>
-  </UCard>
+    
+      <template #footer>
+        <div class="flex justify-end space-x-2">
+          <UButton color="green" @click="startGame">Start game</UButton>
+        </div>
+      </template>
+    </UCard>
   </UModal>
 </template>
 

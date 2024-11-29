@@ -157,7 +157,6 @@ defineProps<{ title: String }>();
 const playerStore = usePlayerStore();
 const { players } = storeToRefs(playerStore);
 
-
 const isDeleteModalOpen = ref(false);
 const selectedPlayerId = ref<number | null>(null);
 const selectedPlayerName = ref<string | null>(null);

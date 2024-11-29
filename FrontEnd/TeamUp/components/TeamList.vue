@@ -1,41 +1,40 @@
 <template>
-  <div>
-    <UButton
-      :ui="{ rounded: 'rounded-full' }"
-      icon="i-heroicons-plus"
-      size="md"
-      color="primary"
-      variant="solid"
-      label="Add team"
-      @click="navigateToAddTeam"
-      class="add-team-button"
-    >
-    </UButton>
+  <div class="mb-4 table-container flex items-center justify-between"> 
+    <input
+      v-model="searchQuery"
+      type="text"
+      placeholder="Search teams or members..."
+      class="search-input"
+    />
+    <AddTeam />
+  </div>
+  
+  <div v-if="teams.length === 0" class="text-center text-red-500">
+    No teams have been added
+  </div>
 
-    <div class="mt-4">
-      <div v-if="teams.length === 0" class="text-center text-red-500">
-        No teams have been added
+  <div v-if="filteredTeams.length === 0" class="text-center text-red-500">
+    No games match your search.
+  </div>
+
+  <div v-else>
+    <div
+      v-for="team in teams"
+      :key="team.id"
+      class="team-accordion-item ml-40 mr-40 mb-20"
+    >
+      <div class="accordion-header">
+        <strong>Team: {{ team.name }}</strong>
+        <button @click="deleteTeam(team.id)" class="delete-button">
+          Delete
+        </button>
       </div>
-      <div v-else>
-        <div
-          v-for="team in teams"
-          :key="team.id"
-          class="team-accordion-item ml-40 mr-40 mb-20"
-        >
-          <div class="accordion-header">
-            <strong>Team: {{ team.name }}</strong>
-            <button @click="deleteTeam(team.id)" class="delete-button">
-              Delete
-            </button>
-          </div>
-          <div class="accordion-content">
-            Members:
-            {{
-              team.members?.map((member) => member.name).join(", ") ||
-              "No members"
-            }}
-          </div>
-        </div>
+      <div class="accordion-content">
+        Members:
+        {{
+          team.members?.map((member) => member.name).join(", ") ||
+          "No members"
+        }}
       </div>
     </div>
   </div>
@@ -44,17 +43,24 @@
 <script setup lang="ts">
 import { useTeamStore } from "~/stores/teamStore";
 import { storeToRefs } from "pinia";
-import { useRouter } from "vue-router";
-//import { AddTeam } from "#build/components";
-//import AddTeam from "~/pages/add-team.vue";
 
 const teamStore = useTeamStore();
 const { teams } = storeToRefs(teamStore);
-const router = useRouter();
+const searchQuery = ref("");
 
-const navigateToAddTeam = () => {
-  router.push("/add-team"); // Replace with your actual "Add Team" route
-};
+const filteredTeams = computed(() => {
+  if (!searchQuery.value.trim()) {
+    return teams.value;
+  }
+  const lowerCaseQuery = searchQuery.value.toLowerCase();
+  return teams.value.filter((team) =>
+    team.name.toLowerCase().includes(lowerCaseQuery) ||
+    team.members?.some((member) =>
+      member?.name?.toLowerCase().includes(lowerCaseQuery)
+    )
+  );
+});
+
 
 onMounted(() => {
   teamStore.loadTeams();
@@ -66,25 +72,6 @@ const deleteTeam = async (teamId: number) => {
 </script>
 
 <style scoped>
-.team-accordion-item {
-  border: 1px solid #3ec4dc;
-  margin-bottom: 1em;
-  padding: 1em;
-  border-radius: 8px;
-}
-
-.accordion-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.delete-button {
-  background-color: red;
-  color: white;
-  border: none;
-  padding: 0.5em 1em;
-  cursor: pointer;
-  border-radius: 10px;
-}
+@import "@/assets/css/tableStyle.css";
+@import "@/assets/css/accordionStyle.css";
 </style>

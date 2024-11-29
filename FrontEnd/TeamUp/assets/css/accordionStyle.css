@@ -1,0 +1,21 @@
+.team-accordion-item {
+    background: linear-gradient(90deg, #b56ff771, #cee7f8);
+    margin-bottom: 1em;
+    padding: 1em;
+    border-radius: 8px;
+  }
+  
+  .accordion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .delete-button {
+    background-color: rgb(247, 78, 78);
+    color: white;
+    border: none;
+    padding: 0.5em 1em;
+    cursor: pointer;
+    border-radius: 10px;
+}

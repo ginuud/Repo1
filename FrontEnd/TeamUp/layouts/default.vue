@@ -52,7 +52,6 @@ onUnmounted(() => {
   padding: 0 20px; 
   position: sticky; /* Kinnitub ülaossa scrollimisel */
   top: 0;
-  z-index: 1000; /* Et jääks alati nähtavaks */
   transition: all 0.3s ease; /* Sujuvad muutused */
 }
 

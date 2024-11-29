@@ -41,14 +41,12 @@ const links = ref([
 </script>
 
 <style scoped>
-/* Paigutus ja stiil */
 .bg-gray-800 {
-  background-color: transparent; /* Tume hall taust */
+  background-color: transparent; 
 }
 
-/* Lingid */
 .router-link-active {
-  border: 3px solid #7f12e6;
+  border: 2px solid #7f12e6;
   border-radius: 6px;
 }
 
@@ -58,7 +56,7 @@ nav a {
 }
 
 nav a:hover {
-  background-color: #7f12e6; /* Hover efekt */
+  background-color: #7f12e6; 
 }
 </style>
 
