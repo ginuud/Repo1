@@ -42,7 +42,9 @@ const links = ref([
 
 <style scoped>
 .bg-gray-800 {
-  background-color: transparent; 
+  background-color: transparent; /* Läbipaistmatu tume taust */
+  z-index: 1000; /* Veendu, et see oleks teistest kihtidest kõrgem */
+  position: relative; /* Tagab z-index'i korrektse toimimise */
 }
 
 .router-link-active {

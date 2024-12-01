@@ -102,8 +102,6 @@ import { useGameStore, type Player } from "#imports";
 import { usePlayerStore } from "~/stores/playerStore";
 import StartGame from "./StartGame.vue";
 
-defineProps<{ title: String }>();
-
 const gameStore = useGameStore();
 const playerStore = usePlayerStore();
 const teamStore = useTeamStore();

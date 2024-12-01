@@ -58,7 +58,8 @@ onUnmounted(() => {
 .header-small {
   height: 50px; /* Väiksem kõrgus scrollimisel */
   padding: 0 15px;
-  box-shadow: 0 2px 8px rgba(36, 124, 240, 0.2); 
+  box-shadow: 0 2px 8px rgba(36, 124, 240, 0.2);
+  background: linear-gradient(90deg, #9f57e2, #cee7f8); 
 }
 
 .content {

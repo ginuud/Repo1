@@ -19,7 +19,7 @@
 
   <div v-else>
     <div
-      v-for="team in teams"
+      v-for="team in filteredTeams"
       :key="team.id"
       class="team-accordion-item ml-40 mr-40 mb-20"
     >
@@ -53,12 +53,13 @@ const filteredTeams = computed(() => {
     return teams.value;
   }
   const lowerCaseQuery = searchQuery.value.toLowerCase();
-  return teams.value.filter((team) =>
-    team.name.toLowerCase().includes(lowerCaseQuery) ||
-    team.members?.some((member) =>
-      member?.name?.toLowerCase().includes(lowerCaseQuery)
-    )
-  );
+  return teams.value.filter((team) => {
+    const teamNameMatch = team.name.toLowerCase().includes(lowerCaseQuery);
+    const memberMatch = (team.members || []).some((member) =>
+      member.name.toLowerCase().includes(lowerCaseQuery)
+    );
+    return teamNameMatch || memberMatch;
+  });
 });
 
 

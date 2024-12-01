@@ -1,59 +1,59 @@
 <template>
-  <div class="hero">
-    <div v-if="players.length === 0" class="text-center text-red-500">
-      No players have been added
-    </div>
-    <div class="mb-4 table-container flex items-center justify-between">
-      <input
-        v-model="searchQuery"
-        type="text"
-        placeholder="Search players..."
-        class="search-input focus:ring-cyan-300"  
-      />
-      <AddPlayer />
-    </div>
-    <div v-if="filteredPlayers.length === 0" class="text-center text-red-500">
-      No players match your search.
-    </div>
+  <div class="mb-4 table-container flex items-center justify-between">
+    <input
+      v-model="searchQuery"
+      type="text"
+      placeholder="Search players..."
+      class="search-input "  
+    />
+    <AddPlayer />
+  </div>
 
-    <div v-else>
-      <div class="table-container">
-        <Table class="Table">
-          <TableHeader>
-            <TableRow class="header-row">
-              <TableCell class="header-cell">Rank</TableCell>
-              <TableCell class="header-cell">Points</TableCell>
-              <TableCell class="header-cell">Name</TableCell>
-              <TableCell class="header-cell">Actions</TableCell>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow v-for="player in filteredPlayers" :key="player.id" class="border-b border-black">
-              <TableCell>{{ player.rank }}</TableCell>
-              <TableCell>{{ player.points }}</TableCell>
-              <TableCell>{{ player.name }}</TableCell>
-              <TableCell>
-                <UButton
-                  type="button"
-                  color="black"
-                  variant="ghost"
-                  icon="i-heroicons-pencil-20-solid"
-                  @click="openEditModal(player.id)"
-                ></UButton>
-                <UButton
-                  type="button"
-                  color="red"
-                  variant="ghost"
-                  icon="i-heroicons-trash-20-solid"
-                  @click="openDeleteModal(player.id)"
-                ></UButton>
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </div>
+  <div v-if="players.length === 0" class="text-center text-red-500">
+    No players have been added
+  </div>
+
+  <div v-if="filteredPlayers.length === 0" class="text-center text-red-500">
+    No players match your search.
+  </div>
+
+  <div v-else>
+    <div class="table-container">
+      <Table class="Table">
+        <TableHeader>
+          <TableRow class="header-row">
+            <TableCell class="header-cell">Rank</TableCell>
+            <TableCell class="header-cell">Points</TableCell>
+            <TableCell class="header-cell">Name</TableCell>
+            <TableCell class="header-cell">Actions</TableCell>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow v-for="player in filteredPlayers" :key="player.id" class="border-b border-black">
+            <TableCell>{{ player.rank }}</TableCell>
+            <TableCell>{{ player.points }}</TableCell>
+            <TableCell>{{ player.name }}</TableCell>
+            <TableCell>
+              <UButton
+                type="button"
+                color="black"
+                variant="ghost"
+                icon="i-heroicons-pencil-20-solid"
+                @click="openEditModal(player.id)"
+              ></UButton>
+              <UButton
+                type="button"
+                color="red"
+                variant="ghost"
+                icon="i-heroicons-trash-20-solid"
+                @click="openDeleteModal(player.id)"
+              ></UButton>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
     </div>
-  </div>  
+  </div>
 
   <UModal v-model="isDeleteModalOpen" prevent-close>
     <UCard
@@ -153,7 +153,6 @@ import { usePlayerStore } from "~/stores/playerStore";
 import { ref, onMounted, computed } from "vue";
 import AddPlayer from "./AddPlayer.vue";
 
-defineProps<{ title: String }>();
 const playerStore = usePlayerStore();
 const { players } = storeToRefs(playerStore);
 
