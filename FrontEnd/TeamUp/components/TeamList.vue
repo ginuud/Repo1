@@ -63,8 +63,8 @@ const filteredTeams = computed(() => {
 });
 
 
-onMounted(() => {
-  teamStore.loadTeams();
+onMounted(async () => {
+  await teamStore.loadTeams();
 });
 
 const deleteTeam = async (teamId: number) => {

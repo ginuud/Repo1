@@ -138,8 +138,8 @@ const playerStore = usePlayerStore();
 const router = useRouter(); 
 const isStartTeamModalOpen = ref(false);
 
-onMounted(() => {
-  playerStore.loadPlayers();
+onMounted(async () => {
+  await playerStore.loadPlayers();
 });
 
 const playerOptions = computed(() =>
@@ -163,7 +163,14 @@ const addTeamForm = reactive({
   members: [],
 });
 
-const openStartTeamModal = () => {
+function resetAddTeamForm() {
+  addTeamForm.id = teamStore.generateId();
+  addTeamForm.name = "";
+  addTeamForm.members = [];
+}
+
+const openStartTeamModal = async () => {
+  await playerStore.loadPlayers()
   isStartTeamModalOpen.value = true;	  
 };
 
@@ -185,6 +192,7 @@ const validateGenerateTeams = (state: typeof generateTeamsForm): FormError[] => 
 
 const validateAddTeam = (state: typeof addTeamForm): FormError[] => {
   const errors: FormError[] = [];
+  console.log("addTeamForm", addTeamForm)
   if (!state.name) {
     errors.push({ path: "name", message: "Team name is required" });
   }
@@ -211,10 +219,12 @@ async function submitGenerateTeams(event: FormSubmitEvent) {
   } catch (error) {
     console.error("Error generating teams:", error);
   }
+  await teamStore.loadTeams()
 }
 
 async function submitAddTeam(event: FormSubmitEvent) {
   event.preventDefault();
+  console.log("addTeamForm", addTeamForm)
   try {
     const teamData = {
       id: addTeamForm.id,
@@ -227,10 +237,12 @@ async function submitAddTeam(event: FormSubmitEvent) {
         teamId: value.teamId,
       })),
     };
+    console.log("teamdata", teamData)
     await teamStore.addTeam(teamData);
     console.log("Team successfully added:", teamData);
     await router.push("/teams");
     isStartTeamModalOpen.value = false;
+    resetAddTeamForm()
   } catch (error) {
     console.error("Error adding team:", error);
   }

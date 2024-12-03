@@ -14,7 +14,6 @@ export const usePlayerStore = defineStore('player', () => {
   const loadPlayers = async () => {
     try {
       players.value = await $fetch<Player[]>('http://localhost:5181/api/Players');
-      console.log("Players loaded:", players.value); 
       generateRanks(); 
       players.value.sort((a, b) => a.rank - b.rank);
     } catch (error) {
