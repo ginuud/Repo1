@@ -24,24 +24,30 @@ namespace REST.Data.Repos
             return teams;
         }
 
-        public async Task<List<Team>> GetAllAsync()
+        public async Task<List<Team>> GetAllAsync(int organizationId)
         {
             var teams = context.Teams.Include(m => m.Members).AsQueryable();
 
-            return await teams.ToListAsync();
+            return await teams.Where(x => x.OrganizationId == organizationId).ToListAsync();
         }
-        public async Task<Team?> GetByIdAsync(int id) => await context.Teams
+        public async Task<Team?> GetByIdAsync(int id, int organizationId) {
+           var dbTeam = await context.Teams
         .Include(m => m.Members)
         .FirstOrDefaultAsync(i => i.Id == id);
+        if(dbTeam?.OrganizationId != organizationId){
+            return null;
+        }
+        return dbTeam;
+        }
 
-        public async Task<List<Player>> GetPlayersByIdsAsync(List<int> playerIds)
+        public async Task<List<Player>> GetPlayersByIdsAsync(List<int> playerIds, int organizationId)
         {
             return await context.Players.Where(m => playerIds.Contains(m.Id)).ToListAsync();
         }
 
         public async Task<bool> TeamExists(int id) => await context.Teams.AnyAsync(p => p.Id == id);
 
-        public async Task<List<Team>> GenerateTeamsAsync(List<Player> players, List<string> teamNames)
+        public async Task<List<Team>> GenerateTeamsAsync(List<Player> players, List<string> teamNames, int organizationId)
         {
             var sortedPlayers = players.OrderByDescending(p => p.Points).ToList();
             var balancedTeams = new List<Team>();
@@ -51,7 +57,8 @@ namespace REST.Data.Repos
                 balancedTeams.Add(new Team
                 {
                     Name = teamName,
-                    Members = new List<Player>()
+                    Members = new List<Player>(),
+                    OrganizationId = organizationId
                 });
             }
 
@@ -78,7 +85,7 @@ namespace REST.Data.Repos
 
         public async Task<Team?> UpdateAsync(int id, UpdateTeamRequestDto teamDto) {           
             
-            var existingTeam = await context.Teams.FirstOrDefaultAsync(x => x.Id == id);
+            var existingTeam = await context.Teams.FirstOrDefaultAsync(x => x.Id == id && x.OrganizationId == teamDto.OrganizationId);
 
             if (existingTeam == null) {
                 return null;
@@ -94,9 +101,9 @@ namespace REST.Data.Repos
             return existingTeam;
         }
 
-        public async Task<Team?> DeleteAsync(int id) 
+        public async Task<Team?> DeleteAsync(int id, int organizationId) 
         {
-            var teamModel = await context.Teams.Include(m => m.Members).FirstOrDefaultAsync(x => x.Id == id);
+            var teamModel = await context.Teams.Include(m => m.Members).FirstOrDefaultAsync(x => x.Id == id && x.OrganizationId == organizationId);
 
             if (teamModel == null) {
                 return null;

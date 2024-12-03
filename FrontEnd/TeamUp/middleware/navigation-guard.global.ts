@@ -1,0 +1,9 @@
+import { useAuth } from "~/composables/useAuth";
+
+export default defineNuxtRouteMiddleware((to, from) => {
+    const auth = useAuth();
+    
+    if (to.path !== '/' && !auth.isAuthenticated.value) {
+      return navigateTo('/');
+    }
+})

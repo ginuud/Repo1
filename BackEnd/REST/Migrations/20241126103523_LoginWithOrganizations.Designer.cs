@@ -12,8 +12,8 @@ using REST.Data;
 namespace REST.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241120203828_AddGameIdToTeam")]
-    partial class AddGameIdToTeam
+    [Migration("20241126103523_LoginWithOrganizations")]
+    partial class LoginWithOrganizations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,6 +37,9 @@ namespace REST.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<int>("OrganizationId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.ToTable("Games");
@@ -45,12 +48,43 @@ namespace REST.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Bulls vs Lakers"
+                            Name = "Bulls vs Lakers",
+                            OrganizationId = 1
                         },
                         new
                         {
                             Id = 2,
-                            Name = "Celtics vs Spurs"
+                            Name = "Celtics vs Spurs",
+                            OrganizationId = 1
+                        });
+                });
+
+            modelBuilder.Entity("REST.Models.Classes.Organization", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Organization");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Group 1"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Group 2"
                         });
                 });
 
@@ -65,6 +99,9 @@ namespace REST.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnType("integer");
 
                     b.Property<int>("Points")
                         .HasColumnType("integer");
@@ -83,6 +120,7 @@ namespace REST.Migrations
                         {
                             Id = 1,
                             Name = "Michael Jordan",
+                            OrganizationId = 1,
                             Points = 32292,
                             TeamId = 1
                         },
@@ -90,6 +128,7 @@ namespace REST.Migrations
                         {
                             Id = 2,
                             Name = "LeBron James",
+                            OrganizationId = 1,
                             Points = 35367,
                             TeamId = 2
                         },
@@ -97,6 +136,7 @@ namespace REST.Migrations
                         {
                             Id = 3,
                             Name = "Kobe Bryant",
+                            OrganizationId = 1,
                             Points = 33643,
                             TeamId = 2
                         },
@@ -104,6 +144,7 @@ namespace REST.Migrations
                         {
                             Id = 4,
                             Name = "Magic Johnson",
+                            OrganizationId = 1,
                             Points = 17707,
                             TeamId = 2
                         },
@@ -111,6 +152,7 @@ namespace REST.Migrations
                         {
                             Id = 5,
                             Name = "Larry Bird",
+                            OrganizationId = 1,
                             Points = 21791,
                             TeamId = 3
                         },
@@ -118,6 +160,7 @@ namespace REST.Migrations
                         {
                             Id = 6,
                             Name = "Kawhi Leonard",
+                            OrganizationId = 1,
                             Points = 13937,
                             TeamId = 4
                         },
@@ -125,6 +168,7 @@ namespace REST.Migrations
                         {
                             Id = 7,
                             Name = "Victor Wembanyama",
+                            OrganizationId = 1,
                             Points = 1522,
                             TeamId = 4
                         });
@@ -145,6 +189,9 @@ namespace REST.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<int>("OrganizationId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("GameId");
@@ -156,25 +203,81 @@ namespace REST.Migrations
                         {
                             Id = 1,
                             GameId = 1,
-                            Name = "Bulls"
+                            Name = "Bulls",
+                            OrganizationId = 1
                         },
                         new
                         {
                             Id = 2,
                             GameId = 1,
-                            Name = "Lakers"
+                            Name = "Lakers",
+                            OrganizationId = 1
                         },
                         new
                         {
                             Id = 3,
                             GameId = 2,
-                            Name = "Celtics"
+                            Name = "Celtics",
+                            OrganizationId = 1
                         },
                         new
                         {
                             Id = 4,
                             GameId = 2,
-                            Name = "Spurs"
+                            Name = "Spurs",
+                            OrganizationId = 1
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "IT",
+                            OrganizationId = 2
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Kiired ja vihased",
+                            OrganizationId = 2
+                        });
+                });
+
+            modelBuilder.Entity("REST.Models.Classes.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserList");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            OrganizationId = 1,
+                            Password = "St9tpNN2zrinRGNUgKWCy4JjZRFEorSQ0Zg3a/8m7k4=",
+                            Username = "test1"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            OrganizationId = 2,
+                            Password = "zWoe4T9h2Hj9G4dyUtWwcKwV6zMR1Q0yr3Uch+xSze8=",
+                            Username = "test2"
                         });
                 });
 

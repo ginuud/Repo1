@@ -16,22 +16,30 @@ namespace REST.Data.Repos
             return player;
         }
 
-        public async Task<List<Player>> GetAllAsync()
+        public async Task<List<Player>> GetAllAsync(int organizationId)
         {
             var players = context.Players.Include(t => t.Team).AsQueryable();
 
-            return await players.ToListAsync();
+            return await players.Where(x => x.OrganizationId == organizationId).ToListAsync();
         }
-        public async Task<Player?> GetByIdAsync(int id) => await context.Players
-        .Include(t => t.Team)
-        .ThenInclude(m => m.Members)
-        .FirstOrDefaultAsync(i => i.Id == id);
+        public async Task<Player?> GetByIdAsync(int id, int organizationId){
+            var dbPlayer = await context.Players
+                .Include(t => t.Team)
+                .ThenInclude(m => m.Members)
+                .FirstOrDefaultAsync(i => i.Id == id);
+            if (dbPlayer?.OrganizationId != organizationId)
+            {
+                return null;
+            }
+
+            return dbPlayer;
+        } 
         
         public async Task<bool> PlayerExists(int id) => await context.Players.AnyAsync(p => p.Id == id);
 
         public async Task<Player?> UpdateAsync(int id, UpdatePlayerRequestDto playerDto) 
         {
-            var existingPlayer = await context.Players.FirstOrDefaultAsync(x => x.Id == id);
+            var existingPlayer = await context.Players.FirstOrDefaultAsync(x => x.Id == id && x.OrganizationId == playerDto.OrganizationId);
 
             if (existingPlayer == null) {
                 return null;
@@ -45,9 +53,9 @@ namespace REST.Data.Repos
             return existingPlayer;
         }
 
-        public async Task<Player?> DeleteAsync(int id) 
+        public async Task<Player?> DeleteAsync(int id, int organizationId) 
         {
-            var playerModel = await context.Players.FirstOrDefaultAsync(x => x.Id == id);
+            var playerModel = await context.Players.FirstOrDefaultAsync(x => x.Id == id && x.OrganizationId == organizationId);
 
             if (playerModel == null) {
                 return null;

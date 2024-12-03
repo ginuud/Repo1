@@ -2,15 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using REST.Dtos.Team;
 
-namespace REST.Dtos.Game
+namespace REST.Dtos.User
 {
-    public class GameDto
+    public class UserDto
     {
         public int Id { get; set; }
-        public string? Name { get; set;} = string.Empty;
-        public List<TeamDto>? Teams { get; set; }
+        public string Username { get; set; } = "";
+        public string Password { get; set; } = "";
         public int OrganizationId { get; set; }
     }
 }

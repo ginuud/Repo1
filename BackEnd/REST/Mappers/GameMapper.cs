@@ -14,19 +14,22 @@ namespace REST.Mappers
             return new GameDto{
                 Id = gameModel.Id,
                 Name = gameModel.Name,
-                Teams = gameModel.Teams.Select(t => t.ToTeamDto()).ToList()       
+                Teams = gameModel.Teams.Select(t => t.ToTeamDto()).ToList(),
+                OrganizationId = gameModel.OrganizationId       
             };
         }
         public static Game ToGameFromCreate(this CreateGameDto gameDto, List<Team> teams){
             return new Game{
                 Name = gameDto.Name,
-                Teams = teams
+                Teams = teams,
+                OrganizationId = gameDto.OrganizationId
             };
         }
         public static Game ToGameFromUpdate(this UpdateGameRequestDto gameDto){
             return new Game{
                 Name = gameDto.Name, 
-                Teams = new List<Team>()               
+                Teams = new List<Team>(),
+                OrganizationId = gameDto.OrganizationId               
             };
         }
     }

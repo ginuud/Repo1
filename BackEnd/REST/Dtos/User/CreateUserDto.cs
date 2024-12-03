@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using REST.Dtos.Player;
 
-namespace REST.Dtos.Team
+namespace REST.Dtos.User
 {
-    public class UpdateTeamRequestDto
+    public class CreateUserDto
     {
         [Required]
         [MaxLength(30, ErrorMessage = "Name cannot be over 30 over characters")]
-        public string? Name { get; set; }
-        public List<CreateTeamPlayerDto>? Members { get; set; } = [];
+        public required string Username { get; set; }
+        [Required]
+        public required string Password { get; set; }
         public int OrganizationId { get; set; }
-        public int? GameId { get; set; }
     }
 }
