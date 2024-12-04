@@ -181,10 +181,10 @@ watch(playerOptions, (newOptions) => {
 
 const validateGenerateTeams = (state: typeof generateTeamsForm): FormError[] => {
   const errors: FormError[] = [];
-  if (state.selectedPlayers.length < 4) {
-    errors.push({ path: "selectedPlayers", message: "Choose at least 4 players" });
+  if (state.selectedPlayers.length < 3) {
+    errors.push({ path: "selectedPlayers", message: "Choose at least 3 players" });
   }
-  if (state.numberOfTeams < 2 || state.numberOfTeams > 2 < 0) {
+  if (state.numberOfTeams < 2 || state.numberOfTeams > 20) {
     errors.push({ path: "numberOfTeams", message: "At least 2 teams required and not over 20" });
   }
   return errors;
