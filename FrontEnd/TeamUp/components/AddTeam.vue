@@ -1,94 +1,129 @@
 <template>
-  <UTabs :items="tabs" class="w-full">
-    <template #item="{ item }">
-      <UCard>
-        <template #header>
-          <p class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-            {{ item.label }}
-          </p>
-          <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            {{ item.description }}
-          </p>
+  <UButton
+    :ui="{ rounded: 'rounded-full' }"
+    icon="i-heroicons-plus"
+    size="md"
+    variant="solid"
+    label="Add team"
+    @click="openStartTeamModal"
+    class="m-4"
+    :style="{ backgroundColor: '#202a79', color: '#fff' }"
+  >
+  </UButton>
+  <UModal v-model="isStartTeamModalOpen" prevent-close>
+    <UCard
+      :ui="{
+        ring: '',
+        divide: 'divide-y divide-gray-900',
+      }"
+      >
+      <template #header>          
+        <div class="flex items-center justify-between">
+          <h3 class="text-base font-semibold leading-6 text-white "
+            >Add team
+          </h3>        
+        <UButton
+          color="gray"
+          variant="ghost"
+          icon="i-heroicons-x-mark-20-solid"
+          class="-my-1"
+          @click="isStartTeamModalOpen = false"
+        />
+        </div>
+      </template>
+
+      <UTabs :items="tabs" class="w-full">
+        <template #item="{ item }">
+          <div>
+            <div v-if="item.key === 'generateTeams'" class="space-y-4">
+              <UForm
+                :validate="validateGenerateTeams"
+                :state="generateTeamsForm"
+                @submit="submitGenerateTeams"
+                @error="handleError"
+                >
+                <UFormGroup label="Select Players" name="selectedPlayers">
+                  <USelectMenu 
+                    v-model="generateTeamsForm.selectedPlayers" 
+                    :options="playerOptions" 
+                    multiple 
+                    searchable
+                    searchable-placeholder="Search a player..."
+                    placeholder="Select players"
+                    color="purple"
+                    variant="outline"
+                  />
+                </UFormGroup>
+                <p class="text-gray-500">Only players who are not already in a team are shown</p>
+
+                <UFormGroup label="Number of Teams" name="numberOfTeams">
+                  <UInput v-model.number="generateTeamsForm.numberOfTeams" type="number" color="purple"
+                  variant="outline"/>
+                </UFormGroup>
+
+                <UFormGroup label="Team Names" name="teamNames" >
+                  <div v-for="index in generateTeamsForm.numberOfTeams" :key="index" style="margin-bottom: 0.5rem;">
+                    <UInput v-model="generateTeamsForm.teamNames[index - 1]" type="text" placeholder="Enter team name" color="purple"
+                    variant="outline"/>
+                  </div>
+                </UFormGroup>
+
+                <UButton type="submit">Generate Teams</UButton>
+                <UButton 
+                  type="button"
+                  @click="cancel" 
+                  class="ml-2"
+                  color="red">
+                  Cancel
+                </UButton>
+              </UForm>
+            </div>
+
+            <div v-else-if="item.key === 'addTeam'" class="space-y-4">
+              <UForm
+                :validate="validateAddTeam"
+                :state="addTeamForm"
+                @submit="submitAddTeam"
+                @error="handleError"
+                >
+                <UFormGroup label="Team Name" name="name">
+                  <UInput v-model="addTeamForm.name" color="purple" variant="outline"/>
+                </UFormGroup>
+
+                <UFormGroup label="Members" name="members">
+
+                  <USelectMenu 
+                    v-model="addTeamForm.members" 
+                    :options="playerOptions" 
+                    multiple 
+                    searchable
+                    searchable-placeholder="Search a player..."
+                    placeholder="Select players"
+                    color="purple"
+                    variant="outline"
+                  />
+                </UFormGroup>
+                <div style="margin-bottom: 0.5rem;">
+                  <p class="text-gray-500">Only players who are not already in a team are shown</p>
+                </div>
+
+                <UButton type="submit">Add Team</UButton>
+                <UButton 
+                  type="button"
+                  @click="cancel" 
+                  class="ml-2"
+                  color="red">
+                  Cancel
+                </UButton>
+              </UForm>
+            </div>
+          </div>
         </template>
-
-        <div v-if="item.key === 'generateTeams'" class="space-y-4">
-          <UForm
-            :validate="validateGenerateTeams"
-            :state="generateTeamsForm"
-            @submit="submitGenerateTeams"
-            @error="handleError"
-          >
-            <UFormGroup label="Select Players" name="selectedPlayers">
-              <USelectMenu 
-                v-model="generateTeamsForm.selectedPlayers" 
-                :options="playerOptions" 
-                multiple 
-                searchable
-                searchable-placeholder="Search a player..."
-                placeholder="Select players"
-              >
-              </USelectMenu>
-            </UFormGroup>
-
-            <p class="text-gray-500">Only players who are not already in a team are shown</p>
-
-            <UFormGroup label="Number of Teams" name="numberOfTeams">
-              <UInput v-model.number="generateTeamsForm.numberOfTeams" type="number" />
-            </UFormGroup>
-
-            <UFormGroup label="Team Names" name="teamNames">
-              <div v-for="index in generateTeamsForm.numberOfTeams" :key="index">
-                <UInput v-model="generateTeamsForm.teamNames[index - 1]" type="text" placeholder="Enter team name" />
-              </div>
-            </UFormGroup>
-
-            <UButton type="submit">Generate Teams</UButton>
-            <UButton 
-              type="button"
-              @click="cancel" 
-              class="ml-2"
-              color="red">
-              Cancel</UButton>
-          </UForm>
-        </div>
-
-        <div v-else-if="item.key === 'addTeam'" class="space-y-4">
-          <UForm
-            :validate="validateAddTeam"
-            :state="addTeamForm"
-            @submit="submitAddTeam"
-            @error="handleError"
-          >
-            <UFormGroup label="Team Name" name="name">
-              <UInput v-model="addTeamForm.name" />
-            </UFormGroup>
-
-            <UFormGroup label="Members" name="members">
-              <USelectMenu 
-                v-model="addTeamForm.members" 
-                :options="playerOptions" 
-                multiple 
-                searchable
-                searchable-placeholder="Search a player..."
-                placeholder="Select players"
-              />
-            </UFormGroup>
-
-            <p class="text-gray-500">Only players who are not already in a team are shown</p>
-
-            <UButton type="submit">Add Team</UButton>
-            <UButton 
-              type="button"
-              @click="cancel" 
-              class="ml-2"
-              color="red">
-              Cancel</UButton>
-          </UForm>
-        </div>
-      </UCard>
-    </template>
-  </UTabs>
+      </UTabs>
+    </UCard>
+  </UModal>
 </template>
+  
 
 
 <script setup lang="ts">
@@ -101,9 +136,10 @@ import { useRouter } from 'vue-router';
 const teamStore = useTeamStore();
 const playerStore = usePlayerStore();
 const router = useRouter(); 
+const isStartTeamModalOpen = ref(false);
 
-onMounted(() => {
-  playerStore.loadPlayers();
+onMounted(async () => {
+  await playerStore.loadPlayers();
 });
 
 const playerOptions = computed(() =>
@@ -127,6 +163,16 @@ const addTeamForm = reactive({
   members: [],
 });
 
+function resetAddTeamForm() {
+  addTeamForm.id = teamStore.generateId();
+  addTeamForm.name = "";
+  addTeamForm.members = [];
+}
+
+const openStartTeamModal = async () => {
+  await playerStore.loadPlayers()
+  isStartTeamModalOpen.value = true;	  
+};
 
 watch(playerOptions, (newOptions) => {
   generateTeamsForm.selectedPlayers = [...newOptions];
@@ -138,14 +184,15 @@ const validateGenerateTeams = (state: typeof generateTeamsForm): FormError[] => 
   if (state.selectedPlayers.length < 4) {
     errors.push({ path: "selectedPlayers", message: "Choose at least 4 players" });
   }
-  if (state.numberOfTeams < 2) {
-    errors.push({ path: "numberOfTeams", message: "At least 2 teams required" });
+  if (state.numberOfTeams < 2 || state.numberOfTeams > 2 < 0) {
+    errors.push({ path: "numberOfTeams", message: "At least 2 teams required and not over 20" });
   }
   return errors;
 };
 
 const validateAddTeam = (state: typeof addTeamForm): FormError[] => {
   const errors: FormError[] = [];
+  console.log("addTeamForm", addTeamForm)
   if (!state.name) {
     errors.push({ path: "name", message: "Team name is required" });
   }
@@ -168,14 +215,16 @@ async function submitGenerateTeams(event: FormSubmitEvent) {
     await teamStore.generateTeams(transformedPlayers, generateTeamsForm.numberOfTeams, generateTeamsForm.teamNames);
     console.log("Teams successfully generated");
     await router.push("/teams");
-   // await navigateTo("/teams");
+    isStartTeamModalOpen.value = false;
   } catch (error) {
     console.error("Error generating teams:", error);
   }
+  await teamStore.loadTeams()
 }
 
 async function submitAddTeam(event: FormSubmitEvent) {
   event.preventDefault();
+  console.log("addTeamForm", addTeamForm)
   try {
     const teamData = {
       id: addTeamForm.id,
@@ -188,10 +237,12 @@ async function submitAddTeam(event: FormSubmitEvent) {
         teamId: value.teamId,
       })),
     };
+    console.log("teamdata", teamData)
     await teamStore.addTeam(teamData);
     console.log("Team successfully added:", teamData);
     await router.push("/teams");
-    //await navigateTo("/teams");
+    isStartTeamModalOpen.value = false;
+    resetAddTeamForm()
   } catch (error) {
     console.error("Error adding team:", error);
   }
@@ -204,7 +255,7 @@ function handleError(event: FormErrorEvent) {
 }
 
 const cancel = () => {
-  router.push("/teams");  // Redirect back to the teams list when cancel is clicked
+  isStartTeamModalOpen.value = false;
 };
 
 const tabs = [
