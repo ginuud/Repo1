@@ -1,10 +1,21 @@
 <template>
-  <div>
-	<h1 class="text-xl text-center">{{ title }}</h1>
+  <div v-if="games.length === 0" class="text-center text-red-500">
+    No games have been played
+  </div>
 
-	<div v-if="games.length === 0" class="text-center text-red-500">
-  	No games have been played   	 
-	</div>
+  <div class="mb-4 table-container flex items-center justify-between">
+    <input
+      v-model="searchQuery"
+      type="text"
+      placeholder="Search games or teams..."
+      class="search-input"
+    />
+    <StartGame />
+  </div>
+
+  <div v-if="filteredGames.length === 0" class="text-center text-red-500">
+    No games match your search.
+  </div>
 
 	<div v-else>
   	<UTable :columns="columns" :rows="games">
@@ -14,51 +25,62 @@
         	@click="openEndGameModal(row.id)">
       	</UButton>
     	</template>
-		<template #status-data="{ row }">
-          <span :class="row.isActive ? 'text-green-500' : 'text-red-500'">
-            {{ row.isActive ? 'Active' : 'Inactive' }}
-          </span>
-        </template>
   	</UTable>
 	</div>
 
-	<UModal v-model="isEndGameModalOpen" prevent-close>
-  	<UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
-    	<template #header>
-      	<div class="flex items-center justify-between">
-        	<h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-          	Select Winner
-        	</h3>
-        	<UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="isEndGameModalOpen = false" />
-      	</div>
-    	</template>
+    <UModal v-model="isEndGameModalOpen" prevent-close>
+      <UCard
+        :ui="{
+          ring: '',
+          divide: 'divide-y divide-gray-900',
+        }"
+      >
+        <template #header>
+          <div class="flex items-center justify-between">
+            <h3 class="text-base font-semibold leading-6 text-white" >
+              Select Winner
+            </h3>
+            <UButton
+              color="gray"
+              variant="ghost"
+              icon="i-heroicons-x-mark-20-solid"
+              class="-my-1"
+              @click="isEndGameModalOpen = false"
+            />
+          </div>
+        </template>
 
-    	<div class="p-4">
-      	<p>Select the winner of the game:</p>
-		  <div class="p-4">
-			<UFormGroup name="selectedTeam">
-				<USelectMenu v-model="selectedTeam" :options="teamOptions" placeholder="Select winning team"/>
-			</UFormGroup>
-		</div>
-    	</div>
-    
-    	<template #footer>
-      	<div class="flex justify-end space-x-2">
-        	<UButton color="green" @click="submitWinner">Submit Winner</UButton>
-        	<UButton color="red" @click="cancelSelection">Cancel</UButton>
-      	</div>
-    	</template>
-  	</UCard>
-	</UModal>
+        <div class="p-4">
+			    <h3 class="text-base font-semibold leading-6 text-white"
+          	>Select the winner of the game:
+        	</h3>
+            <UFormGroup name="selectedTeam">
+              <USelectMenu
+                v-model="selectedTeam"
+                :options="teamOptions"
+                placeholder="Select winning team"
+				        color="purple"
+          		  variant="outline"
+              />
+            </UFormGroup>
+        </div>
+
+        <template #footer>
+          <div class="flex justify-end space-x-2">
+            <UButton color="green" @click="submitWinner">Submit Winner</UButton>
+            <UButton color="red" @click="cancelSelection">Cancel</UButton>
+          </div>
+        </template>
+      </UCard>
+    </UModal>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useGameStore, type Player } from '#imports';
-import { usePlayerStore } from '~/stores/playerStore';
-
-defineProps<{ title: String }>();
+import { ref, computed } from "vue";
+import { useGameStore, type Player } from "#imports";
+import { usePlayerStore } from "~/stores/playerStore";
+import StartGame from "./StartGame.vue";
 
 const gameStore = useGameStore();
 const playerStore = usePlayerStore();
@@ -71,7 +93,6 @@ const columns = [
   { key: "name", label: "Game" },
   { key: "teams.0.name", label: "Team 1" },
   { key: "teams.1.name", label: "Team 2" },
-  { key: "status", label: "Status" },
   { key: "actions", label: "End game" },
 ];
 
@@ -82,14 +103,14 @@ const selectedTeam = ref<Team>();
 let teamOptions = ref<{ id: number; name: string; members: Player[] }[]>([]);
 
 const openEndGameModal = (gameId: number) => {
-  const game = gameStore.games.find(g => g.id === gameId);
+  const game = gameStore.games.find((g) => g.id === gameId);
 
   if (game) {
     selectedGameId.value = gameId;
-	teamOptions = game.teams.map((team) => ({
-		value: team,
-		label: team.name
-	}))
+    teamOptions = game.teams.map((team) => ({
+      value: team,
+      label: team.name,
+    }));
 
     isEndGameModalOpen.value = true;
   }
@@ -142,9 +163,11 @@ const cancelSelection = () => {
 };
 
 onMounted(() => {
-    playerStore.loadPlayers();
-	gameStore.loadGames();
-})
+  playerStore.loadPlayers();
+  gameStore.loadGames();
+});
 </script>
 
-
+<style scoped>
+  @import "@/assets/css/tableStyle.css"; 
+</style> 
