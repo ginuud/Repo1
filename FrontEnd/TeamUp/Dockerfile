@@ -1,20 +1,20 @@
 FROM node:22.11-alpine3.19 as builder
 
-
 WORKDIR /app
 
 COPY ./package.json ./
 RUN npm install
+
+RUN npm run build 
 
 COPY . .
 
 FROM node:22.11-alpine3.19
 
 WORKDIR /app
-RUN npm run build 
 
 COPY --from=builder /app/.output ./.output
 
 EXPOSE 3000
 
-CMD [ "npm", "run", "dev" ]
+CMD [ "node", ".output/server/index.mjs" ]
