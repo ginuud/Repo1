@@ -23,7 +23,7 @@ definePageMeta({
   align-items: center;
   height: 100vh;
   text-align: center;
-  background-color: #e8e8d9;
+  background-color: #cee7f8;
   gap: 15rem;
 }
 
@@ -47,18 +47,3 @@ definePageMeta({
   margin-bottom: 1rem;
 }
 </style>
-
-<!-- .start-button {
-  padding: 0.75rem 1.5rem;
-  font-size: 1.25rem;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.start-button:hover {
-  background-color: #0056b3;
-} -->

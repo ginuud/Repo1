@@ -49,7 +49,7 @@ const submit = async () => {
   background-color: #ffffff; /* Valge taust */
   border-radius: 1rem; /* Ümarad nurgad */
   padding: 2rem; /* Padding seesmine ruum */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Kerge vari */
+  box-shadow: 0 4px 12px #9f57e2; /* Kerge vari  SIIIIAAAAA*/
   width: 100%;
   max-width: 400px; /* Maksimaalne laius */
   display: flex;
@@ -64,9 +64,9 @@ const submit = async () => {
 }
 
 .login-button {
-  background-color: #202a79; /* Same color as Team UP! */
-  color: white; /* White text */
-  border-radius: 0.5rem; /* Rounded corners */
+  background-color: #202a79; 
+  color: white; 
+  border-radius: 0.5rem; 
   padding: 0.5rem 1rem;
   font-size: 1rem;
   border: none;
@@ -75,6 +75,6 @@ const submit = async () => {
 }
 
 .login-button:hover {
-  background-color: #1a1f5c; /* Darker shade for hover effect */
+  background-color: #1a1f5c; 
 }
 </style>
