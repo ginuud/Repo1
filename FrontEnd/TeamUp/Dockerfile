@@ -8,10 +8,10 @@ RUN npm install
 
 COPY . .
 
-
 FROM node:22.11-alpine3.19
 
 WORKDIR /app
+RUN npm run build 
 
 COPY --from=builder /app/.output ./.output
 
