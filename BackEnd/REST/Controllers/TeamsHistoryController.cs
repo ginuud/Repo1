@@ -16,14 +16,9 @@ namespace REST.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class TeamsHistoryController : ControllerBase
+    public class TeamsHistoryController(TeamsHistoryRepo repo) : ControllerBase()
     {
-        private readonly ITeamRepository repo;
-
-        public TeamsHistoryController(ITeamHistoryRepository teamHistoryRepo)
-        {
-            repo = teamHistoryRepo;
-        }
+        private readonly TeamsHistoryRepo repo = repo;
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
