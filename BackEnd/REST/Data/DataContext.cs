@@ -10,6 +10,7 @@ namespace REST.Data
         public DbSet<Game> Games { get; set; }
         public DbSet<User>? UserList { get; set; }
         public DbSet<Game>? GameHistory { get; set; }
+        public DbSet<TeamHistory>? TeamHistory { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder){
             base.OnModelCreating(modelBuilder);
@@ -33,6 +34,8 @@ namespace REST.Data
 
             modelBuilder.Entity<Game>().Property(x => x.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Game>().Property(p => p.Id).HasIdentityOptions(startValue: 3);
+
+            modelBuilder.Entity<TeamHistory>().Property(x => x.Id).ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Organization>().HasData(
                 new Organization
