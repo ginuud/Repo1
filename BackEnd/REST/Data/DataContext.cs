@@ -37,6 +37,9 @@ namespace REST.Data
 
             modelBuilder.Entity<TeamHistory>().Property(x => x.Id).ValueGeneratedOnAdd();
 
+            modelBuilder.Entity<GameHistory>().Property(x => x.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<GameHistory>().Property(p => p.Id).HasIdentityOptions(startValue: 3);
+
             modelBuilder.Entity<Organization>().HasData(
                 new Organization
                 {
