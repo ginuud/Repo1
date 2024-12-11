@@ -9,7 +9,7 @@ namespace REST.Data
         public DbSet<Team> Teams { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<User>? UserList { get; set; }
-        public DbSet<Game>? GameHistory { get; set; }
+        public DbSet<GameHistory>? GameHistory { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder){
             base.OnModelCreating(modelBuilder);

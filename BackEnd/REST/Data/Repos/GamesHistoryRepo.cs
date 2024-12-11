@@ -9,25 +9,25 @@ using Microsoft.EntityFrameworkCore;
 
 namespace REST.Data.Repos
 {
-    public class GamesHistoryRepo (DataContext context) : IGameRepository
+    public class GamesHistoryRepo (DataContext context) : IGameHistoryRepository
     {
         private readonly DataContext context = context;
 
-        public async Task<Game> CreateAsync(Game game){
-            await context.Games.AddAsync(game);
+        public async Task<GameHistory> CreateAsync(GameHistory game){
+            await context.GameHistory.AddAsync(game);
             await context.SaveChangesAsync();
             return game;
         }
 
-        public async Task<List<Game>> GetAllAsync(int organizationId)
+        public async Task<List<GameHistory>> GetAllAsync(int organizationId)
         {
-            var games = context.Games.Include(t => t.Teams).AsQueryable();
+            var games = context.GameHistory.Include(t => t.Teams).AsQueryable();
 
             return await games.Where(x => x.OrganizationId == organizationId).ToListAsync();
         }
-        public async Task<Game?> GetByIdAsync(int id, int organizationId) {
+        public async Task<GameHistory?> GetByIdAsync(int id, int organizationId) {
 
-            var dbGame = await context.Games
+            var dbGame = await context.GameHistory
                 .Include(t => t.Teams)
                 .FirstOrDefaultAsync(i => i.Id == id);
             if(dbGame?.OrganizationId != organizationId){
@@ -41,33 +41,33 @@ namespace REST.Data.Repos
             return await context.Teams.Where(t => teamIds.Contains(t.Id)).ToListAsync();
         }
         
-        public async Task<bool> GameExists(int id) => await context.Games.AnyAsync(p => p.Id == id);
+        public async Task<bool> GameExists(int id) => await context.GameHistory.AnyAsync(p => p.Id == id);
 
-        public async Task<Game?> UpdateAsync(int id, UpdateGameRequestDto gameDto) {
+        // public async Task<Game?> UpdateAsync(int id, UpdateGameRequestDto gameDto) {
             
-            var existingGame = await context.Games
-            .Include(g => g.Teams)
-            .FirstOrDefaultAsync(x => x.Id == id && x.OrganizationId == gameDto.OrganizationId);
+        //     var existingGame = await context.Games
+        //     .Include(g => g.Teams)
+        //     .FirstOrDefaultAsync(x => x.Id == id && x.OrganizationId == gameDto.OrganizationId);
 
-            if (existingGame == null) {
-                return null;
-            }
-            existingGame.Name = gameDto.Name;
+        //     if (existingGame == null) {
+        //         return null;
+        //     }
+        //     existingGame.Name = gameDto.Name;
 
-            if (gameDto.TeamIds != null && gameDto.TeamIds.Any()){
-                existingGame.Teams.Clear();
-                var teams = await context.Teams.Where(t => gameDto.TeamIds.Contains(t.Id)).ToListAsync();
-                foreach (var team in teams)
-                {
-                    existingGame.Teams.Add(team);
-                }
-            }
-            await context.SaveChangesAsync();
-            return existingGame;
-        }
+        //     if (gameDto.TeamIds != null && gameDto.TeamIds.Any()){
+        //         existingGame.Teams.Clear();
+        //         var teams = await context.Teams.Where(t => gameDto.TeamIds.Contains(t.Id)).ToListAsync();
+        //         foreach (var team in teams)
+        //         {
+        //             existingGame.Teams.Add(team);
+        //         }
+        //     }
+        //     await context.SaveChangesAsync();
+        //     return existingGame;
+        // }
 
-        public async Task<Game?> DeleteAsync(int id, int organizationId) {
-            var gameModel = await context.Games.Include(g => g.Teams).FirstOrDefaultAsync(x => x.Id == id && x.OrganizationId == organizationId);
+        public async Task<GameHistory?> DeleteAsync(int id, int organizationId) {
+            var gameModel = await context.GameHistory.Include(g => g.Teams).FirstOrDefaultAsync(x => x.Id == id && x.OrganizationId == organizationId);
 
             if (gameModel == null) {
                 return null;
@@ -78,7 +78,7 @@ namespace REST.Data.Repos
             }
             await context.SaveChangesAsync();
 
-            context.Games.Remove(gameModel);
+            context.GameHistory.Remove(gameModel);
             await context.SaveChangesAsync();
             return gameModel;	
         }        
