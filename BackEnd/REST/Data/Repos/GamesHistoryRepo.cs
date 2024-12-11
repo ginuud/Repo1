@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using REST.Interfaces;
 using REST.Models.Classes;
-using REST.Dtos.Game;
+using REST.Dtos.GameHistory;
 using Microsoft.EntityFrameworkCore;
 
 namespace REST.Data.Repos

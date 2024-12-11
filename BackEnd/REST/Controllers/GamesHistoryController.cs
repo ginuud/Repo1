@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using REST.Interfaces;
 using REST.Mappers;
-using REST.Dtos.Game;
+using REST.Dtos.GameHistory;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 
@@ -40,7 +40,7 @@ namespace REST.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateGameDto gameDto){
+        public async Task<IActionResult> Create([FromBody] CreateGameHistoryDto gameDto){
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             var organizationId = GetOrganizationId();
