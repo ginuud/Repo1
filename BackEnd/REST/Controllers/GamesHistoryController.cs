@@ -12,10 +12,10 @@ namespace REST.Controllers
     [ApiController]
     public class GamesHistoryController : ControllerBase
     {
-        private readonly IGameRepository repo;
-        public GamesHistoryController(IGameRepository gamesRepo)
+        private readonly IGameHistoryRepository repo;
+        public GamesHistoryController(IGameHistoryRepository gamesHistoryRepo)
         {
-            repo = gamesRepo;
+            repo = gamesHistoryRepo;
         }
 
         [HttpGet]
