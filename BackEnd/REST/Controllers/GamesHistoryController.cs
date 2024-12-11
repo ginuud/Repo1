@@ -10,10 +10,10 @@ namespace REST.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class GamesController : ControllerBase
+    public class GamesHistoryController : ControllerBase
     {
         private readonly IGameRepository repo;
-        public GamesController(IGameRepository gamesRepo)
+        public GamesHistoryController(IGameRepository gamesRepo)
         {
             repo = gamesRepo;
         }
