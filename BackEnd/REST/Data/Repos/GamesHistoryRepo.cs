@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace REST.Data.Repos
 {
-    public class GamesRepo (DataContext context) : IGameRepository
+    public class GamesHistoryRepo (DataContext context) : IGameRepository
     {
         private readonly DataContext context = context;
 
