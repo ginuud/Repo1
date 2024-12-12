@@ -37,8 +37,8 @@ namespace REST.Data
 
             modelBuilder.Entity<TeamHistory>().Property(x => x.Id).ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<GameHistory>().Property(x => x.Id).ValueGeneratedOnAdd();
-            modelBuilder.Entity<GameHistory>().Property(p => p.Id).HasIdentityOptions(startValue: 3);
+            modelBuilder.Entity<GameHistory>().Property(g => g.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<GameHistory>().Property(g => g.Winner).HasMaxLength(100);
 
             modelBuilder.Entity<Organization>().HasData(
                 new Organization
@@ -82,6 +82,21 @@ namespace REST.Data
                 {
                     Id = 2,
                     Name = "Celtics vs Spurs",
+                    OrganizationId = 1
+                }                
+            );
+
+            modelBuilder.Entity<GameHistory>().HasData(
+                new Game
+                {
+                    Id = 1,
+                    Name = "Võrkpall",
+                    OrganizationId = 1
+                },
+                new Game
+                {
+                    Id = 2,
+                    Name = "Jalgpall",
                     OrganizationId = 1
                 }                
             );

@@ -4,6 +4,7 @@ using REST.Mappers;
 using REST.Dtos.GameHistory;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using REST.Models.Classes;
 
 namespace REST.Controllers
 {
@@ -41,21 +42,30 @@ namespace REST.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateGameHistoryDto gameDto){
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            var organizationId = GetOrganizationId();
-            gameDto.OrganizationId = organizationId;
-            var teamIDs = gameDto.Teams.Select(t => t.Id).ToList();
-            var existingTeams = await repo.GetTeamsByIdsAsync(teamIDs);
+             if (!ModelState.IsValid)
+        return BadRequest(ModelState);
 
-            if (existingTeams == null || existingTeams.Count != teamIDs.Count)
-            {
-                return BadRequest("Some teams are invalid or do not exist.");
-            }
+        var organizationId = GetOrganizationId();
+        gameDto.OrganizationId = organizationId;
 
-            var gameModel = gameDto.ToGameFromCreate(existingTeams); 
-            var result = await repo.CreateAsync(gameModel);
-            return CreatedAtAction(nameof(GetGame), new {id = gameModel.Id}, gameModel.ToGameDto());
+        var teamIDs = gameDto.Teams?.Select(t => t.Id).ToList() ?? new List<int>();
+        var existingTeams = await repo.GetTeamsByIdsAsync(teamIDs);
+
+        if (existingTeams == null || existingTeams.Count != teamIDs.Count)
+        {
+             return BadRequest("Some teams are invalid or do not exist.");
+        }
+
+        var gameModel = new GameHistory
+        {
+            Name = gameDto.Name,
+            Teams = existingTeams,
+            Winner = gameDto.Winner,
+            OrganizationId = organizationId
+        };
+
+        var result = await repo.CreateAsync(gameModel);
+        return CreatedAtAction(nameof(GetGame), new { id = result.Id }, gameModel);
         }
 
         [HttpPut("{id}")]
