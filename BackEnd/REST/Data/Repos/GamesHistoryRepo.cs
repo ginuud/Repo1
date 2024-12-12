@@ -43,28 +43,28 @@ namespace REST.Data.Repos
         
         public async Task<bool> GameExists(int id) => await context.GameHistory.AnyAsync(p => p.Id == id);
 
-        // public async Task<Game?> UpdateAsync(int id, UpdateGameRequestDto gameDto) {
+        public async Task<Game?> UpdateAsync(int id, UpdateGameRequestDto gameDto) {
             
-        //     var existingGame = await context.Games
-        //     .Include(g => g.Teams)
-        //     .FirstOrDefaultAsync(x => x.Id == id && x.OrganizationId == gameDto.OrganizationId);
+            var existingGame = await context.Games
+            .Include(g => g.Teams)
+            .FirstOrDefaultAsync(x => x.Id == id && x.OrganizationId == gameDto.OrganizationId);
 
-        //     if (existingGame == null) {
-        //         return null;
-        //     }
-        //     existingGame.Name = gameDto.Name;
+            if (existingGame == null) {
+                return null;
+            }
+            existingGame.Name = gameDto.Name;
 
-        //     if (gameDto.TeamIds != null && gameDto.TeamIds.Any()){
-        //         existingGame.Teams.Clear();
-        //         var teams = await context.Teams.Where(t => gameDto.TeamIds.Contains(t.Id)).ToListAsync();
-        //         foreach (var team in teams)
-        //         {
-        //             existingGame.Teams.Add(team);
-        //         }
-        //     }
-        //     await context.SaveChangesAsync();
-        //     return existingGame;
-        // }
+            if (gameDto.TeamIds != null && gameDto.TeamIds.Any()){
+                existingGame.Teams.Clear();
+                var teams = await context.Teams.Where(t => gameDto.TeamIds.Contains(t.Id)).ToListAsync();
+                foreach (var team in teams)
+                {
+                    existingGame.Teams.Add(team);
+                }
+            }
+            await context.SaveChangesAsync();
+            return existingGame;
+        }
 
         public async Task<GameHistory?> DeleteAsync(int id, int organizationId) {
             var gameModel = await context.GameHistory.Include(g => g.Teams).FirstOrDefaultAsync(x => x.Id == id && x.OrganizationId == organizationId);
