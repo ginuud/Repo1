@@ -22,10 +22,10 @@ namespace REST.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-             var organizationId = GetOrganizationId();
+           var organizationId = GetOrganizationId();
             var games = await repo.GetAllAsync(organizationId);
-            var gameDto = games.Select(t => t.ToGameDto());
-            return Ok(gameDto);
+            var gameDtos = games.Select(g => g.ToGameDto());
+            return Ok(gameDtos);
         }
         
         [HttpGet("{id}")]
