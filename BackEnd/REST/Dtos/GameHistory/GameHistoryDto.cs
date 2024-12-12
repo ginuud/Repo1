@@ -7,6 +7,7 @@ namespace REST.Dtos.GameHistory
         public int Id { get; set; }
         public string? Name { get; set;} = string.Empty;
         public List<TeamDto>? Teams { get; set; }
+         public string? Winner { get; set; }
         public int OrganizationId { get; set; }
     }
 }
