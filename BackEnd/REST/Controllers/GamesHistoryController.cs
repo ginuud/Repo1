@@ -31,71 +31,61 @@ namespace REST.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetGame([FromRoute] int id){
 
-            var organizationId = GetOrganizationId();
+             var organizationId = GetOrganizationId();
             var game = await repo.GetByIdAsync(id, organizationId);
-        
-            if (game == null){
-                return NotFound();
-            }
+
+            if (game == null) return NotFound();
+
             return Ok(game.ToGameDto());
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateGameHistoryDto gameDto){
-             if (!ModelState.IsValid)
-        return BadRequest(ModelState);
+             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-        var organizationId = GetOrganizationId();
-        gameDto.OrganizationId = organizationId;
+            var organizationId = GetOrganizationId();
+            gameDto.OrganizationId = organizationId;
 
-        var teamIDs = gameDto.Teams?.Select(t => t.Id).ToList() ?? new List<int>();
-        var existingTeams = await repo.GetTeamsByIdsAsync(teamIDs);
+            var teamIds = gameDto.Teams?.Select(t => t.Id).ToList() ?? new List<int>();
+            var existingTeams = await repo.GetTeamsByIdsAsync(teamIds);
 
-        if (existingTeams == null || existingTeams.Count != teamIDs.Count)
-        {
-             return BadRequest("Some teams are invalid or do not exist.");
-        }
-
-        var gameModel = new GameHistory
-        {
-            Name = gameDto.Name,
-            Teams = existingTeams,
-            Winner = gameDto.Winner,
-            OrganizationId = organizationId
-        };
-
-        var result = await repo.CreateAsync(gameModel);
-        return CreatedAtAction(nameof(GetGame), new { id = result.Id }, gameModel);
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromRoute]int id, [FromBody] UpdateGameRequestDto updateDto){
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-             var organizationId = GetOrganizationId();
-              updateDto.OrganizationId = organizationId;
-            var gameModel = await repo.UpdateAsync(id, updateDto);
-
-            if (gameModel == null)
+            if (existingTeams == null || existingTeams.Count != teamIds.Count)
             {
-                return NotFound();
+                return BadRequest("Some teams are invalid or do not exist.");
             }
 
-            return Ok(gameModel.ToGameDto());
+            var gameModel = gameDto.ToGameHistoryFromCreate(existingTeams);
+            var result = await repo.CreateAsync(gameModel);
+
+            return CreatedAtAction(nameof(GetGame), new { id = result.Id }, result.ToGameDto());
         }
+
+        // [HttpPut("{id}")]
+        // public async Task<IActionResult> Update([FromRoute]int id, [FromBody] UpdateGameRequestDto updateDto){
+        //     if (!ModelState.IsValid)
+        //         return BadRequest(ModelState);
+
+        //      var organizationId = GetOrganizationId();
+        //       updateDto.OrganizationId = organizationId;
+        //     var gameModel = await repo.UpdateAsync(id, updateDto);
+
+        //     if (gameModel == null)
+        //     {
+        //         return NotFound();
+        //     }
+
+        //     return Ok(gameModel.ToGameDto());
+        // }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute]int id)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-
             var organizationId = GetOrganizationId();
             var gameModel = await repo.DeleteAsync(id, organizationId);
 
             if (gameModel == null) return NotFound("Game doesn't exist");
 
-            return Ok(gameModel);
+            return Ok(gameModel.ToGameDto());
         }
 
         private int GetOrganizationId()
