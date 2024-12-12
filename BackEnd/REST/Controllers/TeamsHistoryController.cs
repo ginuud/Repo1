@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using REST.Data.Repos;
 using REST.Dtos.Team;
+using REST.Models;
 using REST.Interfaces;
 using REST.Mappers;
 using REST.Models.Classes;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using REST.Dtos.TeamHistory;
 
 namespace REST.Controllers
 {
@@ -25,9 +27,9 @@ namespace REST.Controllers
         {
             var organizationId = GetOrganizationId();
             var result = await repo.GetAllAsync(organizationId);
-            var teamHistoryDto = result.Select(s => s.ToTeamHistoryDto()).ToList();
+            var teamDto = result.Select(s => s.ToTeamHistoryDto()).ToList();
 
-            return Ok(teamHistoryDto);
+            return Ok(teamDto);
         }
 
         [HttpGet]
@@ -58,37 +60,37 @@ namespace REST.Controllers
                 return BadRequest("Some players are invalid or do not exist.");
             }
 
-            var teamModel = teamDto.ToTeamFromCreate(existingPlayers);
+            var teamModel = teamDto.ToTeamHistoryFromCreate(existingPlayers);
             await repo.CreateAsync(teamModel);
 
-            return CreatedAtAction(nameof(GetTeam), new {id = teamModel.Id}, teamModel.ToTeamDto());
+            return CreatedAtAction(nameof(GetTeamHistory), new {id = teamModel.Id}, teamModel.ToTeamHistoryDto());
         }
 
-        [HttpPost]
-        [Route("generate")]
-        public async Task<IActionResult> GenerateTeams([FromBody] GenerateTeamsDto teamsDto)
-        {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+        // [HttpPost]
+        // [Route("generate")]
+        // public async Task<IActionResult> GenerateTeams([FromBody] GenerateTeamsDto teamsDto)
+        // {
+        //     if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var organizationId = GetOrganizationId();
-            teamsDto.OrganizationId = organizationId;
-            var playerIDs = teamsDto.Members.Select(m => m.Id).ToList();
-            var existingPlayers = await repo.GetPlayersByIdsAsync(playerIDs, organizationId);
+        //     var organizationId = GetOrganizationId();
+        //     teamsDto.OrganizationId = organizationId;
+        //     var playerIDs = teamsDto.Members.Select(m => m.Id).ToList();
+        //     var existingPlayers = await repo.GetPlayersByIdsAsync(playerIDs, organizationId);
 
-            if (existingPlayers == null || existingPlayers.Count != playerIDs.Count)
-            {
-                return BadRequest("Some players are invalid or do not exist.");
-            }
+        //     if (existingPlayers == null || existingPlayers.Count != playerIDs.Count)
+        //     {
+        //         return BadRequest("Some players are invalid or do not exist.");
+        //     }
 
-            var generatedTeams = await repo.GenerateTeamsAsync(existingPlayers, teamsDto.TeamNames, organizationId);
+        //     var generatedTeams = await repo.GenerateTeamsAsync(existingPlayers, teamsDto.TeamNames, organizationId);
 
-            var generatedTeamDtos = generatedTeams.Select(t => t.ToTeamDto()).ToList();
-            return Ok(generatedTeamDtos);
-        }
+        //     var generatedTeamDtos = generatedTeams.Select(t => t.ToTeamDto()).ToList();
+        //     return Ok(generatedTeamDtos);
+        // }
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> Update([FromRoute]int id, [FromBody] UpdateTeamRequestDto updateDto)
+        public async Task<IActionResult> Update([FromRoute]int id, [FromBody] UpdateTeamHistoryRequestDto updateDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var organizationId = GetOrganizationId();
@@ -97,7 +99,7 @@ namespace REST.Controllers
 
             if (teamModel == null) return NotFound();
 
-            return Ok(teamModel.ToTeamDto());
+            return Ok(teamModel.ToTeamHistoryDto());
         }
 
         [HttpDelete]

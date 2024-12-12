@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using REST.Models.Classes;
 using REST.Data;
 using Microsoft.EntityFrameworkCore;
+using REST.Dtos.TeamHistory;
 
 namespace REST.Data.Repos
 {
@@ -52,6 +53,24 @@ namespace REST.Data.Repos
         }
 
         public async Task<bool> TeamExists(int id) => await _context.TeamHistory.AnyAsync(p => p.Id == id);
+
+        public async Task<Team?> UpdateAsync(int id, UpdateTeamHistoryRequestDto teamDto) {           
+            
+            var existingTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == id && x.OrganizationId == teamDto.OrganizationId);
+
+            if (existingTeam == null) {
+                return null;
+            }
+            
+            existingTeam.Name = teamDto.Name;
+
+            var membersIds = teamDto.Members.Select(m => m.Id).ToList();
+            existingTeam.Members = await _context.Players.Where(m => membersIds.Contains(m.Id)).ToListAsync();
+
+            await _context.SaveChangesAsync();
+
+            return existingTeam;
+        }
 
         public async Task<TeamHistory?> DeleteAsync(int id, int organizationId) 
         {
