@@ -39,6 +39,7 @@
                 color="black"
                 variant="ghost"
                 icon="i-heroicons-pencil-20-solid"
+                class="edit-button"
                 @click="openEditModal(player.id)"
               ></UButton>
               <UButton
@@ -71,7 +72,6 @@
             color="gray"
             variant="ghost"
             icon="i-heroicons-x-mark-20-solid"
-            class="-my-1"
             @click="isDeleteModalOpen = false"
           />
         </div>
@@ -108,7 +108,6 @@
             color="gray"
             variant="ghost"
             icon="i-heroicons-x-mark-20-solid"
-            class="-my-1"
             @click="isEditModalOpen = false"
           />
         </div>
@@ -237,4 +236,9 @@ onMounted(async () => {
 
 <style scoped>
   @import "@/assets/css/tableStyle.css";
+
+  button.edit-button:hover {
+  background-color: #333; /* Tumedam värv */
+  color: white; /* Teksti värv kontrastiks */
+}
 </style>
