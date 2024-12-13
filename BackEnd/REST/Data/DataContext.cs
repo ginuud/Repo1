@@ -10,7 +10,8 @@ namespace REST.Data
         public DbSet<Game> Games { get; set; }
         public DbSet<User>? UserList { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder){
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Player>()
@@ -18,11 +19,11 @@ namespace REST.Data
                 .WithMany(t => t.Members)
                 .HasForeignKey(p => p.TeamId)
                 .IsRequired(false);
-            
+
             modelBuilder.Entity<Game>()
-                 .HasMany(g => g.Teams)
-                 .WithOne(t => t.Game)
-                 .HasForeignKey(t => t.GameId);
+                .HasMany(g => g.Teams)
+                .WithOne(t => t.Game)
+                .HasForeignKey(t => t.GameId);
 
             modelBuilder.Entity<Player>().Property(x => x.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Player>().Property(p => p.Id).HasIdentityOptions(startValue: 8);
@@ -56,12 +57,12 @@ namespace REST.Data
                     OrganizationId = 1,
                 },
                 new User
-                    {
-                        Id = 2,
-                        Username = "test2",
-                        Password = "zWoe4T9h2Hj9G4dyUtWwcKwV6zMR1Q0yr3Uch+xSze8=", // test2
-                        OrganizationId = 2,
-                    }
+                {
+                    Id = 2,
+                    Username = "test2",
+                    Password = "zWoe4T9h2Hj9G4dyUtWwcKwV6zMR1Q0yr3Uch+xSze8=", // test2
+                    OrganizationId = 2,
+                }
             );
 
             modelBuilder.Entity<Game>().HasData(
@@ -76,7 +77,7 @@ namespace REST.Data
                     Id = 2,
                     Name = "Celtics vs Spurs",
                     OrganizationId = 1
-                }                
+                }
             );
 
             modelBuilder.Entity<Team>().HasData(
@@ -98,7 +99,7 @@ namespace REST.Data
                 {
                     Id = 3,
                     Name = "Celtics",
-                    GameId =2,
+                    GameId = 2,
                     OrganizationId = 1
                 },
                 new Team
@@ -179,7 +180,7 @@ namespace REST.Data
                     OrganizationId = 1
                 }
             );
-            
+
         }
     }
 }
