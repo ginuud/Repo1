@@ -163,7 +163,7 @@
       <template #header>
         <div class="flex items-center justify-between">
           <h3 class="text-base font-semibold leading-6 text-white">
-            Edit player
+            Edit game
           </h3>
           <UButton
             color="gray"
@@ -178,13 +178,13 @@
       <div class="p-4">
         <h3 class="text-base font-semibold leading-6 text-white">Name</h3>
         <UInput
-          v-model="newName"
+          v-model="name"
           color="purple"
           variant="outline"
-          placeholder="Player name"
+          placeholder="Game name"
         />
-        <p v-if="errors.newName" class="text-red-500 text-sm mt-1">
-          {{ errors.newName }}
+        <p v-if="errors.name" class="text-red-500 text-sm mt-1">
+          {{ errors.name }}
         </p>
         <h3 class="text-base font-semibold leading-6 text-white">Teams</h3>
 
@@ -235,9 +235,8 @@ let teamOptions = ref<{ id: number; name: string; members: Player[] }[]>([]);
 
 const isEditModalOpen = ref(false);
 const name = ref("");
-const newName = ref("");
 const selectedTeams = ref([]);
-const editErrors = reactive({
+const errors = reactive({
   name: null as string | null,
   teams: null as string | null,
 });
@@ -262,15 +261,11 @@ const submitDelete = async () => {
   }
 };
 
-const errors = reactive<{ newName: string | null }>({
-  newName: null as string | null,
-  teams: null as string | null,
-});
 
-const validateEditForm = () => {
-  errors.newName = newName.value.trim() ? null : "Required";
-  return !errors.newName;
-};
+// const validateEditForm = () => {
+//   errors.newName = newName.value.trim() ? null : "Required";
+//   return !errors.newName;
+// };
 
 const openEditModal = (gameId: number) => {
   const game = gameStore.games.find((p) => p.id === gameId);
@@ -288,7 +283,7 @@ const openEditModal = (gameId: number) => {
   console.log("teamEditOptions", teamEditOptions)
   if (game) {
     selectedGameId.value = gameId;
-    newName.value = game.name;
+    name.value = game.name;
     selectedTeams.value = []
     isEditModalOpen.value = true;
   }
@@ -296,21 +291,23 @@ const openEditModal = (gameId: number) => {
 
 const submitGame = async () => {
   if (validate()) {
-    await gameStore.addGame({
-      id: gameStore.generateId(),
-      name: name.value,
-      teams: selectedTeams.value.map((option) => option.value),
-      deleteTeams: deleteTeams.value,
-    });
-    isStartGameModalOpen.value = false;
+    const teamIds = selectedTeams.value.map(team => team.value.id);
+    console.log(teamIds)
+    await gameStore.updateGame(
+      selectedGameId.value,
+      name.value,
+      teamIds
+    );
+    isEditModalOpen.value = false;
+    selectedGameId.value = null
   }
 };
 
 const validate = (): boolean => {
-  editErrors.name = name.value.trim() ? null : "Game name is required.";
-  editErrors.teams =
+  errors.name = name.value.trim() ? null : "Game name is required.";
+  errors.teams =
     selectedTeams.value.length === 2 ? null : "Please select exactly 2 teams.";
-  return !editErrors.name && !editErrors.teams;
+  return !errors.name && !errors.teams;
 };
 
 const filteredGames = computed(() => {
