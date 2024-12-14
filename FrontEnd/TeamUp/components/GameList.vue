@@ -1,5 +1,4 @@
 <template>
-
   <div class="mb-4 table-container flex items-center justify-between">
     <input
       v-model="searchQuery"
@@ -187,15 +186,24 @@
         <p v-if="errors.newName" class="text-red-500 text-sm mt-1">
           {{ errors.newName }}
         </p>
-        <h3 class="text-base font-semibold leading-6 text-white">Points</h3>
-        <UInput
-          v-model="newScore"
-          type="number"
-          color="purple"
-          variant="outline"
-          placeholder="Player score"
-          :errors="errors.newScore"
-        />
+        <h3 class="text-base font-semibold leading-6 text-white">Teams</h3>
+
+        <UFormGroup name="teams">
+          <div style="margin-bottom: 0.5rem">
+            <USelectMenu
+              v-model="selectedTeams"
+              color="purple"
+              :options="teamEditOptions"
+              multiple
+              searchable
+              searchable-placeholder="Search teams..."
+              placeholder="Select 2 teams"
+            />
+            <p v-if="errors.teams" class="text-red-500 text-sm mt-1">
+              {{ errors.teams }}
+            </p>
+          </div>
+        </UFormGroup>
       </div>
       <template #footer>
         <div class="flex justify-end space-x-2">
@@ -221,8 +229,18 @@ const searchQuery = ref("");
 const isLoading = ref(true);
 
 const isDeleteModalOpen = ref(false);
-const isEditModalOpen = ref(false);
 const selectedGameName = ref<string | null>(null);
+
+let teamOptions = ref<{ id: number; name: string; members: Player[] }[]>([]);
+
+const isEditModalOpen = ref(false);
+const name = ref("");
+const newName = ref("");
+const selectedTeams = ref([]);
+const editErrors = reactive({
+  name: null as string | null,
+  teams: null as string | null,
+});
 
 const openDeleteModal = (gameId: number) => {
   const game = gameStore.games.find((p) => p.id === gameId);
@@ -233,6 +251,8 @@ const openDeleteModal = (gameId: number) => {
   }
 };
 
+let teamEditOptions = [];
+
 const submitDelete = async () => {
   if (selectedGameId.value !== null) {
     await gameStore.deleteGame(selectedGameId.value);
@@ -240,6 +260,57 @@ const submitDelete = async () => {
     selectedGameId.value = null;
     navigateTo("/games");
   }
+};
+
+const errors = reactive<{ newName: string | null }>({
+  newName: null as string | null,
+  teams: null as string | null,
+});
+
+const validateEditForm = () => {
+  errors.newName = newName.value.trim() ? null : "Required";
+  return !errors.newName;
+};
+
+const openEditModal = (gameId: number) => {
+  const game = gameStore.games.find((p) => p.id === gameId);
+
+  teamEditOptions = [
+    ...game.teams.map((team) => ({
+      value: team,
+      label: team.name,
+    })),
+    ...teamStore.teams
+      .filter((team) => team.gameId === null)
+      .map((team) => ({ value: team, label: team.name }))
+  ];
+
+  console.log("teamEditOptions", teamEditOptions)
+  if (game) {
+    selectedGameId.value = gameId;
+    newName.value = game.name;
+    selectedTeams.value = []
+    isEditModalOpen.value = true;
+  }
+};
+
+const submitGame = async () => {
+  if (validate()) {
+    await gameStore.addGame({
+      id: gameStore.generateId(),
+      name: name.value,
+      teams: selectedTeams.value.map((option) => option.value),
+      deleteTeams: deleteTeams.value,
+    });
+    isStartGameModalOpen.value = false;
+  }
+};
+
+const validate = (): boolean => {
+  editErrors.name = name.value.trim() ? null : "Game name is required.";
+  editErrors.teams =
+    selectedTeams.value.length === 2 ? null : "Please select exactly 2 teams.";
+  return !editErrors.name && !editErrors.teams;
 };
 
 const filteredGames = computed(() => {
@@ -259,8 +330,6 @@ const filteredGames = computed(() => {
 const isEndGameModalOpen = ref(false);
 const selectedGameId = ref<number | null>(null);
 const selectedTeam = ref<Team>();
-
-let teamOptions = ref<{ id: number; name: string; members: Player[] }[]>([]);
 
 const openEndGameModal = (gameId: number) => {
   const game = gameStore.games.find((g) => g.id === gameId);
