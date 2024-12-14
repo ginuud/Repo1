@@ -231,6 +231,7 @@ const isLoading = ref(true);
 const isDeleteModalOpen = ref(false);
 const selectedGameName = ref<string | null>(null);
 
+let teamEditOptions = [];
 let teamOptions = ref<{ id: number; name: string; members: Player[] }[]>([]);
 
 const isEditModalOpen = ref(false);
@@ -250,8 +251,6 @@ const openDeleteModal = (gameId: number) => {
   }
 };
 
-let teamEditOptions = [];
-
 const submitDelete = async () => {
   if (selectedGameId.value !== null) {
     await gameStore.deleteGame(selectedGameId.value);
@@ -260,12 +259,6 @@ const submitDelete = async () => {
     navigateTo("/games");
   }
 };
-
-
-// const validateEditForm = () => {
-//   errors.newName = newName.value.trim() ? null : "Required";
-//   return !errors.newName;
-// };
 
 const openEditModal = (gameId: number) => {
   const game = gameStore.games.find((p) => p.id === gameId);
@@ -277,29 +270,25 @@ const openEditModal = (gameId: number) => {
     })),
     ...teamStore.teams
       .filter((team) => team.gameId === null)
-      .map((team) => ({ value: team, label: team.name }))
+      .map((team) => ({ value: team, label: team.name })),
   ];
 
-  console.log("teamEditOptions", teamEditOptions)
+  console.log("teamEditOptions", teamEditOptions);
   if (game) {
     selectedGameId.value = gameId;
     name.value = game.name;
-    selectedTeams.value = []
+    selectedTeams.value = [];
     isEditModalOpen.value = true;
   }
 };
 
 const submitGame = async () => {
   if (validate()) {
-    const teamIds = selectedTeams.value.map(team => team.value.id);
-    console.log(teamIds)
-    await gameStore.updateGame(
-      selectedGameId.value,
-      name.value,
-      teamIds
-    );
+    const teamIds = selectedTeams.value.map((team) => team.value.id);
+    console.log(teamIds);
+    await gameStore.updateGame(selectedGameId.value, name.value, teamIds);
     isEditModalOpen.value = false;
-    selectedGameId.value = null
+    selectedGameId.value = null;
   }
 };
 
