@@ -83,7 +83,7 @@
         <UFormGroup label="Members" name="members">
           <USelectMenu
             v-model="editTeamForm.members"
-            :options="playerOptions"
+            :options="playerEditOptions"
             multiple
             searchable
             searchable-placeholder="Search a player..."
@@ -98,7 +98,9 @@
           </p>
         </div>
 
-        <UButton class="flex justify-end space-x-2" type="submit">Add Team</UButton>
+        <UButton class="flex justify-end space-x-2" type="submit"
+          >Add Team</UButton
+        >
       </UForm>
     </UCard>
   </UModal>
@@ -114,22 +116,29 @@ const { teams } = storeToRefs(teamStore);
 const searchQuery = ref("");
 const isLoading = ref(true);
 const selectedTeamid = ref<number | null>(null);
+let playerEditOptions = [];
 
 const isEditModalOpen = ref(false);
 
-const playerOptions = computed(() =>
-  playerStore.players
-    .filter((player) => player.teamId === null)
-    .map((player) => ({
-      value: player,
-      label: player.name,
-    }))
-);
-
 const openEditModal = async (teamId: number) => {
   const team = teamStore.teams.find((t) => t.id === teamId);
-  console.log("editable team", team);
-  selectedTeamid.value = teamId
+
+  playerEditOptions = [
+    ...team.members.map((player) => ({
+      value: player,
+      label: player.name,
+    })),
+    ...playerStore.players
+      .filter((player) => player.teamId === null)
+      .map((player) => ({
+        value: player,
+        label: player.name,
+      })),
+  ];
+
+  console.log("playerEditOptions", playerEditOptions)
+
+  selectedTeamid.value = teamId;
   isEditModalOpen.value = true;
 };
 
