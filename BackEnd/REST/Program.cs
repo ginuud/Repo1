@@ -30,7 +30,7 @@ builder.Services
 builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
     {
         builder
-        .SetIsOriginAllowed(_ => true)
+        .AllowAnyOrigin()
         .AllowCredentials()
         .AllowAnyMethod()
         .AllowAnyHeader();
