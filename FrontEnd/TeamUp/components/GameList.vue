@@ -13,7 +13,11 @@
     <StartGame />
   </div>
 
-  <div v-if="filteredGames.length === 0" class="text-center text-red-500">
+  <div v-if="isLoading" class="flex justify-center items-center h-64">
+    <div class="loader"></div>
+  </div>
+
+  <div v-else-if="filteredGames.length === 0" class="text-center text-red-500">
     No games match your search.
   </div>
 
@@ -109,6 +113,7 @@ const teamStore = useTeamStore();
 const { players } = storeToRefs(playerStore);
 const { games } = storeToRefs(gameStore);
 const searchQuery = ref("");
+const isLoading = ref(true);
 
 const filteredGames = computed(() => {
   if (!searchQuery.value.trim()) {
@@ -189,12 +194,28 @@ const cancelSelection = () => {
   isEndGameModalOpen.value = false;
 };
 
-onMounted(() => {
-  playerStore.loadPlayers();
-  gameStore.loadGames();
+onMounted(async () => {
+  try {
+    isLoading.value = true;
+    await playerStore.loadPlayers();
+    await gameStore.loadGames();
+  } catch (error) {
+    console.error("Error loading data:", error);
+  } finally {
+    isLoading.value = false;
+  }
 });
 </script>
 
 <style scoped>
-  @import "@/assets/css/tableStyle.css"; 
+  @import "@/assets/css/tableStyle.css";
+
+  .loader {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
 </style> 
