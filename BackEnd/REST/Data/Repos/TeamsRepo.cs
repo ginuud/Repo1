@@ -85,17 +85,18 @@ namespace REST.Data.Repos
 
         public async Task<Team?> UpdateAsync(int id, UpdateTeamRequestDto teamDto) {           
             
-            var existingTeam = await context.Teams.FirstOrDefaultAsync(x => x.Id == id && x.OrganizationId == teamDto.OrganizationId);
+            var existingTeam = await context.Teams.Include(t => t.Members).FirstOrDefaultAsync(x => x.Id == id && x.OrganizationId == teamDto.OrganizationId);
 
             if (existingTeam == null) {
                 return null;
             }
             
             existingTeam.Name = teamDto.Name;
-
-            var membersIds = teamDto.Members.Select(m => m.Id).ToList();
-            existingTeam.Members = await context.Players.Where(m => membersIds.Contains(m.Id)).ToListAsync();
-
+            if (teamDto.Members != null){
+                existingTeam.Members.Clear();
+                var membersIds = teamDto.Members.Select(m => m.Id).ToList();
+                existingTeam.Members = await context.Players.Where(m => membersIds.Contains(m.Id)).ToListAsync();
+            }
             await context.SaveChangesAsync();
 
             return existingTeam;
