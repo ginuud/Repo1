@@ -142,6 +142,7 @@ watch(
 );
 
 const openEditModal = async (teamId: number) => {
+  await playerStore.loadPlayers()
   const team = teamStore.teams.find((t) => t.id === teamId);
 
   const availablePlayers = [
