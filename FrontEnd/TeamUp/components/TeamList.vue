@@ -21,7 +21,7 @@
     <div
       v-for="team in filteredTeams"
       :key="team.id"
-      class="team-accordion-item ml-40 mr-40 mb-20"
+      class="team-accordion-item ml-20 mr-20 mb-20"
     >
       <div class="accordion-header">
         <strong>Team: {{ team.name }}</strong>
