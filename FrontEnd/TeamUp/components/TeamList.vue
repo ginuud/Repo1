@@ -116,14 +116,33 @@ const { teams } = storeToRefs(teamStore);
 const searchQuery = ref("");
 const isLoading = ref(true);
 const selectedTeamid = ref<number | null>(null);
-let playerEditOptions = [];
+const playerEditOptions = ref([]);
+const preSelectedMembers = ref([]);
 
 const isEditModalOpen = ref(false);
+
+const editTeamForm = reactive({
+  name: "",
+  members: [],
+});
+
+watch(
+  preSelectedMembers,
+  (newOptions) => {
+    editTeamForm.members = newOptions.map(
+      (item) =>
+        playerEditOptions.value.find(
+          (option) => option.value.id === item.value.id
+        ) || item
+    );
+  },
+  { immediate: true }
+);
 
 const openEditModal = async (teamId: number) => {
   const team = teamStore.teams.find((t) => t.id === teamId);
 
-  playerEditOptions = [
+  const availablePlayers = [
     ...team.members.map((player) => ({
       value: player,
       label: player.name,
@@ -136,16 +155,20 @@ const openEditModal = async (teamId: number) => {
       })),
   ];
 
-  console.log("playerEditOptions", playerEditOptions)
+  playerEditOptions.value = availablePlayers;
+
+  preSelectedMembers.value = team.members.map((player) => ({
+    value: player,
+    label: player.name,
+  }));
+
+  editTeamForm.name = team?.name;
+
+  console.log("editTeamForm", editTeamForm);
 
   selectedTeamid.value = teamId;
   isEditModalOpen.value = true;
 };
-
-const editTeamForm = reactive({
-  name: "",
-  members: [],
-});
 
 function resetEditTeamForm() {
   editTeamForm.name = "";
@@ -195,10 +218,6 @@ function handleError(event: FormErrorEvent) {
   firstErrorElement?.focus();
   firstErrorElement?.scrollIntoView({ behavior: "smooth", block: "center" });
 }
-
-const cancel = () => {
-  isEditModalOpen.value = false;
-};
 
 const filteredTeams = computed(() => {
   if (!searchQuery.value.trim()) {
