@@ -57,7 +57,7 @@
       <template #header>
         <div class="flex items-center justify-between">
           <h3 class="text-base font-semibold leading-6 text-white">
-            Edit player
+            Edit team
           </h3>
           <UButton
             color="gray"
@@ -101,7 +101,7 @@
         </div>
 
         <UButton class="flex justify-end space-x-2" type="submit"
-          >Add Team</UButton
+          >Save changes</UButton
         >
       </UForm>
     </UCard>
