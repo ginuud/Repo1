@@ -260,7 +260,8 @@ const submitDelete = async () => {
   }
 };
 
-const openEditModal = (gameId: number) => {
+const openEditModal = async (gameId: number) => {
+  await teamStore.loadTeams();
   const game = gameStore.games.find((p) => p.id === gameId);
 
   teamEditOptions = [

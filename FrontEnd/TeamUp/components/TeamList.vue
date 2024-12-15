@@ -142,7 +142,7 @@ watch(
 );
 
 const openEditModal = async (teamId: number) => {
-  await playerStore.loadPlayers()
+  await playerStore.loadPlayers();
   const team = teamStore.teams.find((t) => t.id === teamId);
 
   const availablePlayers = [
@@ -205,7 +205,6 @@ async function submitTeam(event: FormSubmitEvent) {
         teamId: value.teamId,
       })),
     };
-    console.log("teamdata", teamData);
     await teamStore.updateTeam(teamData);
     console.log("Team successfully added:", teamData);
     isEditModalOpen.value = false;
