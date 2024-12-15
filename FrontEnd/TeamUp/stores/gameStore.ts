@@ -34,6 +34,22 @@ export const useGameStore = defineStore("game", () => {
       games.value = games.value.filter(game => game.id !== gameId);
     }
 
+    const updateGame = async (gameId: number, name: string, teamIds: Array<number>) => {
+      try {
+        await auth.fetchWithToken(`Games/${gameId}`, {
+          method: 'PUT',
+          body: {
+            name : name,
+            teamIds : teamIds,
+          },
+        });
+        await loadGames();
+      }
+      catch (error){
+        console.error("Error updating player:", error)
+      }
+    }
+
     // const makeStatusInactive = (id: number, status: "in progress") => {
     //   const game = games.value.find(game => game.id === id);
     //   if (game) {
@@ -44,5 +60,5 @@ export const useGameStore = defineStore("game", () => {
     //   }
     // }
 
-    return { games, generateId, addGame, loadGames, deleteGame };
+    return { games, generateId, addGame, loadGames, deleteGame, updateGame };
   })
