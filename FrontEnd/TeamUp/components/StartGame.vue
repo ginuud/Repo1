@@ -92,7 +92,8 @@ const validate = (): boolean => {
   return !errors.name && !errors.teams;
 };
 
-const openStartGameModal = () => {
+const openStartGameModal = async () => {
+  await teamStore.loadTeams();
   isStartGameModalOpen.value = true;
   name.value = '';
   selectedTeams.value = [];

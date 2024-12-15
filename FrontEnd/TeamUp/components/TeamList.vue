@@ -57,7 +57,7 @@
       <template #header>
         <div class="flex items-center justify-between">
           <h3 class="text-base font-semibold leading-6 text-white">
-            Edit player
+            Edit team
           </h3>
           <UButton
             color="gray"
@@ -101,7 +101,7 @@
         </div>
 
         <UButton class="flex justify-end space-x-2" type="submit"
-          >Add Team</UButton
+          >Save changes</UButton
         >
       </UForm>
     </UCard>
@@ -142,6 +142,7 @@ watch(
 );
 
 const openEditModal = async (teamId: number) => {
+  await playerStore.loadPlayers();
   const team = teamStore.teams.find((t) => t.id === teamId);
 
   const availablePlayers = [
@@ -204,7 +205,6 @@ async function submitTeam(event: FormSubmitEvent) {
         teamId: value.teamId,
       })),
     };
-    console.log("teamdata", teamData);
     await teamStore.updateTeam(teamData);
     console.log("Team successfully added:", teamData);
     isEditModalOpen.value = false;
