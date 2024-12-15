@@ -29,12 +29,14 @@
     >
       <div class="accordion-header">
         <strong>Team: {{ team.name }}</strong>
-        <button @click="deleteTeam(team.id)" class="delete-button">
-          Delete
-        </button>
-        <button @click="openEditModal(team.id)" class="edit-button">
-          Edit
-        </button>
+        <div style="display: inline-block">
+          <button @click="openEditModal(team.id)" class="edit-button">
+            Edit
+          </button>
+          <button @click="deleteTeam(team.id)" class="delete-button">
+            Delete
+          </button>
+        </div>
       </div>
       <div class="accordion-content">
         Members:
