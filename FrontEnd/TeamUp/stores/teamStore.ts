@@ -55,6 +55,24 @@ export const useTeamStore = defineStore("team", () => {
       return generatedTeams;
     };
 
+    const updateTeam = async (team: Team) => { 
+      try {
+        console.log("team", team)
+        await auth.fetchWithToken(`Teams/${team.id}`, {
+          method: 'PUT',
+          body: team
+          // body: {
+          //   name: name,
+          //   members: members
+          // },
+        });
+        await loadTeams(); 
+      } 
+      catch (error) {
+        console.error('Error updating player:', error);
+      }
+    }; 
+
     const playerstore = usePlayerStore()
 
     const addPointsToTeam = async (team: Team) => {
@@ -82,5 +100,5 @@ export const useTeamStore = defineStore("team", () => {
     };
     
 
-    return { teams, generateId, addTeam, deleteTeam, generateTeams, loadTeams, addPointsToTeam };
+    return { teams, generateId, addTeam, deleteTeam, generateTeams, loadTeams, addPointsToTeam, updateTeam };
   })
