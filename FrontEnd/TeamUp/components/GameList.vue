@@ -417,7 +417,7 @@ button.edit-button:hover {
   margin-left: 87px;
   font-size: 1.5rem;
   font-weight: bold;
-  margin-bottom: 0px;
+  margin-bottom: 1px;
 }
 
 </style>
