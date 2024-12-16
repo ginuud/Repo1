@@ -9,6 +9,8 @@ namespace REST.Data
         public DbSet<Team> Teams { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<User>? UserList { get; set; }
+        public DbSet<GameHistory>? GameHistory { get; set; }
+        public DbSet<TeamHistory>? TeamHistory { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -33,6 +35,11 @@ namespace REST.Data
 
             modelBuilder.Entity<Game>().Property(x => x.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Game>().Property(p => p.Id).HasIdentityOptions(startValue: 3);
+
+            modelBuilder.Entity<TeamHistory>().Property(x => x.Id).ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<GameHistory>().Property(g => g.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<GameHistory>().Property(g => g.Winner).HasMaxLength(100);
 
             modelBuilder.Entity<Organization>().HasData(
                 new Organization
@@ -78,6 +85,25 @@ namespace REST.Data
                     Name = "Celtics vs Spurs",
                     OrganizationId = 1
                 }
+            );
+
+            modelBuilder.Entity<GameHistory>().HasData(
+                new GameHistory
+                {
+                    Id = 1,
+                    Name = "Võrkpall",
+                    OrganizationId = 1,
+                    Teams = "Tiim 3 vs Tiim 4",
+                    Winner = "Tiim 1"
+                },
+                new GameHistory
+                {
+                    Id = 2,
+                    Name = "Jalgpall",
+                    OrganizationId = 1,
+                    Teams = "Tiim 1 vs Tiim 2",
+                    Winner = "Tiim 1"
+                }                
             );
 
             modelBuilder.Entity<Team>().HasData(
