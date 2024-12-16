@@ -28,7 +28,11 @@
         <TableBody>
           <TableRow v-for="gameHistory in filteredGamesHistory" :key="gameHistory.id" class="border-b border-black">
             <TableCell>{{ gameHistory.name }}</TableCell>
-            <TableCell></TableCell>
+            <TableCell>
+              <span v-for="(team, index) in gameHistory.teams.split(' vs ')" :key="index">
+                {{ team }}<span v-if="index < gameHistory.teams.split(' vs ').length - 1"> vs </span>
+              </span>
+            </TableCell>
             <TableCell>{{ gameHistory.winner || "N/A" }}</TableCell>
           </TableRow>
         </TableBody>
@@ -57,9 +61,7 @@
     const lowerCaseQuery = searchQuery.value.toLowerCase();
     return gamesHistory.value.filter((gameHistory) =>
       gameHistory.name.toLowerCase().includes(lowerCaseQuery) ||
-      gameHistory.teamsHistory.some((teamHistory) =>
-        teamHistory?.name?.toLowerCase().includes(lowerCaseQuery)
-      )
+      gameHistory.teams.toLowerCase().includes(lowerCaseQuery)
     );
   });
   
