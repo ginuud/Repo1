@@ -18,10 +18,14 @@ export const useGameHistoryStore = defineStore("gameHistory", () => {
       gamesHistory.value = await auth.fetchWithToken<GameHistory[]>("GamesHistory")
     }
     
-    const addGameHistory = async (gameHistory: GameHistory) => {
+    const addGameHistory = async (game: Game, winner: string) => {
       const res = await auth.fetchWithToken("GameHistory", {
         method: 'POST',
-        body: gameHistory,
+        body: {
+          name: game.name,
+          teams: game.teams,
+          winner: winner
+        },
       });
       gamesHistory.value.push(res);
       loadGamesHistory();

@@ -228,6 +228,7 @@ import StartGame from "./StartGame.vue";
 const gameStore = useGameStore();
 const playerStore = usePlayerStore();
 const teamStore = useTeamStore();
+const gameHistoryStore = useGameHistoryStore();
 
 const { games } = storeToRefs(gameStore);
 const searchQuery = ref("");
@@ -242,6 +243,7 @@ let teamOptions = ref<{ id: number; name: string; members: Player[] }[]>([]);
 const isEditModalOpen = ref(false);
 const name = ref("");
 const selectedTeams = ref([]);
+const gameHistoryGame = ref()
 const errors = reactive({
   name: null as string | null,
   teams: null as string | null,
@@ -325,7 +327,7 @@ const selectedTeam = ref<Team>();
 
 const openEndGameModal = (gameId: number) => {
   const game = gameStore.games.find((g) => g.id === gameId);
-
+  gameHistoryGame.value = game
   if (game) {
     selectedGameId.value = gameId;
     teamOptions = game.teams.map((team) => ({
@@ -351,7 +353,7 @@ const deleteTeamsWhenChecked = async (gameId: number) => {
   }
 };
 
-const submitWinner = async () => {
+const submitWinner = async (gameId: number) => {
   if (selectedTeam.value && selectedGameId.value) {
     await teamStore.addPointsToTeam(selectedTeam.value.value);
 
@@ -368,6 +370,10 @@ const submitWinner = async () => {
     }
 
     try {
+      console.log("gameId", gameId)
+      const game = gameStore.games.find((p) => p.id === gameId);
+      console.log("game", game)
+      await gameHistoryStore.addGameHistory(game, selectedTeam.value.name)
       console.log("Deleting game with id:", selectedGameId.value);
       await gameStore.deleteGame(selectedGameId.value);
     } catch (error) {

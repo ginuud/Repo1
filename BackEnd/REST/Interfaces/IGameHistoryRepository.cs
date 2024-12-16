@@ -14,7 +14,7 @@ namespace REST.Interfaces
         Task<List<Team>> GetTeamsByIdsAsync(List<int> teamIds);
         Task<GameHistory> CreateAsync(GameHistory gameModel);       
         //Task<GameHistory?> UpdateAsync(int id, UpdateGameRequestDto gameDto);
-        Task<GameHistory?> DeleteAsync(int id, int organizationId);
+        //Task<GameHistory?> DeleteAsync(int id, int organizationId);
         Task<bool> GameExists(int id);
     }
 }

@@ -30,8 +30,6 @@
         <TableBody>
           <TableRow v-for="gameHistory in filteredGamesHistory" :key="gameHistory.id" class="border-b border-black">
             <TableCell>{{ gameHistory.name }}</TableCell>
-            <TableCell>{{ gameHistory.teamsHistory[0]?.name || 'N/A' }}</TableCell>
-            <TableCell>{{ gameHistory.teamsHistory[1]?.name || 'N/A' }}</TableCell>
           </TableRow>
         </TableBody>
         </Table>
@@ -46,7 +44,7 @@
   
   const gameHistoryStore = useGameHistoryStore();
   const playerStore = usePlayerStore();
-  const teamHistoryStore = useTeamHistoryStore();
+
   
   const { players } = storeToRefs(playerStore);
   const { gamesHistory } = storeToRefs(gameHistoryStore);

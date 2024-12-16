@@ -17,7 +17,7 @@ namespace REST.Mappers
             {
                 Id = gameHistoryModel.Id,
                 Name = gameHistoryModel.Name,
-                TeamHistories = gameHistoryModel.TeamHistories.Select(t => t.ToTeamDto()).ToList(),
+                //TeamHistories = gameHistoryModel.TeamHistories.Select(t => t.ToTeamDto()).ToList(),
                 Winner = gameHistoryModel.Winner,
                 OrganizationId = gameHistoryModel.OrganizationId
             };
@@ -28,7 +28,7 @@ namespace REST.Mappers
             return new GameHistory
             {
                 Name = createDto.Name,
-                Teams = teams,
+                //Teams = teams,
                 Winner = createDto.Winner,
                 OrganizationId = createDto.OrganizationId
             };

@@ -20,15 +20,11 @@ namespace REST.Data.Repos
 
         public async Task<List<GameHistory>> GetAllAsync(int organizationId)
         {
-           return await context.GameHistory
-                .Include(g => g.Teams)
-                .Where(g => g.OrganizationId == organizationId)
-                .ToListAsync();
+           return await context.GameHistory.Where(g => g.OrganizationId == organizationId).ToListAsync();
         }
         public async Task<GameHistory?> GetByIdAsync(int id, int organizationId) {
 
             return await context.GameHistory
-                .Include(g => g.Teams)
                 .FirstOrDefaultAsync(g => g.Id == id && g.OrganizationId == organizationId);
         } 
 
@@ -64,30 +60,18 @@ namespace REST.Data.Repos
         //     return existingGame;
         // }
 
-        public async Task<GameHistory?> DeleteAsync(int id, int organizationId) {
-            var gameModel = await context.GameHistory
-                .Include(g => g.Teams)
-                .FirstOrDefaultAsync(g => g.Id == id && g.OrganizationId == organizationId);
+        // public async Task<GameHistory?> DeleteAsync(int id, int organizationId) {
+        //     var gameModel = await context.GameHistory
+        //         .FirstOrDefaultAsync(g => g.Id == id && g.OrganizationId == organizationId);
 
-            if (gameModel == null) return null;
+        //     if (gameModel == null) return null;
 
-            foreach (var team in gameModel.Teams)
-            {
-                var teamHistory = new TeamHistory
-                {
-                    Name = team.Name,
-                    GameHistoryId = gameModel.Id,
-                    OrganizationId = gameModel.OrganizationId
-                };
-                context.TeamHistory.Add(teamHistory);
-            }
+        //     context.Games.Remove(gameModel);
+        //     await context.SaveChangesAsync();
 
-            context.Games.Remove(gameModel);
-            await context.SaveChangesAsync();
-
-            return gameModel;
+        //     return gameModel;
 	
-        }        
+        // }        
         
     }
 }

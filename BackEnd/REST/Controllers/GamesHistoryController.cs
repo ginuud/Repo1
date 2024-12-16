@@ -77,16 +77,16 @@ namespace REST.Controllers
         //     return Ok(gameModel.ToGameDto());
         // }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromRoute]int id)
-        {
-            var organizationId = GetOrganizationId();
-            var gameModel = await repo.DeleteAsync(id, organizationId);
+        // [HttpDelete("{id}")]
+        // public async Task<IActionResult> Delete([FromRoute]int id)
+        // {
+        //     var organizationId = GetOrganizationId();
+        //     var gameModel = await repo.DeleteAsync(id, organizationId);
 
-            if (gameModel == null) return NotFound("Game doesn't exist");
+        //     if (gameModel == null) return NotFound("Game doesn't exist");
 
-            return Ok(gameModel.ToGameDto());
-        }
+        //     return Ok(gameModel.ToGameDto());
+        // }
 
         private int GetOrganizationId()
         {
