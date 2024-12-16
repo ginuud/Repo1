@@ -30,7 +30,8 @@ builder.Services
 builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
     {
         builder
-        .AllowAnyOrigin()
+        .SetIsOriginAllowed(_ => true)
+        .AllowCredentials()
         .AllowAnyMethod()
         .AllowAnyHeader();
     }));
@@ -66,7 +67,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors("MyPolicy");
 
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
