@@ -1,8 +1,5 @@
 <template>
-    <div v-if="gamesHistory.length === 0" class="text-center text-red-500">
-      No games have been played
-    </div>
-  
+
     <div class="mb-4 table-container flex items-center justify-between">
       <input
         v-model="searchQuery"

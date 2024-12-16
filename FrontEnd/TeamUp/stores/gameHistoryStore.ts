@@ -19,7 +19,7 @@ export const useGameHistoryStore = defineStore("gameHistory", () => {
     }
     
     const addGameHistory = async (game: Game, winner: string) => {
-      const res = await auth.fetchWithToken("GameHistory", {
+      const res = await auth.fetchWithToken("GamesHistory", {
         method: 'POST',
         body: {
           name: game.name,

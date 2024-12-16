@@ -1,7 +1,4 @@
 <template>
-  <div v-if="games.length === 0" class="text-center text-red-500">
-    No games have been started
-  </div>
 
   <div class="mb-4 table-container flex items-center justify-between">
     <input
@@ -370,17 +367,14 @@ const submitWinner = async (gameId: number) => {
     }
 
     try {
-      console.log("gameId", gameId)
-      const game = gameStore.games.find((p) => p.id === gameId);
-      console.log("game", game)
-      await gameHistoryStore.addGameHistory(game, selectedTeam.value.name)
+      console.log("winner", selectedTeam.value.value.name)
+      await gameHistoryStore.addGameHistory(gameHistoryGame.value, selectedTeam.value.value.name)
       console.log("Deleting game with id:", selectedGameId.value);
       await gameStore.deleteGame(selectedGameId.value);
     } catch (error) {
       console.error("Failed to delete game:", selectedGameId.value, error);
     }
     isEndGameModalOpen.value = false;
-    navigateTo("/players");
   }
 };
 
