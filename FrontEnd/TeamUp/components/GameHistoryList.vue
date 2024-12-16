@@ -20,8 +20,7 @@
         <TableHeader>
           <TableRow class="header-row">
             <TableCell class="header-cell">Game</TableCell>
-            <TableCell class="header-cell">Team 1</TableCell>
-            <TableCell class="header-cell">Team 2</TableCell>
+            <TableCell class="header-cell">Teams</TableCell>
             <TableCell class="header-cell">Winner</TableCell>
             <TableCell class="header-cell">Actions</TableCell>
           </TableRow>
@@ -29,6 +28,7 @@
         <TableBody>
           <TableRow v-for="gameHistory in filteredGamesHistory" :key="gameHistory.id" class="border-b border-black">
             <TableCell>{{ gameHistory.name }}</TableCell>
+            <TableCell></TableCell>
             <TableCell>{{ gameHistory.winner || "N/A" }}</TableCell>
           </TableRow>
         </TableBody>
