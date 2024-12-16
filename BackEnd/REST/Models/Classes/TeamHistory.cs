@@ -2,16 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace REST.Models.Classes
 {
-    public record Game
+    public class TeamHistory
     {
         public int Id { get; set; }
         public string? Name { get; set; } = string.Empty;
-        public List<Team> Teams { get; set; } = new List<Team>();
-         //public List<GameHistory>? Histories { get; set; } = new();
+        public List<Player>? Members { get; set; } = [];
+        //public int? GameHistoryId { get; set; }
+        public GameHistory? GameHistory { get; set; } 
         public int OrganizationId { get; set; }
+
     }
 }

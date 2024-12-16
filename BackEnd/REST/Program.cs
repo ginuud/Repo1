@@ -25,6 +25,7 @@ builder.Services
     .AddScoped<IPlayerRepository, PlayersRepo>()
     .AddScoped<ITeamRepository, TeamsRepo>()
     .AddScoped<IGameRepository, GamesRepo>()
+    .AddScoped<IGameHistoryRepository, GamesHistoryRepo>()
     .AddScoped<UsersRepo>();
 
 builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
