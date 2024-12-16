@@ -24,7 +24,6 @@
             <TableCell class="header-cell">Game</TableCell>
             <TableCell class="header-cell">Teams</TableCell>
             <TableCell class="header-cell">Winner</TableCell>
-            <TableCell class="header-cell">Actions</TableCell>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -51,7 +50,6 @@ import { usePlayerStore } from "~/stores/playerStore";
 const gameHistoryStore = useGameHistoryStore();
 const playerStore = usePlayerStore();
 
-const { players } = storeToRefs(playerStore);
 const { gamesHistory } = storeToRefs(gameHistoryStore);
 const searchQuery = ref("");
 
@@ -67,13 +65,6 @@ const filteredGamesHistory = computed(() => {
   );
 });
 
-const isEndGameModalOpen = ref(false);
-const selectedGameId = ref<number | null>(null);
-const selectedTeamHistory = ref<TeamHistory>();
-
-let teamHistoryOptions = ref<{ id: number; name: string; members: Player[] }[]>(
-  []
-);
 
 onMounted(() => {
   playerStore.loadPlayers();
@@ -88,5 +79,6 @@ onMounted(() => {
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 16px;
+  margin-top: 60px;
 }
 </style>
