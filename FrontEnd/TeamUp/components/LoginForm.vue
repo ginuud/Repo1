@@ -2,14 +2,12 @@
   <div class="form-container">
     <h2 class="login-title">Login</h2>
       <UForm :state="user" class="space-y-4" @submit="submit">
-        <UFormGroup label="User" name="user" class="custom-label">
-          <UInput v-model="user.username" color="purple"
-          variant="outline"/>
+        <UFormGroup label="User" name="user" class="custom-label"> 
+          <UInput v-model="user.username" color="purple" variant="outline" class="input"/>
         </UFormGroup>
 
         <UFormGroup label="Password" name="password" class="custom-label">
-          <UInput v-model="user.password" type="password" color="purple"
-          variant="outline"/>
+          <UInput v-model="user.password" type="password" color="purple" variant="outline" class="input"/>
         </UFormGroup>
 
         <UButton type="submit" class="login-button">
@@ -39,7 +37,7 @@ const submit = async () => {
 
 <style scoped>
 .form-container {
-  background-color: #fbfdf0; 
+  background-color: #ffffff; 
   border-radius: 1rem; /* Ümarad nurgad */
   padding: 2rem; 
   box-shadow: 0 4px 12px #9f57e2; /* Kerge vari  SIIIIAAAAA*/
@@ -55,6 +53,7 @@ const submit = async () => {
   font-weight: bold;
   margin-bottom: 1rem;
   text-align: center;
+  color:black
 }
 
 .login-button {
@@ -72,8 +71,15 @@ const submit = async () => {
   background-color: #1a1f5c; 
 }
 
-.custom-label label {
-  color: black !important;
+.custom-label :deep(label) {
+  color: black !important; /* Labeli värv mustaks */
+  font-weight: 500; /* Valikuline: tugevam kiri */
+  font-size: 1rem;
 }
+.input :deep(input) {
+  color: black !important; /* Sisestuse tekst mustaks */
+  background-color: white !important; /* Valge taust */
+}
+
 
 </style>
