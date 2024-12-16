@@ -34,10 +34,8 @@
             class="border-b border-black"
           >
             <TableCell>{{ gameHistory.name }}</TableCell>
-            <TableCell>
-              {{ gameHistory.teams }}
-            </TableCell>
-            <TableCell>{{ gameHistory.winner || "N/A" }}</TableCell>
+            <TableCell>{{ gameHistory.teams}} </TableCell>
+            <TableCell>{{ gameHistory.winner}}</TableCell>
           </TableRow>
         </TableBody>
       </Table>
