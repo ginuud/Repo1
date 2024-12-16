@@ -1,21 +1,19 @@
 <template>
-  <div class="login-container">
-    <div class="form-container">
+  <div class="form-container">
     <h2 class="login-title">Login</h2>
       <UForm :state="user" class="space-y-4" @submit="submit">
-        <UFormGroup label="User" name="user">
-          <UInput v-model="user.username" />
+        <UFormGroup label="User" name="user" class="custom-label"> 
+          <UInput v-model="user.username" color="purple" variant="outline" class="input"/>
         </UFormGroup>
 
-        <UFormGroup label="Password" name="password">
-          <UInput v-model="user.password" type="password" />
+        <UFormGroup label="Password" name="password" class="custom-label">
+          <UInput v-model="user.password" type="password" color="purple" variant="outline" class="input"/>
         </UFormGroup>
 
         <UButton type="submit" class="login-button">
           Login
         </UButton>
       </UForm>
-    </div>
   </div>
 </template>
 
@@ -38,22 +36,16 @@ const submit = async () => {
 </script>
 
 <style scoped>
-.login-container {
+.form-container {
+  background-color: #ffffff; 
+  border-radius: 1rem; /* Ümarad nurgad */
+  padding: 2rem; 
+  box-shadow: 0 4px 12px #9f57e2; /* Kerge vari  SIIIIAAAAA*/
+  width: 100%;
+  max-width: 300px; /* Maksimaalne laius */
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem;
-}
-
-.form-container {
-  background-color: #ffffff; /* Valge taust */
-  border-radius: 1rem; /* Ümarad nurgad */
-  padding: 2rem; /* Padding seesmine ruum */
-  box-shadow: 0 4px 12px #9f57e2; /* Kerge vari  SIIIIAAAAA*/
-  width: 100%;
-  max-width: 400px; /* Maksimaalne laius */
-  display: flex;
-  flex-direction: column;
 }
 
 .login-title {
@@ -61,10 +53,11 @@ const submit = async () => {
   font-weight: bold;
   margin-bottom: 1rem;
   text-align: center;
+  color:black
 }
 
 .login-button {
-  background-color: #202a79; 
+  background-color: #8529ba; 
   color: white; 
   border-radius: 0.5rem; 
   padding: 0.5rem 1rem;
@@ -77,4 +70,16 @@ const submit = async () => {
 .login-button:hover {
   background-color: #1a1f5c; 
 }
+
+.custom-label :deep(label) {
+  color: black !important; /* Labeli värv mustaks */
+  font-weight: 500; /* Valikuline: tugevam kiri */
+  font-size: 1rem;
+}
+.input :deep(input) {
+  color: black !important; /* Sisestuse tekst mustaks */
+  background-color: white !important; /* Valge taust */
+}
+
+
 </style>
