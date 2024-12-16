@@ -1,6 +1,13 @@
 <template>
-
-    <div class="mb-4 table-container flex items-center justify-between">
+  
+    <div v-if="filteredGamesHistory.length === 0" class="text-center text-red-500">
+      No games match your search.
+    </div>
+  
+    <div v-else>
+      <!-- Add the "Game history" title here -->
+      <h2 class="game-history-title">Game History</h2>
+      <div class="mb-4 table-container flex items-center justify-between">
       <input
         v-model="searchQuery"
         type="text"
@@ -8,12 +15,6 @@
         class="search-input"
       />
     </div>
-  
-    <div v-if="filteredGamesHistory.length === 0" class="text-center text-red-500">
-      No games match your search.
-    </div>
-  
-    <div v-else>
       <div class="table-container">
         <Table class="Table">
         <TableHeader>
@@ -21,12 +22,14 @@
             <TableCell class="header-cell">Game</TableCell>
             <TableCell class="header-cell">Team 1</TableCell>
             <TableCell class="header-cell">Team 2</TableCell>
+            <TableCell class="header-cell">Winner</TableCell>
             <TableCell class="header-cell">Actions</TableCell>
           </TableRow>
         </TableHeader>
         <TableBody>
           <TableRow v-for="gameHistory in filteredGamesHistory" :key="gameHistory.id" class="border-b border-black">
             <TableCell>{{ gameHistory.name }}</TableCell>
+            <TableCell>{{ gameHistory.winner || "N/A" }}</TableCell>
           </TableRow>
         </TableBody>
         </Table>
@@ -75,4 +78,9 @@
   
   <style scoped>
     @import "@/assets/css/tableStyle.css"; 
+    .game-history-title {
+  margin-left: 87px; 
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 16px;}
   </style> 

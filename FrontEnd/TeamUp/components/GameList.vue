@@ -1,5 +1,5 @@
 <template>
-
+  <h2 class="active-game-titel">Active Games</h2>
   <div class="mb-4 table-container flex items-center justify-between">
     <input
       v-model="searchQuery"
@@ -409,7 +409,14 @@ onMounted(async () => {
 
 button.edit-button:hover {
   background-color: #333; /* Tumedam värv */
-  color: white; /* Teksti värv kontrastiks */
+  color: white; /* Teksti värv kontrastiks */ 
+}
+
+.active-game-titel{
+  margin-left: 87px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0px;
 }
 
 </style>
