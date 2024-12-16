@@ -68,7 +68,7 @@
                   </div>
                 </UFormGroup>
 
-                <UButton type="submit">Generate Teams</UButton>
+                <UButton type="submit">Generate teams</UButton>
                 <UButton 
                   type="button"
                   @click="cancel" 
@@ -107,7 +107,7 @@
                   <p class="text-gray-500">Only players who are not already in a team are shown</p>
                 </div>
 
-                <UButton type="submit">Add Team</UButton>
+                <UButton type="submit">Add team</UButton>
                 <UButton 
                   type="button"
                   @click="cancel" 

@@ -33,7 +33,7 @@
           <button @click="openEditModal(team.id)" class="edit-button">
             Edit
           </button>
-          <button @click="deleteTeam(team.id)" class="delete-button">
+          <button @click="openDeleteModal(team.id)" class="delete-button">
             Delete
           </button>
         </div>
@@ -106,6 +106,42 @@
       </UForm>
     </UCard>
   </UModal>
+
+  <UModal v-model="isDeleteModalOpen" prevent-close>
+    <UCard
+      :ui="{
+        ring: '',
+        divide: 'divide-y divide-gray-900',
+      }"
+    >
+      <template #header>
+        <div class="flex items-center justify-between">
+          <h3 class="text-base font-semibold leading-6 text-white">
+            Delete team
+          </h3>
+          <UButton
+            color="gray"
+            variant="ghost"
+            icon="i-heroicons-x-mark-20-solid"
+            class="-my-1"
+            @click="isDeleteModalOpen = false"
+          />
+        </div>
+      </template>
+
+      <div class="p-4">
+        <h3 class="text-base font-semibold leading-6 text-white">
+          Are you sure you want to delete team: {{ selectedTeamName }}
+        </h3>
+      </div>
+
+      <template #footer>
+        <div class="flex justify-end space-x-2">
+          <UButton color="red" @click="submitDelete">Delete team</UButton>
+        </div>
+      </template>
+    </UCard>
+  </UModal>
 </template>
 
 <script setup lang="ts">
@@ -120,6 +156,9 @@ const isLoading = ref(true);
 const selectedTeamid = ref<number | null>(null);
 const playerEditOptions = ref([]);
 const preSelectedMembers = ref([]);
+const isDeleteModalOpen = ref(false);
+const selectedTeamId = ref<number | null>(null);
+const selectedTeamName = ref<string | null>(null);
 
 const isEditModalOpen = ref(false);
 
@@ -246,8 +285,23 @@ onMounted(async () => {
   }
 });
 
-const deleteTeam = async (teamId: number) => {
-  await teamStore.deleteTeam(teamId);
+const openDeleteModal = async (teamId: number) => {
+  const team = teamStore.teams.find((t) => t.id === teamId);
+  if (team) {
+    isDeleteModalOpen.value = true;
+    selectedTeamId.value = teamId;
+    selectedTeamName.value = team.name;
+  }
+  //await teamStore.deleteTeam(teamId);
+};
+
+const submitDelete = async () => {
+  if (selectedTeamId.value !== null) {
+    await teamStore.deleteTeam(selectedTeamId.value);
+    isDeleteModalOpen.value = false;
+    selectedTeamId.value = null;
+    navigateTo("/teams");
+  }
 };
 </script>
 

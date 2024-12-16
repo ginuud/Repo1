@@ -112,7 +112,7 @@
 
       <template #footer>
         <div class="flex justify-end space-x-2">
-          <UButton color="green" @click="submitWinner">Submit Winner</UButton>
+          <UButton color="green" @click="submitWinner">Submit winner</UButton>
           <UButton color="red" @click="cancelSelection">Cancel</UButton>
         </div>
       </template>
@@ -149,7 +149,7 @@
 
       <template #footer>
         <div class="flex justify-end space-x-2">
-          <UButton color="red" @click="submitDelete">Delete Game</UButton>
+          <UButton color="red" @click="submitDelete">Delete game</UButton>
         </div>
       </template>
     </UCard>
@@ -209,7 +209,7 @@
       </div>
       <template #footer>
         <div class="flex justify-end space-x-2">
-          <UButton color="green" @click="submitGame">Save Changes</UButton>
+          <UButton color="green" @click="submitGame">Save changes</UButton>
         </div>
       </template>
     </UCard>
