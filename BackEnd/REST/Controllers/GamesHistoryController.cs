@@ -46,15 +46,16 @@ namespace REST.Controllers
             var organizationId = GetOrganizationId();
             gameDto.OrganizationId = organizationId;
 
-            var teamIds = gameDto.Teams?.Select(t => t.Id).ToList() ?? new List<int>();
-            var existingTeams = await repo.GetTeamsByIdsAsync(teamIds);
+            // var teamIds = gameDto.Teams?.Select(t => t.Id).ToList() ?? new List<int>();
+            // var existingTeams = await repo.GetTeamsByIdsAsync(teamIds);
 
-            if (existingTeams == null || existingTeams.Count != teamIds.Count)
-            {
-                return BadRequest("Some teams are invalid or do not exist.");
-            }
-
-            var gameModel = gameDto.ToGameHistoryFromCreate(existingTeams);
+            // if (existingTeams == null || existingTeams.Count != teamIds.Count)
+            // {
+            //     return BadRequest("Some teams are invalid or do not exist.");
+            // }
+            
+            var teams = $"{gameDto.Teams[0].Name} vs {gameDto.Teams[1].Name}";
+            var gameModel = gameDto.ToGameHistoryFromCreate(teams);
             var result = await repo.CreateAsync(gameModel);
 
             return CreatedAtAction(nameof(GetGame), new { id = result.Id }, result.ToGameDto());

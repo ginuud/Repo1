@@ -17,18 +17,18 @@ namespace REST.Mappers
             {
                 Id = gameHistoryModel.Id,
                 Name = gameHistoryModel.Name,
-                //TeamHistories = gameHistoryModel.TeamHistories.Select(t => t.ToTeamDto()).ToList(),
+                //Teams = gameHistoryModel.Teams,
                 Winner = gameHistoryModel.Winner,
                 OrganizationId = gameHistoryModel.OrganizationId
             };
         }
 
-        public static GameHistory ToGameHistoryFromCreate(this CreateGameHistoryDto createDto, List<Team> teams)
+        public static GameHistory ToGameHistoryFromCreate(this CreateGameHistoryDto createDto, string teams)
         {
             return new GameHistory
             {
                 Name = createDto.Name,
-                //Teams = teams,
+                Teams = teams,
                 Winner = createDto.Winner,
                 OrganizationId = createDto.OrganizationId
             };

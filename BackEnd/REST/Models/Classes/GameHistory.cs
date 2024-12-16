@@ -9,9 +9,8 @@ namespace REST.Models.Classes
     {
         public int Id { get; set; }
         public string? Name { get; set; } = string.Empty;
-        //public List<TeamHistory>? TeamHistories { get; set; } = new();
+        public string Teams { get; set; } = string.Empty;
         public string? Winner { get; set; } = string.Empty;
-        public Game? Game { get; set; }
         public int OrganizationId { get; set; }
     }
 }
