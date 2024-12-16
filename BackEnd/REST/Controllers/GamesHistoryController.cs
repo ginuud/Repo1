@@ -24,8 +24,7 @@ namespace REST.Controllers
         {
            var organizationId = GetOrganizationId();
             var games = await repo.GetAllAsync(organizationId);
-            var gameDtos = games.Select(g => g.ToGameDto());
-            return Ok(gameDtos);
+            return Ok(games);
         }
         
         [HttpGet("{id}")]
