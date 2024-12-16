@@ -13,5 +13,6 @@ namespace REST.Models.Classes
         public int? GameHistoryId { get; set; }
         public GameHistory? GameHistory { get; set; } 
         public int OrganizationId { get; set; }
+
     }
 }

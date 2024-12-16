@@ -26,10 +26,11 @@ namespace REST.Controllers
         public async Task<IActionResult> GetAll()
         {
             var organizationId = GetOrganizationId();
-            var result = await repo.GetAllAsync(organizationId);
-            var teamDto = result.Select(s => s.ToTeamHistoryDto()).ToList();
+            var teams = await repo.GetAllAsync(organizationId);
 
-            return Ok(teamDto);
+            if (!teams.Any()) return NotFound("No team histories found.");
+
+            return Ok(teams.Select(t => t.ToTeamHistoryDto()));
         }
 
         [HttpGet]

@@ -22,6 +22,7 @@ namespace REST.Mappers
             return new TeamHistory{
                 Name = teamDto.Name,
                 Members = members,
+                GameHistoryId = teamDto.GameHistoryId,
                 OrganizationId = teamDto.OrganizationId
             };
         }

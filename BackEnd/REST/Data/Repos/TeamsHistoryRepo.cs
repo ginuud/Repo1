@@ -6,10 +6,11 @@ using REST.Models.Classes;
 using REST.Data;
 using Microsoft.EntityFrameworkCore;
 using REST.Dtos.TeamHistory;
+using REST.Interfaces;
 
 namespace REST.Data.Repos
 {
-    public class TeamsHistoryRepo
+    public class TeamsHistoryRepo : ITeamHistoryRepository
     {
         private readonly DataContext _context;
 
@@ -18,11 +19,11 @@ namespace REST.Data.Repos
             _context = context;
         }
 
-        public async Task<TeamHistory> CreateAsync(TeamHistory team){
-            await _context.TeamHistory.AddAsync(team);
+        public async Task<TeamHistory> CreateAsync(TeamHistory teamModel){
+            await _context.TeamHistory.AddAsync(teamModel);
             await _context.SaveChangesAsync();
             
-            return team;
+            return teamModel;
         }
         public async Task<List<TeamHistory>> CreateMultipleAsync(List<TeamHistory> teams)
         {
@@ -54,39 +55,32 @@ namespace REST.Data.Repos
 
         public async Task<bool> TeamExists(int id) => await _context.TeamHistory.AnyAsync(p => p.Id == id);
 
-        public async Task<Team?> UpdateAsync(int id, UpdateTeamHistoryRequestDto teamDto) {           
+        public async Task<Team?> UpdateAsync(int id, UpdateTeamHistoryRequestDto teamDto, int organizationId) {           
             
-            var existingTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == id && x.OrganizationId == teamDto.OrganizationId);
+           var team = await _context.TeamHistory
+                .Include(m => m.Members)
+                .FirstOrDefaultAsync(th => th.Id == id && th.OrganizationId == organizationId);
 
-            if (existingTeam == null) {
-                return null;
-            }
-            
-            existingTeam.Name = teamDto.Name;
+            if (team == null) return null;
 
-            var membersIds = teamDto.Members.Select(m => m.Id).ToList();
-            existingTeam.Members = await _context.Players.Where(m => membersIds.Contains(m.Id)).ToListAsync();
+            team.Name = teamDto.Name;
+            team.Members = await _context.Players
+                .Where(p => teamDto.Members.Select(m => m.Id).Contains(p.Id))
+                .ToListAsync();
 
             await _context.SaveChangesAsync();
-
-            return existingTeam;
+            return team;
         }
 
         public async Task<TeamHistory?> DeleteAsync(int id, int organizationId) 
         {
-            var teamModel = await _context.TeamHistory.Include(m => m.Members).FirstOrDefaultAsync(x => x.Id == id && x.OrganizationId == organizationId);
+            var team = await GetByIdAsync(id, organizationId);
 
-            if (teamModel == null) {
-                return null;
-            }
+            if (team == null) return null;
 
-            foreach (var player in teamModel.Members) {
-                player.TeamId = null;
-            }
-
-            _context.TeamHistory.Remove(teamModel);
+            _context.TeamHistory.Remove(team);
             await _context.SaveChangesAsync();
-            return teamModel;
+            return team;
         }
 
     }
