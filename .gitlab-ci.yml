@@ -115,5 +115,4 @@ deploy:
     - exit
   stage: deploy
   tags:
-  - itb2203
 
