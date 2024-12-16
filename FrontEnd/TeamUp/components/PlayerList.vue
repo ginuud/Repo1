@@ -4,16 +4,20 @@
       v-model="searchQuery"
       type="text"
       placeholder="Search players..."
-      class="search-input "  
+      class="search-input"
     />
     <AddPlayer />
   </div>
 
-  <div v-if="players.length === 0" class="text-center text-red-500">
+  <div v-if="isLoading" class="flex justify-center items-center h-64">
+    <div class="loader"></div>
+  </div>
+
+  <div v-else-if="players.length === 0" class="text-center text-red-500">
     No players have been added
   </div>
 
-  <div v-if="filteredPlayers.length === 0" class="text-center text-red-500">
+  <div v-else-if="filteredPlayers.length === 0" class="text-center text-red-500">
     No players match your search.
   </div>
 
@@ -29,7 +33,11 @@
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow v-for="player in filteredPlayers" :key="player.id" class="border-b border-black">
+          <TableRow
+            v-for="player in filteredPlayers"
+            :key="player.id"
+            class="border-b border-black"
+          >
             <TableCell>{{ player.rank }}</TableCell>
             <TableCell>{{ player.points }}</TableCell>
             <TableCell>{{ player.name }}</TableCell>
@@ -65,7 +73,7 @@
       <template #header>
         <div class="flex items-center justify-between">
           <h3 class="text-base font-semibold leading-6 text-white">
-          Delete player
+            Delete player
           </h3>
           <UButton
             color="gray"
@@ -78,9 +86,8 @@
       </template>
 
       <div class="p-4">
-        <h3
-          class="text-base font-semibold leading-6 text-white"
-          >Are you sure you want to delete player: {{ selectedPlayerName }}
+        <h3 class="text-base font-semibold leading-6 text-white">
+          Are you sure you want to delete player: {{ selectedPlayerName }}
         </h3>
       </div>
 
@@ -115,9 +122,7 @@
       </template>
 
       <div class="p-4">
-        <h3 class="text-base font-semibold leading-6 text-white"
-          >Name
-        </h3>
+        <h3 class="text-base font-semibold leading-6 text-white">Name</h3>
         <UInput
           v-model="newName"
           color="purple"
@@ -127,9 +132,7 @@
         <p v-if="errors.newName" class="text-red-500 text-sm mt-1">
           {{ errors.newName }}
         </p>
-        <h3 class="text-base font-semibold leading-6 text-white"
-          >Points
-        </h3>
+        <h3 class="text-base font-semibold leading-6 text-white">Points</h3>
         <UInput
           v-model="newScore"
           type="number"
@@ -163,14 +166,17 @@ const currentTeamId = ref<number | null>(null);
 const isEditModalOpen = ref(false);
 const newName = ref("");
 const newScore = ref<number>(0);
-  const searchQuery = ref("");
+const searchQuery = ref("");
+const isLoading = ref(true);
 
 const filteredPlayers = computed(() => {
   if (!searchQuery.value.trim()) {
     return players.value;
   }
   const lowerCaseQuery = searchQuery.value.toLowerCase();
-  return players.value.filter((player) => player.name.toLowerCase().includes(lowerCaseQuery));
+  return players.value.filter((player) =>
+    player.name.toLowerCase().includes(lowerCaseQuery)
+  );
 });
 
 const openDeleteModal = (playerId: number) => {
@@ -231,10 +237,26 @@ const submitPlayer = () => {
 };
 
 onMounted(async () => {
-  await playerStore.loadPlayers();
+  try {
+    isLoading.value = true;
+    await playerStore.loadPlayers();
+  } catch (error) {
+    console.error("Error loading players:", error);
+  } finally {
+    isLoading.value = false;
+  }
 });
 </script>
 
 <style scoped>
-  @import "@/assets/css/tableStyle.css";
+@import "@/assets/css/tableStyle.css";
+
+.loader {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
 </style>

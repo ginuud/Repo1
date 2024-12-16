@@ -19,3 +19,13 @@
     cursor: pointer;
     border-radius: 10px;
 }
+
+  .edit-button {
+    background-color: #F28C28;
+    color: white;
+    border: none;
+    padding: 0.5em 1em;
+    cursor: pointer;
+    border-radius: 10px;
+    margin-right: 10px;
+}
