@@ -8,7 +8,7 @@
           v-for="link in links"
           :key="link.label"
           :to="link.to"
-          class="text-lg px-4 py-2 rounded hover:bg-gray-600"
+          class="text-lg px-4 py-2 rounded"
         >
           {{ link.label }}
         </router-link>
@@ -41,6 +41,7 @@ const links = ref([
 </script>
 
 <style scoped>
+
 .bg-gray-800 {
   background-color: transparent; /* Läbipaistmatu tume taust */
   z-index: 1000; /* Veendu, et see oleks teistest kihtidest kõrgem */
@@ -48,7 +49,7 @@ const links = ref([
 }
 
 .router-link-active {
-  border: 2px solid #7f12e6;
+  border: 2px solid #070f8a;
   border-radius: 6px;
 }
 
@@ -58,7 +59,7 @@ nav a {
 }
 
 nav a:hover {
-  background-color: #7f12e6; 
+  background-color: #070f8a; 
 }
 </style>
 

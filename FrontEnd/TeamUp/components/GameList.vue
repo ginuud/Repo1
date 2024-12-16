@@ -58,6 +58,7 @@
                 type="button"
                 color="black"
                 variant="ghost"
+                class="edit-button"
                 icon="i-heroicons-pencil-20-solid"
                 @click="openEditModal(game.id)"
               ></UButton>
@@ -264,7 +265,8 @@ const submitDelete = async () => {
   }
 };
 
-const openEditModal = (gameId: number) => {
+const openEditModal = async (gameId: number) => {
+  await teamStore.loadTeams();
   const game = gameStore.games.find((p) => p.id === gameId);
 
   teamEditOptions = [
@@ -404,4 +406,10 @@ onMounted(async () => {
   height: 50px;
   animation: spin 1s linear infinite;
 }
+
+button.edit-button:hover {
+  background-color: #333; /* Tumedam värv */
+  color: white; /* Teksti värv kontrastiks */
+}
+
 </style>
