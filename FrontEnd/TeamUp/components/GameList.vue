@@ -360,6 +360,9 @@ const submitWinner = async (gameId: number) => {
       return;
     }
 
+    console.log("winner", selectedTeam.value.value.name)
+    await gameHistoryStore.addGameHistory(gameHistoryGame.value, selectedTeam.value.value.name)
+
     if (game.deleteTeams) {
       await deleteTeamsWhenChecked(selectedGameId.value);
     } else {
@@ -367,8 +370,6 @@ const submitWinner = async (gameId: number) => {
     }
 
     try {
-      console.log("winner", selectedTeam.value.value.name)
-      await gameHistoryStore.addGameHistory(gameHistoryGame.value, selectedTeam.value.value.name)
       console.log("Deleting game with id:", selectedGameId.value);
       await gameStore.deleteGame(selectedGameId.value);
     } catch (error) {

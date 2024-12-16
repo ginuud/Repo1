@@ -11,6 +11,6 @@ namespace REST.Dtos.TeamHistory
         public string? Name { get; set; }
         public List<CreateTeamPlayerDto>? Members { get; set; } = [];
         public int OrganizationId { get; set; }
-        public int? GameHistoryId { get; set; }
+        //public int? GameHistoryId { get; set; }
     }
 }

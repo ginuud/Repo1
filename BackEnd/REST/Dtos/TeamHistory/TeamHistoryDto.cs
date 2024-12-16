@@ -12,7 +12,7 @@ namespace REST.Dtos.TeamHistory
         public int Id { get; set;}
         public string? Name { get; set; }= string.Empty;
         public List<PlayerDto> Members { get; set; } = [];
-        public int? GameHistoryId { get; set; }
+        //public int? GameHistoryId { get; set; }
         public int OrganizationId { get; set; }
     }
 }

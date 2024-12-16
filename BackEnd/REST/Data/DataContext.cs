@@ -88,17 +88,21 @@ namespace REST.Data
             );
 
             modelBuilder.Entity<GameHistory>().HasData(
-                new Game
+                new GameHistory
                 {
                     Id = 1,
                     Name = "Võrkpall",
-                    OrganizationId = 1
+                    OrganizationId = 1,
+                    Teams = "Tiim 3 vs Tiim 4",
+                    Winner = "Tiim 1"
                 },
-                new Game
+                new GameHistory
                 {
                     Id = 2,
                     Name = "Jalgpall",
-                    OrganizationId = 1
+                    OrganizationId = 1,
+                    Teams = "Tiim 1 vs Tiim 2",
+                    Winner = "Tiim 1"
                 }                
             );
 
