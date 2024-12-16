@@ -1,13 +1,15 @@
 <template>
-  
-    <div v-if="filteredGamesHistory.length === 0" class="text-center text-red-500">
-      No games match your search.
-    </div>
-  
-    <div v-else>
-      <!-- Add the "Game history" title here -->
-      <h2 class="game-history-title">Game History</h2>
-      <div class="mb-4 table-container flex items-center justify-between">
+  <div
+    v-if="filteredGamesHistory.length === 0"
+    class="text-center text-red-500"
+  >
+    No games match your search.
+  </div>
+
+  <div v-else>
+    <!-- Add the "Game history" title here -->
+    <h2 class="game-history-title">Game History</h2>
+    <div class="mb-4 table-container flex items-center justify-between">
       <input
         v-model="searchQuery"
         type="text"
@@ -15,8 +17,8 @@
         class="search-input"
       />
     </div>
-      <div class="table-container">
-        <Table class="Table">
+    <div class="table-container">
+      <Table class="Table">
         <TableHeader>
           <TableRow class="header-row">
             <TableCell class="header-cell">Game</TableCell>
@@ -26,63 +28,67 @@
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow v-for="gameHistory in filteredGamesHistory" :key="gameHistory.id" class="border-b border-black">
+          <TableRow
+            v-for="gameHistory in filteredGamesHistory"
+            :key="gameHistory.id"
+            class="border-b border-black"
+          >
             <TableCell>{{ gameHistory.name }}</TableCell>
             <TableCell>
-              <span v-for="(team, index) in gameHistory.teams.split(' vs ')" :key="index">
-                {{ team }}<span v-if="index < gameHistory.teams.split(' vs ').length - 1"> vs </span>
-              </span>
+              {{ gameHistory.teams }}
             </TableCell>
             <TableCell>{{ gameHistory.winner || "N/A" }}</TableCell>
           </TableRow>
         </TableBody>
-        </Table>
-      </div>
+      </Table>
     </div>
-  </template>
-  
-  <script setup lang="ts">
-  import { ref, computed } from "vue";
-  import { useGameHistoryStore, type Player, type TeamHistory } from "#imports";
-  import { usePlayerStore } from "~/stores/playerStore";
-  
-  const gameHistoryStore = useGameHistoryStore();
-  const playerStore = usePlayerStore();
+  </div>
+</template>
 
-  
-  const { players } = storeToRefs(playerStore);
-  const { gamesHistory } = storeToRefs(gameHistoryStore);
-  const searchQuery = ref("");
-  
-  const filteredGamesHistory = computed(() => {
-    if (!searchQuery.value.trim()) {
-      return gamesHistory.value;
-    }
-    const lowerCaseQuery = searchQuery.value.toLowerCase();
-    return gamesHistory.value.filter((gameHistory) =>
+<script setup lang="ts">
+import { ref, computed } from "vue";
+import { useGameHistoryStore, type Player, type TeamHistory } from "#imports";
+import { usePlayerStore } from "~/stores/playerStore";
+
+const gameHistoryStore = useGameHistoryStore();
+const playerStore = usePlayerStore();
+
+const { players } = storeToRefs(playerStore);
+const { gamesHistory } = storeToRefs(gameHistoryStore);
+const searchQuery = ref("");
+
+const filteredGamesHistory = computed(() => {
+  if (!searchQuery.value.trim()) {
+    return gamesHistory.value;
+  }
+  const lowerCaseQuery = searchQuery.value.toLowerCase();
+  return gamesHistory.value.filter(
+    (gameHistory) =>
       gameHistory.name.toLowerCase().includes(lowerCaseQuery) ||
       gameHistory.teams.toLowerCase().includes(lowerCaseQuery)
-    );
-  });
-  
-  const isEndGameModalOpen = ref(false);
-  const selectedGameId = ref<number | null>(null);
-  const selectedTeamHistory = ref<TeamHistory>();
-  
-  let teamHistoryOptions = ref<{ id: number; name: string; members: Player[] }[]>([]);
-  
-  
-  onMounted(() => {
-    playerStore.loadPlayers();
-    gameHistoryStore.loadGamesHistory();
-  });
-  </script>
-  
-  <style scoped>
-    @import "@/assets/css/tableStyle.css"; 
-    .game-history-title {
-  margin-left: 87px; 
+  );
+});
+
+const isEndGameModalOpen = ref(false);
+const selectedGameId = ref<number | null>(null);
+const selectedTeamHistory = ref<TeamHistory>();
+
+let teamHistoryOptions = ref<{ id: number; name: string; members: Player[] }[]>(
+  []
+);
+
+onMounted(() => {
+  playerStore.loadPlayers();
+  gameHistoryStore.loadGamesHistory();
+});
+</script>
+
+<style scoped>
+@import "@/assets/css/tableStyle.css";
+.game-history-title {
+  margin-left: 87px;
   font-size: 1.5rem;
   font-weight: bold;
-  margin-bottom: 16px;}
-  </style> 
+  margin-bottom: 16px;
+}
+</style>
