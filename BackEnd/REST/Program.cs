@@ -55,7 +55,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 var app = builder.Build();
 
 using (var scope = ((IApplicationBuilder)app).ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-using (var context = scope.ServiceProvider.GetService<DataContext>()){
+using (var context = scope.ServiceProvider.GetService<DataContext>())
+{
     context?.Database.EnsureCreated();
 }
 
@@ -75,4 +76,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+app.Run("http://*:8080");

@@ -1,27 +1,23 @@
-# Define base image
-FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine3.20 AS builder
+# Build stage
+FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine3.20 AS build
+WORKDIR /src
 
-# Copy project files
-WORKDIR /source
-COPY ./*.csproj .
+# 1. Kopeeri projekti failid ja restore
+COPY *.csproj .
+RUN dotnet restore "REST.csproj"
 
-# Restore
-RUN dotnet restore
-
-# Copy all source code
+# 2. Kopeeri kogu kood
 COPY . .
 
-# Publish
-WORKDIR /source
+# 3. Avalda rakendus /publish kausta
 RUN dotnet publish "REST.csproj" -c Release -o /publish
 
-# Runtime
+# Runtime stage
 FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine3.20
 WORKDIR /app
-COPY --from=builder /publish .
+
+# 4. Kopeeri ÕIGEST kataloogist (kasuta /publish)
+COPY --from=build /publish .
 
 EXPOSE 8080
-
-RUN addgroup -S runner && adduser -S runner -G runner
-USER runner
 ENTRYPOINT ["dotnet", "REST.dll"]

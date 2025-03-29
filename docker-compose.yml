@@ -1,29 +1,72 @@
 services:
-  postgres: 
+  db: 
     image: postgres:17-alpine
     container_name: TeamUp-db
     ports:
-    - 5432:5432
-#    volumes:
-#    - postgres-data:/var/lib/postgresql/data
+      - 5432:5432
     environment:
-    - POSTGRES_PASSWORD=teamup
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: heaparool
+      POSTGRES_DB: TeamUp-db
     networks:
-    - pg_net
-  pgamdmin4:
+      - pg_net
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:  
+      test: ["CMD-SHELL", "pg_isready -U postgres -d TeamUp-db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  pgadmin4:
     image: dpage/pgadmin4:8
     container_name: pgadmin-TeamUp
     ports:
-    - 8081:80
+      - 8081:80
     volumes:
-    - pgadmin-data:/var/lib/pgadmin
+      - pgadmin-data:/var/lib/pgadmin
     environment:
-    - PGADMIN_DEFAULT_EMAIL=admin@admin.com
-    - PGADMIN_DEFAULT_PASSWORD=admin
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
     networks:
-    - pg_net
+      - pg_net
+    depends_on:
+      - db
+
+  backend: 
+    build: 
+      context: ./BackEnd/REST  
+      dockerfile: Dockerfile
+    ports:
+      - 5181:8080  # Host:5181 → Container:8080 (Program.cs port)
+    environment:
+      - ConnectionStrings__Default=Host=db;Port=5432;Database=TeamUp-db;Username=postgres;Password=heaparool
+      - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      - pg_net
+    depends_on:
+      db:
+        condition: service_healthy  
+
+  frontend: 
+    build: 
+      context: ./FrontEnd/TeamUp  
+      dockerfile: Dockerfile
+    ports:
+      - 5173:5173  
+    volumes:
+      - ./FrontEnd/TeamUp:/app
+      - /app/node_modules
+    networks:
+      - pg_net
+    environment:
+      VUE_APP_API_URL: http://backend:8080
+    depends_on:
+      - backend
+
 networks:
   pg_net:
+
 volumes:
   pgadmin-data:
-# postgres-data:
+  postgres-data:
