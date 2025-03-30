@@ -21,11 +21,7 @@
     >
       <template #header>
         <div class="flex items-center justify-between">
-          <h3
-            class="text-base font-semibold leading-6 text-white"
-          >
-            Add player
-          </h3>
+          <UFormGroup label="Add player" name="addPlayer" ></UFormGroup>
           <UButton
             color="gray"
             variant="ghost"

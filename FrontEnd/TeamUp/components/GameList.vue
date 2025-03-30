@@ -82,9 +82,7 @@
     >
       <template #header>
         <div class="flex items-center justify-between">
-          <h3 class="text-base font-semibold leading-6 text-white">
-            Select Winner
-          </h3>
+          <UFormGroup label="Select winner" name="selectWinner" ></UFormGroup>
           <UButton
             color="gray"
             variant="ghost"
@@ -96,10 +94,7 @@
       </template>
 
       <div class="p-4">
-        <h3 class="text-base font-semibold leading-6 text-white">
-          Select the winner of the game:
-        </h3>
-        <UFormGroup name="selectedTeam">
+        <UFormGroup label="Select the winner of the game:" name="selectedTeam">
           <USelectMenu
             v-model="selectedTeam"
             :options="teamOptions"
@@ -128,9 +123,7 @@
     >
       <template #header>
         <div class="flex items-center justify-between">
-          <h3 class="text-base font-semibold leading-6 text-white">
-            Delete game
-          </h3>
+          <UFormGroup label="Delete game" name="deleteGame" ></UFormGroup>
           <UButton
             color="gray"
             variant="ghost"
@@ -142,9 +135,9 @@
       </template>
 
       <div class="p-4">
-        <h3 class="text-base font-semibold leading-6 text-white">
+        <UKbd class="ring-0 bg-transparent font-semibold text-base px-3 py-4">
           Are you sure you want to delete game: {{ selectedGameName }}
-        </h3>
+        </UKbd>
       </div>
 
       <template #footer>
@@ -164,9 +157,7 @@
     >
       <template #header>
         <div class="flex items-center justify-between">
-          <h3 class="text-base font-semibold leading-6 text-white">
-            Edit game
-          </h3>
+          <UFormGroup label="Edit game" name="editgame" ></UFormGroup>
           <UButton
             color="gray"
             variant="ghost"
@@ -178,19 +169,12 @@
       </template>
 
       <div class="p-4">
-        <h3 class="text-base font-semibold leading-6 text-white">Name</h3>
-        <UInput
-          v-model="name"
-          color="purple"
-          variant="outline"
-          placeholder="Game name"
-        />
-        <p v-if="errors.name" class="text-red-500 text-sm mt-1">
-          {{ errors.name }}
-        </p>
-        <h3 class="text-base font-semibold leading-6 text-white">Teams</h3>
+        <UFormGroup label="Name" name="name">
+          <UInput v-model="name" color="purple" variant="outline" placeholder="Game name" />
+          <p v-if="errors.name" class="text-red-500 text-sm mt-1">{{ errors.name }}</p>
+        </UFormGroup>
 
-        <UFormGroup name="teams">
+        <UFormGroup label="Teams" name="teams">
           <div style="margin-bottom: 0.5rem">
             <USelectMenu
               v-model="selectedTeams"
@@ -199,13 +183,11 @@
               multiple
               searchable
               searchable-placeholder="Search teams..."
-              placeholder="Select 2 teams"
-            />
-            <p v-if="errors.teams" class="text-red-500 text-sm mt-1">
-              {{ errors.teams }}
+              placeholder="Select 2 teams"/>
+            <p v-if="errors.teams" class="text-red-500 text-sm mt-1"> {{ errors.teams }}
             </p>
           </div>
-        </UFormGroup>
+        </UFormGroup>        
       </div>
       <template #footer>
         <div class="flex justify-end space-x-2">
@@ -409,8 +391,8 @@ onMounted(async () => {
 }
 
 button.edit-button:hover {
-  background-color: #333; /* Tumedam värv */
-  color: white; /* Teksti värv kontrastiks */ 
+  background-color: #333; 
+  color: white;  
 }
 
 .active-game-titel{

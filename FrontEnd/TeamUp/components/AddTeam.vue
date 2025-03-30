@@ -19,9 +19,7 @@
       >
       <template #header>          
         <div class="flex items-center justify-between">
-          <h3 class="text-base font-semibold leading-6 text-white "
-            >Add team
-          </h3>        
+          <UFormGroup label="Add Team" name="addTeam"></UFormGroup>      
         <UButton
           color="gray"
           variant="ghost"

@@ -73,9 +73,7 @@
     >
       <template #header>
         <div class="flex items-center justify-between">
-          <h3 class="text-base font-semibold leading-6 text-white">
-            Delete player
-          </h3>
+          <UFormGroup label="Delete player" name="deletePlayer"></UFormGroup>
           <UButton
             color="gray"
             variant="ghost"
@@ -86,9 +84,9 @@
       </template>
 
       <div class="p-4">
-        <h3 class="text-base font-semibold leading-6 text-white">
-          Are you sure you want to delete player: {{ selectedPlayerName }}
-        </h3>
+        <UKbd class="ring-0 bg-transparent font-semibold text-base px-3 py-4">
+            Are you sure you want to delete player: {{ selectedPlayerName }}
+          </UKbd>
       </div>
 
       <template #footer>
@@ -108,20 +106,17 @@
     >
       <template #header>
         <div class="flex items-center justify-between">
-          <h3 class="text-base font-semibold leading-6 text-white">
-            Edit player
-          </h3>
-          <UButton
-            color="gray"
-            variant="ghost"
-            icon="i-heroicons-x-mark-20-solid"
-            @click="isEditModalOpen = false"
-          />
+          <UFormGroup label="Edit player" name="editPlayer"></UFormGroup>
+            <UButton
+              color="gray"
+              variant="ghost"
+              icon="i-heroicons-x-mark-20-solid"
+              @click="isEditModalOpen = false"
+            />
         </div>
       </template>
 
-      <div class="p-4">
-        <h3 class="text-base font-semibold leading-6 text-white">Name</h3>
+      <UFormGroup label="Name" name="playerName" >
         <UInput
           v-model="newName"
           color="purple"
@@ -131,7 +126,8 @@
         <p v-if="errors.newName" class="text-red-500 text-sm mt-1">
           {{ errors.newName }}
         </p>
-        <h3 class="text-base font-semibold leading-6 text-white">Points</h3>
+      </UFormGroup>
+      <UFormGroup label="Points" name="points">
         <UInput
           v-model="newScore"
           type="number"
@@ -140,7 +136,7 @@
           placeholder="Player score"
           :errors="errors.newScore"
         />
-      </div>
+      </UFormGroup>
       <template #footer>
         <div class="flex justify-end space-x-2">
           <UButton color="green" @click="submitPlayer">Save changes</UButton>

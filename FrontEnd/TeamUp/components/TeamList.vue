@@ -56,9 +56,7 @@
     >
       <template #header>
         <div class="flex items-center justify-between">
-          <h3 class="text-base font-semibold leading-6 text-white">
-            Edit team
-          </h3>
+          <UFormGroup label="Edit team" name="editTeam" ></UFormGroup>
           <UButton
             color="gray"
             variant="ghost"
@@ -116,9 +114,7 @@
     >
       <template #header>
         <div class="flex items-center justify-between">
-          <h3 class="text-base font-semibold leading-6 text-white">
-            Delete team
-          </h3>
+          <UFormGroup label="Delete team" name="deleteTeam" ></UFormGroup>
           <UButton
             color="gray"
             variant="ghost"
@@ -130,9 +126,17 @@
       </template>
 
       <div class="p-4">
-        <h3 class="text-base font-semibold leading-6 text-white">
-          Are you sure you want to delete team: {{ selectedTeamName }}
-        </h3>
+        <UKbd
+            :ui="{
+              background: 'bg-transparent',
+              font: 'text-base font-semibold',
+              ring: 'ring-10',
+              rounded: 'rounded-md',
+              padding: 'px-3 py-4'
+            }"
+          >
+            Are you sure you want to delete team: {{ selectedTeamName }}
+          </UKbd>
       </div>
 
       <template #footer>
@@ -147,6 +151,7 @@
 <script setup lang="ts">
 import { useTeamStore } from "~/stores/teamStore";
 import { storeToRefs } from "pinia";
+import type { Backpack } from "lucide-vue-next";
 
 const playerStore = usePlayerStore();
 const teamStore = useTeamStore();
